@@ -1,197 +1,274 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Mathematics Hub — Class 6 to 12</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathematics Hub Class 6 to 12</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-:root{
-  --bg:#dde2e6;
-  --dark:#0b2447;
-  --muted:#667085;
-  --soft-shadow:0 4px 12px rgba(0,0,0,.05);
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f8ff; /* हल्का Alice Blue background */
+  margin: 0;
+  padding: 0;
+  color: #000;
 }
 
-body{
-  font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;
-  line-height:1.5;
-  background:var(--bg);
-  color:var(--dark);
-  margin:0;
-  padding:0;
+/* Header & Footer Outer Wrapper */
+.header-wrapper, .footer-wrapper {
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient */
+  padding: 12px;
 }
 
-.container{max-width:1100px;margin:30px auto;padding:0 18px}
-
-header{
-  background:#0b2447;
-  color:#fff;
-  padding:28px;
-  border-radius:12px;
+/* Header & Footer Inner Box */
+.header, .footer-inner {
+  background: #FFFFCC;   /* Yellowish */
+  padding: 15px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid #333;
+  border-radius: 10px;
+  text-shadow: 2px 2px 4px #888888;
+  max-width: 600px;
+  margin: auto;
 }
-header h1{font-size:22px;margin:0}
-header p{margin:6px 0 0;opacity:.9}
+.header div { margin: 5px 0; }
 
-.hero{display:grid;grid-template-columns:1fr 320px;gap:20px;margin-top:18px}
-
-.card{
-  border-radius:12px;
-  padding:20px;
-  box-shadow:var(--soft-shadow);
-  transition:all .25s;
-  background:#f0f4f8;
+/* Section Titles */
+.section-title {
+  text-align: center;
+  color: #fff;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 16px;
 }
-.card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.title-class   { background: #2196F3; }
+.title-updates { background: #2F4F4F; }
+.title-practice{ background: #9C27B0; }
+.title-res     { background: #009688; }
+.title-shout   { background: #F44336; }
+.title-contact { background: #4B0082; }
 
-.welcome h2{margin-bottom:10px;font-size:22px}
-.features{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-.chip{background:#cfd8e5;color:var(--dark);padding:6px 12px;border-radius:999px;font-weight:500;font-size:13px;cursor:pointer;transition:all .2s}
-.chip:hover{background:#b8c8db}
-
-.class-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
-
-/* Gradient colorful class buttons */
-.cls-btn{
-  border-radius:12px;
-  text-align:center;
-  font-weight:600;
-  padding:16px;
-  cursor:pointer;
-  transition:all .25s;
-  color:#fff;
-  font-size:15px;
-  border:none;
+/* Boxes */
+.box {
+  border: 1px solid #999;
+  margin: 5px;
+  padding: 10px;
+  background: #F9F9F9;
+  font-size: 14px;
 }
-.cls-btn:nth-child(1){background:linear-gradient(135deg,#4facfe,#00f2fe)}
-.cls-btn:nth-child(2){background:linear-gradient(135deg,#43e97b,#38f9d7)}
-.cls-btn:nth-child(3){background:linear-gradient(135deg,#fbc658,#ff5c5c)}
-.cls-btn:nth-child(4){background:linear-gradient(135deg,#a770ef,#cf8bf3)}
-.cls-btn:nth-child(5){background:linear-gradient(135deg,#f54ea2,#ff7676)}
-.cls-btn:nth-child(6){background:linear-gradient(135deg,#17ead9,#6078ea)}
-.cls-btn:nth-child(7){background:linear-gradient(135deg,#ff9966,#ff5e62)}
-.cls-btn:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.15)}
-
-.sidebar h3{margin-bottom:10px}
-.updates{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}
-.update{padding:12px;background:#f5f5f5;border-radius:10px;border:1px solid #d0d4d9;transition:all .2s;cursor:default}
-.update:hover{background:#e2e2e2}
-
-.resources{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
-/* Gradient resource cards */
-.res-card{
-  padding:14px;border-radius:12px;text-align:center;color:#fff;font-weight:500;transition:all .25s;cursor:pointer;
+.box-welcome {
+  border: 2px solid #9C27B0;
+  margin: 10px;
+  padding: 20px;
+  font-size: 16px;
+  background: #F3E5F5;
+  text-align: center;
+  border-radius: 8px;
 }
-.res-card:nth-child(1){background:linear-gradient(135deg,#6a11cb,#2575fc)}
-.res-card:nth-child(2){background:linear-gradient(135deg,#ff6a00,#ee0979)}
-.res-card:nth-child(3){background:linear-gradient(135deg,#11998e,#38ef7d)}
-.res-card:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.15)}
 
-footer{margin-top:28px;padding:18px;border-radius:12px;background:#e4e7eb;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--soft-shadow)}
-.contact a{display:inline-block;margin-right:10px;background:#0b2447;color:#fff;padding:8px 14px;border-radius:10px;text-decoration:none;transition:all .2s}
-.contact a:hover{background:#051634}
+/* Linkbar */
+.linkbar {
+  background: linear-gradient(45deg, #FF9800, #E91E63);
+  padding: 8px;
+  text-align: center;
+}
+.linkbar a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 10px;
+}
+.linkbar a:hover { text-decoration: underline; }
 
-.muted{color:var(--muted);font-size:13px}
-.btn-primary{background:#0b2447;color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;transition:all .2s}
-.btn-primary:hover{background:#051634}
+.small { font-size: 12px; color: #555; }
+.blue { color: #3366CC; font-weight: bold; }
 
-/* responsive */
-@media (max-width:900px){.hero{grid-template-columns:1fr}.class-grid{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:560px){.class-grid{grid-template-columns:repeat(2,1fr)};header{padding:18px}}
+/* Buttons */
+button, .btn {
+  border: none;
+  padding: 12px 14px;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 6px;
+  width: 100%;
+  height: 60px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+button:hover, .btn:hover { filter: brightness(0.85); }
+
+.class-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  justify-items: center;
+}
+
+/* Class Buttons */
+.btn6  { background: #FF5722; }
+.btn7  { background: #4CAF50; }
+.btn8  { background: #9C27B0; }
+.btn9  { background: #3F51B5; }
+.btn10 { background: #FF8C00; }
+.btn11 { background: #00BFFF; }
+.btn12 { background: #DC143C; }
+
+/* Shoutbox Send Button */
+#shoutbox button {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+/* MCQ Class 12 Button */
+.btn-mcq12 { background-color: #8B0000; }
+
+/* Contact Buttons */
+#contact-buttons #whatsapp-btn {
+  background-color: #25D366;
+  color: #fff;
+}
+#contact-buttons #twitter-btn {
+  background-color: #1DA1F2;
+  color: #fff;
+}
+
+/* Elegant Outer cover for Notice Board */
+.welcome-cover {
+  background: #555; /* Dark Gray */
+  padding: 6px;
+  border-radius: 8px;
+  margin: 12px;
+  border: 1px solid #333;
+}
+.welcome-cover .section-title {
+  margin: 0;
+  font-size: 18px;
+  background: linen; /* Simple flat linen */
+  color: black;
+  border-radius: 6px;
+}
+
+/* सिर्फ Notice Board underline होगा */
+.welcome-cover .section-title u {
+  text-decoration: underline;
+}
 </style>
 </head>
 <body>
-<div class="container">
-<header>
-  <div class="brand">
-    <div>
-      <h1>Mathematics Hub — Class 6 to 12</h1>
-      <p>Easy Notes • NCERT Solutions • Practice Tests — Boost your scores</p>
-    </div>
+
+<!-- Header -->
+<div class="header-wrapper">
+  <div class="header">
+    <div>Welcome to Mathematics Hub</div>
+    <div>Class 6 to 12</div>
   </div>
-</header>
-
-<div class="hero">
-  <div class="card welcome">
-    <h2>Welcome Students!</h2>
-    <p class="muted">यह वेबसाइट खासतौर पर Class 6 से 12 तक के छात्रों के लिए बनाई गई है — नोट्स, उदाहरण, प्रैक्टिस टेस्ट और फॉर्मूला शीट्स के साथ।</p>
-    <div class="features">
-      <span class="chip">Chapter-wise Notes</span>
-      <span class="chip">NCERT Solutions</span>
-      <span class="chip">Practice Tests</span>
-      <span class="chip">Formula Sheets</span>
-    </div>
-
-    <div class="class-grid">
-      <div class="cls-btn" onclick="goto('class6')">Class 6</div>
-      <div class="cls-btn" onclick="goto('class7')">Class 7</div>
-      <div class="cls-btn" onclick="goto('class8')">Class 8</div>
-      <div class="cls-btn" onclick="goto('class9')">Class 9</div>
-      <div class="cls-btn" onclick="window.location.href='class10/index.html'">Class 10</div>
-      <div class="cls-btn" onclick="goto('class11')">Class 11</div>
-      <div class="cls-btn" style="grid-column:span 2" onclick="goto('class12')">Class 12</div>
-    </div>
-
-    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
-      <a class="btn-primary" href="#resources">Resources</a>
-      <a class="btn-primary" href="#practice">Practice Tests</a>
-    </div>
-  </div>
-
-  <aside class="sidebar">
-    <div class="card">
-      <h3>Latest Updates</h3>
-      <ul class="updates" aria-live="polite">
-        <li class="update"><strong>Formula Sheet (6–12)</strong> — Download PDF (Updated Aug 2025)</li>
-        <li class="update"><strong>Sample Paper 2024–25</strong> — Solutions added</li>
-        <li class="update"><strong>Weekly Test</strong> — Integrals (Sun, 8 PM)</li>
-      </ul>
-    </div>
-
-    <div class="card" style="margin-top:12px">
-      <h3>Quick Resources</h3>
-      <div class="resources">
-        <div class="res-card">Formula Sheets</div>
-        <div class="res-card">NCERT Solutions</div>
-        <div class="res-card">Previous Year Papers</div>
-      </div>
-    </div>
-  </aside>
 </div>
 
-<section id="practice" class="card" style="margin-top:18px">
-  <h3 style="margin-top:0">Practice Zone</h3>
-  <p class="muted">Daily practice problems, MCQ quizzes and chapter-wise question banks.</p>
-  <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
-    <button class="cls-btn" style="min-width:160px" onclick="alert('Open Class 12 practice')">MCQ: Class 12</button>
-    <button class="cls-btn" style="min-width:160px" onclick="alert('Open Class 10 practice')">MCQ: Class 10</button>
-    <button class="cls-btn" style="min-width:160px" onclick="alert('Open daily problem')">Daily Practice</button>
-  </div>
-</section>
+<!-- Notice Board -->
+<div class="welcome-cover">
+  <div class="section-title"><u>Notice Board</u> :-</div>
+</div>
 
-<section id="resources" class="card" style="margin-top:18px">
-  <h3 style="margin-top:0">Resources</h3>
-  <p class="muted">Download ready-made PDFs and notes for each class.</p>
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
-    <div class="res-card">NCERT Solutions (All Classes)</div>
-    <div class="res-card">Formula Sheets</div>
-    <div class="res-card">Sample Papers</div>
-  </div>
-</section>
+<div class="box-welcome">
+  यह वेबसाइट खासतौर पर Class 6 से 12 तक के छात्रों के लिए बनाई गई है — 
+  <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
+</div>
 
-<footer>
-  <div>
-    <strong>Contact & Support</strong>
-    <p class="muted" style="margin:6px 0 0">Email: yourmail@example.com • WhatsApp: +91 XXXXXXXXXX</p>
+<!-- Shoutbox -->
+<div class="section-title title-shout">Shoutbox</div>
+<div class="box" id="shoutbox">
+  <div id="messages">
+    <div><span class="blue">Sahil</span>: Hi <span class="small">(just now)</span></div>
   </div>
-  <div class="contact">
-    <a href="#">Join WhatsApp</a>
-    <a href="#">Feedback</a>
+  <input type="text" id="msg" placeholder="Type your message" style="width:70%">
+  <button onclick="postMsg()" style="padding:6px 10px;font-size:12px;height:auto;width:auto;">Send</button>
+</div>
+
+<!-- Updates -->
+<div class="section-title title-updates" id="updates">Latest Updates</div>
+<div class="box">
+  • <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>
+  • <b>Sample Paper 2024–25</b> — Solutions added<br>
+  • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
+</div>
+
+<!-- Classes -->
+<div class="section-title title-class">Select Your Class</div>
+<div class="box class-grid">
+  <button class="btn btn6">Class 6</button>
+  <button class="btn btn7">Class 7</button>
+  <button class="btn btn8">Class 8</button>
+  <button class="btn btn9">Class 9</button>
+  <button class="btn btn10">Class 10</button>
+  <button class="btn btn11">Class 11</button>
+  <button class="btn btn12" style="grid-column: span 2;">Class 12</button>
+</div>
+
+<!-- Practice Zone -->
+<div class="section-title title-practice" id="practice">Practice Zone</div>
+<div class="box">
+  Daily practice problems, MCQ quizzes और chapter-wise question banks.<br><br>
+  <button class="btn btn-mcq12">MCQ: Class 12</button>
+  <button class="btn btn9">MCQ: Class 10</button>
+  <button class="btn btn7">Daily Practice</button>
+</div>
+
+<!-- Resources -->
+<div class="section-title title-res" id="resources">Resources</div>
+<div class="box">
+  <b>Quick Links:</b><br>
+  • NCERT Solutions (All Classes)<br>
+  • Formula Sheets<br>
+  • Sample Papers
+</div>
+
+<!-- Contact -->
+<div class="section-title title-contact">Contact & Support</div>
+<div class="box" id="contact-buttons">
+  Email: yourmail@example.com • WhatsApp: +91 XXXXXXXXXX<br><br>
+  <button id="whatsapp-btn"><i class="fab fa-whatsapp"></i> Join us on WhatsApp</button>
+  <button id="twitter-btn"><i class="fab fa-twitter"></i> Join us on Twitter</button>
+</div>
+
+<!-- Navigation Bar -->
+<div class="linkbar">
+  <a href="#">Home</a> | 
+  <a href="#updates">Latest Updates</a> | 
+  <a href="#practice">Practice Zone</a> | 
+  <a href="#resources">Resources</a>
+</div>
+
+<!-- Footer -->
+<div class="footer-wrapper">
+  <div class="footer-inner">
+    © 2025 Mathematics Hub
   </div>
-</footer>
 </div>
 
 <script>
-function goto(id){alert('Open page: '+id+' (Replace this with real link)')}
+function postMsg(){
+  let box = document.getElementById("messages");
+  let msg = document.getElementById("msg");
+  if(msg.value.trim()!==""){
+    let div = document.createElement("div");
+    div.innerHTML = "<span class='blue'>You</span>: " + msg.value + " <span class='small'>(just now)</span>";
+    if(box.firstChild){
+      box.insertBefore(div, box.firstChild);
+    } else {
+      box.appendChild(div);
+    }
+    msg.value="";
+  }
+}
 </script>
+
 </body>
 </html>
