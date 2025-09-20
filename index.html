@@ -135,12 +135,8 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   background-color: #25D366;
   color: #fff;
 }
-#contact-buttons #twitter-btn {
-  background-color: #1DA1F2;
-  color: #fff;
-}
 #contact-buttons #telegram-btn {
-  background-color: #0088cc; /* Telegram Blue */
+  background-color: #1DA1F2; /* अब Twitter जैसा रंग */
   color: #fff;
 }
 
@@ -240,10 +236,9 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   Email: dalbir46@gmail.com • WhatsApp: +91 9468067047<br><br>
 
   <!-- WhatsApp -->
-  <button id="whatsapp-btn"><i class="fab fa-whatsapp"></i> Join us on WhatsApp</button>
-
-  <!-- Twitter -->
-  <button id="twitter-btn"><i class="fab fa-twitter"></i> Join us on Twitter</button>
+  <button id="whatsapp-btn" onclick="window.open('https://chat.whatsapp.com/I3kosBY1yVp2irNXhkPDZV?mode=ems_share_t','_blank')">
+    <i class="fab fa-whatsapp"></i> Join us on WhatsApp
+  </button>
 
   <!-- Telegram -->
   <button id="telegram-btn" onclick="window.open('https://t.me/Mathematic_hub','_blank')">
@@ -284,5 +279,4 @@ function postMsg(){
 </script>
 
 </body>
-  </html>
-  
+</html>
