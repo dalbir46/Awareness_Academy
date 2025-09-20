@@ -8,7 +8,7 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #f0f8ff; /* हल्का Alice Blue background */
+  background: #f0f8ff;
   margin: 0;
   padding: 0;
   color: #000;
@@ -59,7 +59,7 @@ body {
   font-size: 14px;
 }
 .box-welcome {
-  border: 2px solid #9C27B0; /* नीचे वाले box ki outer border */
+  border: 2px solid #9C27B0;
   margin: 10px;
   padding: 20px;
   font-size: 16px;
@@ -133,11 +133,11 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 
 /* Elegant Outer cover for Notice Board */
 .welcome-cover {
-  background: #F3E5F5; /* हल्का lavender/pink mix */
+  background: #F3E5F5;
   padding: 6px;
   border-radius: 8px;
   margin: 12px;
-  border: 6px solid #9C27B0; /* Thickness increased to 6px */
+  border: 6px solid #9C27B0;
 }
 .welcome-cover .section-title {
   margin: 0;
@@ -149,6 +149,47 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .welcome-cover .section-title u {
   text-decoration: underline;
 }
+
+/* Shoutbox Container */
+#shoutbox {
+  background: #fff;
+  border: 2px solid #F44336;
+  border-radius: 6px;
+  padding: 10px;
+  margin: 10px;
+}
+#messages {
+  max-height: 250px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  margin-bottom: 8px;
+}
+.msg {
+  border-bottom: 1px solid #ddd;
+  padding: 4px 0;
+}
+.meta {
+  font-size: 12px;
+  color: gray;
+}
+#shoutbox input {
+  padding: 6px;
+  width: 70%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+#shoutbox button {
+  padding: 6px 12px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  color: #fff;
+  cursor: pointer;
+}
+#shoutbox button:hover { background-color: #45a049; }
+
 </style>
 </head>
 <body>
@@ -174,11 +215,10 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <!-- Shoutbox -->
 <div class="section-title title-shout">Shoutbox</div>
 <div class="box" id="shoutbox">
-  <div id="messages">
-    <div><span class="blue">Sahil</span>: Hi <span class="small">(just now)</span></div>
-  </div>
-  <input type="text" id="msg" placeholder="Type your message" style="width:70%">
-  <button onclick="postMsg()" style="padding:6px 10px;font-size:12px;height:auto;width:auto;">Send</button>
+  <div id="messages"></div>
+  <input type="text" id="username" placeholder="Name" required>
+  <input type="text" id="message" placeholder="Type your message" required>
+  <button id="sendBtn">Send</button>
 </div>
 
 <!-- Updates -->
@@ -223,11 +263,9 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <div class="section-title title-contact">Contact & Support</div>
 <div class="box" id="contact-buttons">
   Email: dalbir46@gmail.com • WhatsApp: +91 9468067047<br><br>
-    <!-- WhatsApp -->
   <button id="whatsapp-btn" onclick="window.open('https://chat.whatsapp.com/I3kosBY1yVp2irNXhkPDZV?mode=ems_share_t','_blank')">
     <i class="fab fa-whatsapp"></i> Join us on WhatsApp
   </button>
-    <!-- Telegram -->
   <button id="telegram-btn" onclick="window.open('https://t.me/Mathematic_hub','_blank')">
     <i class="fab fa-telegram-plane"></i> Join us on Telegram
   </button>
@@ -245,22 +283,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   </div>
 </div>
 
-<script>
-function postMsg(){
-  let box = document.getElementById("messages");
-  let msg = document.getElementById("msg");
-  if(msg.value.trim()!==""){
-    let div = document.createElement("div");
-    div.innerHTML = "<span class='blue'>You</span>: " + msg.value + " <span class='small'>(just now)</span>";
-    if(box.firstChild){
-      box.insertBefore(div, box.firstChild);
-    } else {
-      box.appendChild(div);
-    }
-    msg.value="";
-  }
-}
-</script>
-
-</body>
-</html>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9
+          
