@@ -16,13 +16,13 @@ body {
 
 /* Header & Footer Outer Wrapper */
 .header-wrapper, .footer-wrapper {
-  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient */
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   padding: 12px;
 }
 
 /* Header & Footer Inner Box */
 .header, .footer-inner {
-  background: #FFFFCC;   /* Yellowish */
+  background: #FFFFCC;
   padding: 15px;
   text-align: center;
   font-size: 20px;
@@ -59,7 +59,7 @@ body {
   font-size: 14px;
 }
 .box-welcome {
-  border: 2px solid #9C27B0;
+  border: 2px solid #9C27B0; /* नीचे वाले box ki outer border */
   margin: 10px;
   padding: 20px;
   font-size: 16px;
@@ -122,41 +122,30 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .btn12 { background: #DC143C; }
 
 /* Shoutbox Send Button */
-#shoutbox button {
-  background-color: #4CAF50;
-  color: #fff;
-}
+#shoutbox button { background-color: #4CAF50; color: #fff; }
 
 /* MCQ Class 12 Button */
 .btn-mcq12 { background-color: #8B0000; }
 
 /* Contact Buttons */
-#contact-buttons #whatsapp-btn {
-  background-color: #25D366;
-  color: #fff;
-}
-#contact-buttons #telegram-btn {
-  background-color: #1DA1F2; /* अब Twitter जैसा रंग */
-  color: #fff;
-}
+#contact-buttons #whatsapp-btn { background-color: #25D366; color: #fff; }
+#contact-buttons #telegram-btn { background-color: #1DA1F2; color: #fff; }
 
 /* Elegant Outer cover for Notice Board */
 .welcome-cover {
-  background: #555; /* Dark Gray */
+  background: #F3E5F5; /* हल्का lavender/pink mix */
   padding: 6px;
   border-radius: 8px;
   margin: 12px;
-  border: 1px solid #333;
+  border: 6px solid #9C27B0; /* Thickness increased to 6px */
 }
 .welcome-cover .section-title {
   margin: 0;
   font-size: 18px;
-  background: linen; /* Simple flat linen */
+  background: transparent;
   color: black;
   border-radius: 6px;
 }
-
-/* सिर्फ Notice Board underline होगा */
 .welcome-cover .section-title u {
   text-decoration: underline;
 }
@@ -178,7 +167,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 </div>
 
 <div class="box-welcome">
-  यह वेबसाइट खासतौर पर Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है — 
+  यह वेबसाइट खासतौर पर Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
   <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
 </div>
 
@@ -234,13 +223,11 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <div class="section-title title-contact">Contact & Support</div>
 <div class="box" id="contact-buttons">
   Email: dalbir46@gmail.com • WhatsApp: +91 9468067047<br><br>
-
-  <!-- WhatsApp -->
+    <!-- WhatsApp -->
   <button id="whatsapp-btn" onclick="window.open('https://chat.whatsapp.com/I3kosBY1yVp2irNXhkPDZV?mode=ems_share_t','_blank')">
     <i class="fab fa-whatsapp"></i> Join us on WhatsApp
   </button>
-
-  <!-- Telegram -->
+    <!-- Telegram -->
   <button id="telegram-btn" onclick="window.open('https://t.me/Mathematic_hub','_blank')">
     <i class="fab fa-telegram-plane"></i> Join us on Telegram
   </button>
@@ -248,10 +235,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 
 <!-- Navigation Bar -->
 <div class="linkbar">
-  <a href="#">Home</a> | 
-  <a href="#updates">Latest Updates</a> | 
-  <a href="#practice">Practice Zone</a> | 
-  <a href="#resources">Resources</a>
+  <a href="#">Home</a> | <a href="#updates">Latest Updates</a> | <a href="#practice">Practice Zone</a> | <a href="#resources">Resources</a>
 </div>
 
 <!-- Footer -->
