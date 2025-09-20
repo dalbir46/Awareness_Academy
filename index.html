@@ -212,7 +212,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <div id="messages"></div>
   <input type="text" id="username" placeholder="Name" required>
   <input type="text" id="message" placeholder="Type your message" required>
-  <button id="sendBtn">Send</button>
+  <button id="sendBtn" type="button">Send</button>
 </div>
 
 <!-- Updates -->
@@ -336,4 +336,5 @@ db.ref("shoutbox").limitToLast(100).on("child_added", function(snapshot){
 </script>
 
 </body>
-</html>
+    </html>
+  
