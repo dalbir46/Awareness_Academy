@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shoutbox</title>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+</head>
+<body>
+  <h2>Shoutbox</h2>
+  <div id="messages" style="border:1px solid #ccc; padding:10px; width:300px; height:300px; overflow-y:scroll;"></div>
+
+  <form id="shoutForm" style="margin-top:10px;">
+    <input type="text" id="username" placeholder="Name" required>
+    <input type="text" id="message" placeholder="Message" required>
+    <button type="submit">Send</button>
+  </form>
+
+  <script>
+    // 🔹 Tumhara Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
+      authDomain: "mathematics-hub-7087f.firebaseapp.com",
+      databaseURL: "https://mathematics-hub-7087f-default-rtdb.firebaseio.com", // IMPORTANT ✅
+      projectId: "mathematics-hub-7087f",
+      storageBucket: "mathematics-hub-7087f.firebasestorage.app",
+      messagingSenderId: "182359137920",
+      appId: "1:182359137920:web:1cf89e1d441ea1503a9065",
+      measurementId: "G-JDGFBX110Q"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Form submit
+    document.getElementById("shoutForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const name = document.getElementById("username").value;
+      const msg = document.getElementById("message").value;
+
+      if (name && msg) {
+        db.ref("shoutbox").push({
+          name: name,
+          message: msg,
+          time: Date.now()
+        });
+        document.getElementById("message").value = "";
+      }
+    });
+
+    // Load last 100 messages
+    db.ref("shoutbox").limitToLast(100).on("child_added", function(snapshot){
+      const data = snapshot.val();
+      const div = document.createElement("div");
+      div.textContent = data.name + ": " + data.message;
+      document.getElementById("messages").appendChild(div);
+      // Auto scroll to bottom
+      document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
+    });
+  </script>
+</body>
+</html>
