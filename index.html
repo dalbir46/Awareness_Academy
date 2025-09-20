@@ -121,12 +121,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .btn11 { background: #00BFFF; }
 .btn12 { background: #DC143C; }
 
-/* Shoutbox Send Button */
-#shoutbox button { background-color: #4CAF50; color: #fff; }
-
-/* MCQ Class 12 Button */
-.btn-mcq12 { background-color: #8B0000; }
-
 /* Contact Buttons */
 #contact-buttons #whatsapp-btn { background-color: #25D366; color: #fff; }
 #contact-buttons #telegram-btn { background-color: #1DA1F2; color: #fff; }
@@ -175,7 +169,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 }
 #shoutbox input {
   padding: 6px;
-  width: 70%;
+  width: 65%;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
@@ -285,5 +279,61 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9
-          
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+
+<script>
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
+  authDomain: "mathematics-hub-7087f.firebaseapp.com",
+  databaseURL: "https://mathematics-hub-7087f-default-rtdb.firebaseio.com",
+  projectId: "mathematics-hub-7087f",
+  storageBucket: "mathematics-hub-7087f.firebasestorage.app",
+  messagingSenderId: "182359137920",
+  appId: "1:182359137920:web:1cf89e1d441ea1503a9065",
+  measurementId: "G-JDGFBX110Q"
+};
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// Get IP & Location
+async function getUserInfo() {
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    return await res.json();
+  } catch {
+    return { ip: "Unknown", city: "Unknown", country: "Unknown" };
+  }
+}
+
+// Send message
+document.getElementById("sendBtn").addEventListener("click", async function(){
+  const name = document.getElementById("username").value.trim();
+  const msg  = document.getElementById("message").value.trim();
+  if(!name || !msg) return;
+  const info = await getUserInfo();
+  db.ref("shoutbox").push({
+    name: name,
+    message: msg,
+    ip: info.ip,
+    location: info.city + ", " + info.country,
+    time: Date.now()
+  });
+  document.getElementById("message").value="";
+});
+
+// Load messages (latest on top)
+db.ref("shoutbox").limitToLast(100).on("child_added", function(snapshot){
+  const data = snapshot.val();
+  const div = document.createElement("div");
+  div.classList.add("msg");
+  const date = new Date(data.time);
+  const timeStr = date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  div.innerHTML = `<b>${data.name}</b>: ${data.message} <div class="meta">${timeStr} | ${data.ip} | ${data.location}</div>`;
+  const messagesDiv = document.getElementById("messages");
+  messagesDiv.insertBefore(div, messagesDiv.firstChild);
+});
+</script>
+
+</body>
+</html>
