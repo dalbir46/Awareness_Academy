@@ -6,160 +6,64 @@
 <title>Mathematics Hub Class 6 to 12</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f0f8ff;
-  margin: 0;
-  padding: 0;
-  color: #000;
-}
-
-/* Header & Footer */
-.header-wrapper, .footer-wrapper {
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  padding: 12px;
-}
-.header, .footer-inner {
-  background: #FFFFCC;
-  padding: 15px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  border: 2px solid #333;
-  border-radius: 10px;
-  text-shadow: 2px 2px 4px #888888;
-  max-width: 600px;
-  margin: auto;
-}
-.header div { margin: 5px 0; }
+body { font-family: Arial, sans-serif; background: #f0f8ff; margin:0; padding:0; color:#000; }
+.header-wrapper, .footer-wrapper { background: linear-gradient(135deg, #6a11cb, #2575fc); padding: 12px; }
+.header, .footer-inner { background:#FFFFCC; padding:15px; text-align:center; font-size:20px; font-weight:bold; border:2px solid #333; border-radius:10px; text-shadow:2px 2px 4px #888888; max-width:600px; margin:auto; }
+.header div { margin:5px 0; }
 
 /* Section Titles */
-.section-title {
-  text-align: center;
-  color: #fff;
-  padding: 10px;
-  font-weight: bold;
-  font-size: 16px;
-}
-.title-class   { background: #2196F3; }
-.title-updates { background: #2F4F4F; }
-.title-practice{ background: #9C27B0; }
-.title-res     { background: #009688; }
-.title-shout   { background: #F44336; }
-.title-contact { background: #4B0082; }
+.section-title { text-align:center; color:#fff; padding:10px; font-weight:bold; font-size:16px; }
+.title-class   { background: #2196F3; } .title-updates { background: #2F4F4F; } .title-practice{ background: #9C27B0; }
+.title-res     { background: #009688; } .title-shout   { background: #F44336; } .title-contact { background: #4B0082; }
 
 /* Boxes */
-.box { border: 1px solid #999; margin: 5px; padding: 10px; background: #F9F9F9; font-size: 14px; }
-.box-welcome { border: 2px solid #9C27B0; margin: 10px; padding: 20px; font-size: 16px; background: #F3E5F5; text-align: center; border-radius: 8px; }
+.box { border:1px solid #999; margin:5px; padding:10px; background:#F9F9F9; font-size:14px; }
+.box-welcome { border:2px solid #9C27B0; margin:10px; padding:20px; font-size:16px; background:#F3E5F5; text-align:center; border-radius:8px; }
 
 /* Linkbar */
-.linkbar { background: linear-gradient(45deg, #FF9800, #E91E63); padding: 8px; text-align: center; }
-.linkbar a { color: #fff; text-decoration: none; font-weight: bold; margin: 0 10px; }
-.linkbar a:hover { text-decoration: underline; }
+.linkbar { background:linear-gradient(45deg, #FF9800, #E91E63); padding:8px; text-align:center; }
+.linkbar a { color:#fff; text-decoration:none; font-weight:bold; margin:0 10px; }
+.linkbar a:hover { text-decoration:underline; }
 
-.small { font-size: 12px; color: #555; }
-.blue { color: #3366CC; font-weight: bold; }
+.small { font-size:12px; color:#555; }
+.blue { color:#3366CC; font-weight:bold; }
 
 /* Buttons */
-button, .btn {
-  border: none; padding: 12px 14px; color: #fff; border-radius: 6px;
-  cursor: pointer; font-size: 14px; margin: 6px; width: 100%; height: 60px;
-  font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: all 0.3s ease;
-}
+button, .btn { border:none; padding:12px 14px; color:#fff; border-radius:6px; cursor:pointer; font-size:14px; margin:6px; width:100%; height:60px; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.3s ease; }
 button:hover, .btn:hover { filter: brightness(0.85); }
 
-.class-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; justify-items: center; }
-.btn6  { background: #FF5722; } .btn7  { background: #4CAF50; } .btn8  { background: #9C27B0; }
-.btn9  { background: #3F51B5; } .btn10 { background: #FF8C00; } .btn11 { background: #00BFFF; } .btn12 { background: #DC143C; }
-.btn-mcq12 { background-color: #8B0000; }
+.class-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; justify-items:center; }
+.btn6  { background:#FF5722; } .btn7  { background:#4CAF50; } .btn8  { background:#9C27B0; }
+.btn9  { background:#3F51B5; } .btn10 { background:#FF8C00; } .btn11 { background:#00BFFF; } .btn12 { background:#DC143C; }
+.btn-mcq12 { background-color:#8B0000; }
 
 /* Contact Buttons */
-#contact-buttons #whatsapp-btn { background-color: #25D366; color: #fff; }
-#contact-buttons #telegram-btn { background-color: #1DA1F2; color: #fff; }
+#contact-buttons #whatsapp-btn { background-color:#25D366; color:#fff; }
+#contact-buttons #telegram-btn { background-color:#1DA1F2; color:#fff; }
 
 /* Notice Board */
-.welcome-cover {
-  background: #F3E5F5; 
-  padding: 6px;
-  border-radius: 8px;
-  margin: 12px;
-  border: 6px solid #9C27B0;
-}
-.welcome-cover .section-title {
-  margin: 0;
-  font-size: 18px;
-  background: transparent;
-  color: black;
-  border-radius: 6px;
-}
-.welcome-cover .section-title u { text-decoration: underline; }
+.welcome-cover { background:#F3E5F5; padding:6px; border-radius:8px; margin:12px; border:6px solid #9C27B0; }
+.welcome-cover .section-title { margin:0; font-size:18px; background:transparent; color:black; border-radius:6px; }
+.welcome-cover .section-title u { text-decoration:underline; }
 
 /* Shoutbox */
-#shoutbox {
-  background: #fff;
-  border: 2px solid #F44336;
-  border-radius: 6px;
-  padding: 10px;
-  margin: 10px;
-}
-#messages {
-  max-height: 250px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column-reverse;
-  margin-bottom: 8px;
-}
-.msg { border-bottom: 1px solid #ddd; padding: 4px 0; }
-.meta { font-size: 12px; color: gray; }
-#shoutbox input {
-  padding: 6px;
-  width: 100%;
-  border: 1px solid #FFA500;
-  border-radius: 4px;
-  margin-bottom: 6px;
-  box-sizing: border-box;
-}
-#shoutbox button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  background-color: #4CAF50;
-  color: #fff;
-  cursor: pointer;
-  font-size: 12px;
-  width: auto;
-  display: block;
-  margin-top: 4px;
-}
-#shoutbox button:hover { background-color: #45a049; }
-@media(max-width:600px){
-  #shoutbox input { width: 100%; margin-bottom:6px; }
-  #shoutbox button { width: 100%; margin-left:0; }
-}
+#shoutbox { background:#fff; border:2px solid #F44336; border-radius:6px; padding:10px; margin:10px; }
+#messages { max-height:250px; overflow-y:auto; display:flex; flex-direction:column; margin-bottom:8px; }
+.msg { border-bottom:1px solid #ddd; padding:4px 0; }
+.meta { font-size:12px; color:gray; }
+#shoutbox input { padding:6px; width:100%; border:1px solid #FFA500; border-radius:4px; margin-bottom:6px; box-sizing:border-box; }
+#shoutbox button { padding:6px 12px; border:none; border-radius:4px; background-color:#4CAF50; color:#fff; cursor:pointer; font-size:12px; width:auto; display:block; margin-top:4px; }
+#shoutbox button:hover { background-color:#45a049; }
+@media(max-width:600px){ #shoutbox input { width:100%; margin-bottom:6px; } #shoutbox button { width:100%; margin-left:0; } }
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="header-wrapper">
-  <div class="header">
-    <div>Welcome to Mathematics Hub</div>
-    <div>Class 6 to 12</div>
-  </div>
-</div>
+<div class="header-wrapper"><div class="header"><div>Welcome to Mathematics Hub</div><div>Class 6 to 12</div></div></div>
 
-<!-- Notice Board -->
-<div class="welcome-cover">
-  <div class="section-title"><u>Notice Board</u> :-</div>
-</div>
+<div class="welcome-cover"><div class="section-title"><u>Notice Board</u> :-</div></div>
+<div class="box-welcome">यह वेबसाइट खासतौर पर Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है — <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।</div>
 
-<div class="box-welcome">
-  यह वेबसाइट खासतौर पर Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
-  <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
-</div>
-
-<!-- Shoutbox -->
 <div class="section-title title-shout">Shoutbox</div>
 <div class="box" id="shoutbox">
   <div id="messages"></div>
@@ -168,7 +72,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <button id="sendBtn" type="button">Send</button>
 </div>
 
-<!-- Updates -->
 <div class="section-title title-updates" id="updates">Latest Updates</div>
 <div class="box">
   • <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>
@@ -176,7 +79,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
 </div>
 
-<!-- Classes -->
 <div class="section-title title-class">Select Your Class</div>
 <div class="box class-grid">
   <button class="btn btn6">Class 6</button>
@@ -188,7 +90,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <button class="btn btn12" style="grid-column: span 2;">Class 12</button>
 </div>
 
-<!-- Practice Zone -->
 <div class="section-title title-practice" id="practice">Practice Zone</div>
 <div class="box">
   Daily practice problems, MCQ quizzes और chapter-wise question banks.<br><br>
@@ -197,7 +98,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <button class="btn btn7">Daily Practice</button>
 </div>
 
-<!-- Resources -->
 <div class="section-title title-res" id="resources">Resources</div>
 <div class="box">
   <b>Quick Links:</b><br>
@@ -206,7 +106,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   • Sample Papers
 </div>
 
-<!-- Contact -->
 <div class="section-title title-contact">Contact & Support</div>
 <div class="box" id="contact-buttons">
   Email: dalbir46@gmail.com • WhatsApp: +91 9468067047<br><br>
@@ -218,17 +117,12 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   </button>
 </div>
 
-<!-- Navigation Bar -->
 <div class="linkbar">
   <a href="#">Home</a> | <a href="#updates">Latest Updates</a> | <a href="#practice">Practice Zone</a> | <a href="#resources">Resources</a>
 </div>
 
-<!-- Footer -->
-<div class="footer-wrapper">
-  <div class="footer-inner">© 2025 Mathematics Hub</div>
-</div>
+<div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
 
-<!-- Firebase v8 SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -249,58 +143,48 @@ var db = firebase.database();
 
 // Get IP & Location
 async function getUserInfo() {
-  try {
-    const res = await fetch("https://ipapi.co/json/");
-    return await res.json();
-  } catch {
-    return { ip: "Unknown", city: "Unknown", country: "Unknown" };
-  }
+  try { const res = await fetch("https://ipapi.co/json/"); return await res.json(); } 
+  catch { return { ip:"Unknown", city:"Unknown", country:"Unknown" }; }
 }
 
-// Add message to shoutbox
-function addMessageToBox(data){
+// Add message
+function addMessage(data){
   var div = document.createElement("div");
   div.classList.add("msg");
   var date = new Date(data.time);
-  var options = { hour: '2-digit', minute:'2-digit', hour12: true };
-  var timeStr = date.toLocaleTimeString([], options);
+  var timeStr = date.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', hour12:true});
   var dateStr = date.toLocaleDateString();
-  div.innerHTML = "<b>"+data.name+"</b>: "+data.message+
-                  " <div class='meta'>"+dateStr+" "+timeStr+" | "+data.ip+" | "+data.location+"</div>";
-  document.getElementById("messages").appendChild(div);
+  div.innerHTML = "<b>"+data.name+"</b>: "+data.message+" <div class='meta'>"+dateStr+" "+timeStr+" | "+data.ip+" | "+data.location+"</div>";
+  document.getElementById("messages").prepend(div); // prepend = latest on top
 }
 
-// Initial load
-db.ref("shoutbox").once("value", function(snapshot){
-  snapshot.forEach(function(childSnapshot){
-    var data = childSnapshot.val();
-    addMessageToBox(data);
+// Load existing messages
+db.ref("shoutbox").once("value", snapshot=>{
+  snapshot.forEach(child=>{
+    addMessage(child.val());
   });
 });
 
 // Listen for new messages
-db.ref("shoutbox").on("child_added", function(snapshot){
-  var data = snapshot.val();
-  addMessageToBox(data);
+db.ref("shoutbox").on("child_added", snapshot=>{
+  addMessage(snapshot.val());
 });
 
 // Send message
-document.getElementById("sendBtn").addEventListener("click", async function(){
+document.getElementById("sendBtn").addEventListener("click", async ()=>{
   var name = document.getElementById("username").value.trim();
-  var msg  = document.getElementById("message").value.trim();
+  var msg = document.getElementById("message").value.trim();
   if(!name || !msg) return;
   var info = await getUserInfo();
   db.ref("shoutbox").push({
-    name: name,
-    message: msg,
-    ip: info.ip,
-    location: info.city + ", " + info.country,
+    name:name,
+    message:msg,
+    ip:info.ip,
+    location: info.city+", "+info.country,
     time: Date.now()
   });
   document.getElementById("message").value="";
 });
 </script>
-
 </body>
-  </html>
-  
+</html>
