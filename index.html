@@ -13,14 +13,11 @@ body {
   padding: 0;
   color: #000;
 }
-
-/* Header & Footer Outer Wrapper */
+/* Header & Footer */
 .header-wrapper, .footer-wrapper {
   background: linear-gradient(135deg, #6a11cb, #2575fc);
   padding: 12px;
 }
-
-/* Header & Footer Inner Box */
 .header, .footer-inner {
   background: #FFFFCC;
   padding: 15px;
@@ -34,7 +31,6 @@ body {
   margin: auto;
 }
 .header div { margin: 5px 0; }
-
 /* Section Titles */
 .section-title {
   text-align: center;
@@ -49,7 +45,6 @@ body {
 .title-res     { background: #009688; }
 .title-shout   { background: #F44336; }
 .title-contact { background: #4B0082; }
-
 /* Boxes */
 .box {
   border: 1px solid #999;
@@ -67,7 +62,6 @@ body {
   text-align: center;
   border-radius: 8px;
 }
-
 /* Linkbar */
 .linkbar {
   background: linear-gradient(45deg, #FF9800, #E91E63);
@@ -81,10 +75,8 @@ body {
   margin: 0 10px;
 }
 .linkbar a:hover { text-decoration: underline; }
-
 .small { font-size: 12px; color: #555; }
 .blue { color: #3366CC; font-weight: bold; }
-
 /* Buttons */
 button, .btn {
   border: none;
@@ -104,14 +96,12 @@ button, .btn {
   transition: all 0.3s ease;
 }
 button:hover, .btn:hover { filter: brightness(0.85); }
-
 .class-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   justify-items: center;
 }
-
 /* Class Buttons */
 .btn6  { background: #FF5722; }
 .btn7  { background: #4CAF50; }
@@ -120,21 +110,17 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .btn10 { background: #FF8C00; }
 .btn11 { background: #00BFFF; }
 .btn12 { background: #DC143C; }
-
-/* MCQ Class 12 Button */
 .btn-mcq12 { background-color: #8B0000; }
-
 /* Contact Buttons */
 #contact-buttons #whatsapp-btn { background-color: #25D366; color: #fff; }
 #contact-buttons #telegram-btn { background-color: #1DA1F2; color: #fff; }
-
-/* Elegant Outer cover for Notice Board */
+/* Notice Board */
 .welcome-cover {
   background: #F3E5F5; 
   padding: 6px;
   border-radius: 8px;
   margin: 12px;
-  border: 6px solid #9C27B0; /* outer boundary thickness adjustable */
+  border: 6px solid #9C27B0;
 }
 .welcome-cover .section-title {
   margin: 0;
@@ -144,7 +130,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   border-radius: 6px;
 }
 .welcome-cover .section-title u { text-decoration: underline; }
-
 /* Shoutbox */
 #shoutbox {
   background: #fff;
@@ -162,8 +147,26 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 }
 .msg { border-bottom: 1px solid #ddd; padding: 4px 0; }
 .meta { font-size: 12px; color: gray; }
-#shoutbox input { padding: 6px; width: 100%; border: 1px solid #FFA500; border-radius: 4px; margin-bottom: 6px; box-sizing: border-box; }
-#shoutbox button { padding: 6px 12px; border: none; border-radius: 4px; background-color: #4CAF50; color: #fff; cursor: pointer; font-size: 12px; width: auto; display: block; margin-top: 4px; }
+#shoutbox input {
+  padding: 6px;
+  width: 100%;
+  border: 1px solid #FFA500;
+  border-radius: 4px;
+  margin-bottom: 6px;
+  box-sizing: border-box;
+}
+#shoutbox button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4CAF50;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  width: auto;
+  display: block;
+  margin-top: 4px;
+}
 #shoutbox button:hover { background-color: #45a049; }
 @media(max-width:600px){
   #shoutbox input { width: 100%; margin-bottom:6px; }
@@ -185,7 +188,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <div class="welcome-cover">
   <div class="section-title"><u>Notice Board</u> :-</div>
 </div>
-
 <div class="box-welcome">
   यह वेबसाइट खासतौर पर Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
   <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
@@ -197,7 +199,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <div id="messages"></div>
   <input type="text" id="username" placeholder="Name" required>
   <input type="text" id="message" placeholder="Type your message" required>
-  <button id="sendBtn">Send</button>
+  <button id="sendBtn" type="button">Send</button>
 </div>
 
 <!-- Updates -->
@@ -250,11 +252,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   </button>
 </div>
 
-<!-- Navigation Bar -->
-<div class="linkbar">
-  <a href="#">Home</a> | <a href="#updates">Latest Updates</a> | <a href="#practice">Practice Zone</a> | <a href="#resources">Resources</a>
-</div>
-
 <!-- Footer -->
 <div class="footer-wrapper">
   <div class="footer-inner">
@@ -262,10 +259,9 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   </div>
 </div>
 
-<!-- Firebase SDK -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
 // Firebase config
 var firebaseConfig = {
@@ -282,40 +278,39 @@ var db = firebase.database();
 
 // Get IP & Location
 async function getUserInfo() {
-  try { const res = await fetch("https://ipapi.co/json/"); return await res.json(); }
-  catch { return { ip: "Unknown", city: "Unknown", country: "Unknown" }; }
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    return await res.json();
+  } catch {
+    return { ip: "Unknown", city: "Unknown", country: "Unknown" };
+  }
 }
 
-// Add message to DOM & localStorage
+// Add message to DOM
 function addMessage(data) {
   const div = document.createElement("div");
   div.classList.add("msg");
   const date = new Date(data.time);
-  div.innerHTML = `<b>${data.name}</b>: ${data.message}<div class='meta'>${date.toLocaleString()} | ${data.ip} | ${data.location}</div>`;
+  const timeStr = date.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', hour12:true});
+  const dateStr = date.toLocaleDateString();
+  div.innerHTML = `<b>${data.name}</b>: ${data.message}
+    <div class='meta'>${dateStr} ${timeStr} | ${data.ip} | ${data.location}</div>`;
   document.getElementById("messages").prepend(div);
-
-  let history = JSON.parse(localStorage.getItem("shoutHistory") || "[]");
-  history.push(data);
-  localStorage.setItem("shoutHistory", JSON.stringify(history));
 }
 
-// Load messages from localStorage
-function loadLocalMessages() {
-  const history = JSON.parse(localStorage.getItem("shoutHistory") || "[]");
-  history.forEach(msg => {
-    const div = document.createElement("div");
-    div.classList.add("msg");
-    const date = new Date(msg.time);
-    div.innerHTML = `<b>${msg.name}</b>: ${msg.message}<div class='meta'>${date.toLocaleString()} | ${msg.ip} | ${msg.location}</div>`;
-    document.getElementById("messages").prepend(div);
+// Load all messages (history)
+function loadHistory() {
+  db.ref("shoutbox").orderByChild("time").limitToLast(100).once("value", snapshot => {
+    document.getElementById("messages").innerHTML = "";
+    snapshot.forEach(child => {
+      addMessage(child.val());
+    });
   });
 }
-loadLocalMessages();
 
-// Listen for new Firebase messages
-db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snapshot => {
-  const data = snapshot.val();
-  addMessage(data);
+// Real-time listener for new message
+db.ref("shoutbox").limitToLast(1).on("child_added", snapshot => {
+  addMessage(snapshot.val());
 });
 
 // Send message
@@ -324,12 +319,20 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
   const msg  = document.getElementById("message").value.trim();
   if(!name || !msg) return;
   const info = await getUserInfo();
-  const data = { name, message: msg, ip: info.ip, location: info.city + ", " + info.country, time: Date.now() };
+  const data = { 
+    name, 
+    message: msg, 
+    ip: info.ip, 
+    location: info.city + ", " + info.country, 
+    time: Date.now() 
+  };
   db.ref("shoutbox").push(data);
   document.getElementById("message").value="";
 });
-</script>
 
+// First load
+loadHistory();
+</script>
 </body>
-  </html>
+    </html>
   
