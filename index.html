@@ -164,21 +164,21 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .meta { font-size: 12px; color: gray; }
 #shoutbox input { padding: 6px; width: 100%; border: 1px solid #FFA500; border-radius: 4px; margin-bottom: 6px; box-sizing: border-box; }
 
-/* FIX: Shoutbox Send Button - right aligned and slightly up */
+/* FIX: Send button small, right below message input */
 #shoutbox .send-wrapper {
     display: flex;
-    justify-content: flex-end;  /* right align */
-    margin-top: -2px;           /* move slightly up */
+    justify-content: flex-end;
+    margin-top: -2px;
 }
 #shoutbox button#sendBtn {
+    width: auto !important;
+    height: auto !important;
     padding: 6px 14px;
     font-size: 12px;
     border-radius: 4px;
     background-color: #4CAF50;
     color: #fff;
     cursor: pointer;
-    width: auto;
-    height: auto;
 }
 #shoutbox button#sendBtn:hover { background-color: #45a049; }
 
@@ -214,8 +214,6 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <div id="messages"></div>
   <input type="text" id="username" placeholder="Name" required>
   <input type="text" id="message" placeholder="Type your message" required>
-  
-  <!-- Send button wrapper -->
   <div class="send-wrapper">
     <button id="sendBtn">Send</button>
   </div>
