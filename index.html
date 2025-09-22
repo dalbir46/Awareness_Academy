@@ -134,7 +134,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   padding: 6px;
   border-radius: 8px;
   margin: 12px;
-  border: 6px solid #9C27B0; /* outer boundary thickness adjustable */
+  border: 6px solid #9C27B0;
 }
 .welcome-cover .section-title {
   margin: 0;
@@ -163,11 +163,28 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .msg { border-bottom: 1px solid #ddd; padding: 4px 0; }
 .meta { font-size: 12px; color: gray; }
 #shoutbox input { padding: 6px; width: 100%; border: 1px solid #FFA500; border-radius: 4px; margin-bottom: 6px; box-sizing: border-box; }
-#shoutbox button { padding: 6px 12px; border: none; border-radius: 4px; background-color: #4CAF50; color: #fff; cursor: pointer; font-size: 12px; width: auto; display: block; margin-top: 4px; }
-#shoutbox button:hover { background-color: #45a049; }
+
+/* FIX: Shoutbox Send Button - right aligned and slightly up */
+#shoutbox .send-wrapper {
+    display: flex;
+    justify-content: flex-end;  /* right align */
+    margin-top: -2px;           /* move slightly up */
+}
+#shoutbox button#sendBtn {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+    width: auto;
+    height: auto;
+}
+#shoutbox button#sendBtn:hover { background-color: #45a049; }
+
 @media(max-width:600px){
-  #shoutbox input { width: 100%; margin-bottom:6px; }
-  #shoutbox button { width: 100%; margin-left:0; }
+  #shoutbox .send-wrapper { justify-content: flex-start; margin-top: 6px; }
+  #shoutbox button#sendBtn { width: 100%; }
 }
 </style>
 </head>
@@ -197,7 +214,11 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <div id="messages"></div>
   <input type="text" id="username" placeholder="Name" required>
   <input type="text" id="message" placeholder="Type your message" required>
-  <button id="sendBtn">Send</button>
+  
+  <!-- Send button wrapper -->
+  <div class="send-wrapper">
+    <button id="sendBtn">Send</button>
+  </div>
 </div>
 
 <!-- Updates -->
@@ -331,5 +352,4 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
 </script>
 
 </body>
-  </html>
-  
+</html>
