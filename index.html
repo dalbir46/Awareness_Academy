@@ -1,108 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mathematics Hub Class 6 to 12</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  body { font-family: Arial, sans-serif; background:#f0f8ff; margin:0; padding:0; color:#000; }
-  .header-wrapper, .footer-wrapper { background: linear-gradient(135deg,#6a11cb,#2575fc); padding:12px; }
-  .header, .footer-inner { background:#FFFFCC; padding:15px; text-align:center; font-size:20px; font-weight:bold; border:2px solid #333; border-radius:10px; text-shadow:2px 2px 4px #888; max-width:600px; margin:auto; }
-  .header div{ margin:5px 0; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f8ff;
+  margin: 0;
+  padding: 0;
+  color: #000;
+}
 
-  .section-title { text-align:center; color:#fff; padding:10px; font-weight:bold; font-size:16px; }
-  .title-class{ background:#2196F3 } .title-updates{ background:#2F4F4F } .title-practice{ background:#9C27B0 }
-  .title-res{ background:#009688 } .title-shout{ background:#F44336 } .title-contact{ background:#4B0082 }
+/* Header & Footer Outer Wrapper */
+.header-wrapper, .footer-wrapper {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  padding: 12px;
+}
 
-  .box{ border:1px solid #999; margin:5px; padding:10px; background:#F9F9F9; font-size:14px; }
-  .box-welcome{ border:2px solid #9C27B0; margin:10px; padding:20px; font-size:16px; background:#F3E5F5; text-align:center; border-radius:8px; }
+/* Header & Footer Inner Box */
+.header, .footer-inner {
+  background: #FFFFCC;
+  padding: 15px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid #333;
+  border-radius: 10px;
+  text-shadow: 2px 2px 4px #888888;
+  max-width: 600px;
+  margin: auto;
+}
+.header div { margin: 5px 0; }
 
-  .linkbar{ background: linear-gradient(45deg,#FF9800,#E91E63); padding:8px; text-align:center; }
-  .linkbar a{ color:#fff; text-decoration:none; font-weight:bold; margin:0 10px; } .linkbar a:hover{ text-decoration:underline; }
+/* Section Titles */
+.section-title {
+  text-align: center;
+  color: #fff;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 16px;
+}
+.title-class   { background: #2196F3; }
+.title-updates { background: #2F4F4F; }
+.title-practice{ background: #9C27B0; }
+.title-res     { background: #009688; }
+.title-shout   { background: #F44336; }
+.title-contact { background: #4B0082; }
 
-  .small{ font-size:12px; color:#555 } .blue{ color:#3366CC; font-weight:bold; }
+/* Boxes */
+.box {
+  border: 1px solid #999;
+  margin: 5px;
+  padding: 10px;
+  background: #F9F9F9;
+  font-size: 14px;
+}
+.box-welcome {
+  border: 2px solid #9C27B0; 
+  margin: 10px;
+  padding: 20px;
+  font-size: 16px;
+  background: #F3E5F5;
+  text-align: center;
+  border-radius: 8px;
+}
 
-  button, .btn {
-    border:none; padding:12px 14px; color:#fff; border-radius:6px; cursor:pointer; font-size:14px; margin:6px;
-    width:100%; height:60px; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px;
-    transition:all .3s ease;
-  }
-  button:hover, .btn:hover{ filter:brightness(.85); }
+/* Linkbar */
+.linkbar {
+  background: linear-gradient(45deg, #FF9800, #E91E63);
+  padding: 8px;
+  text-align: center;
+}
+.linkbar a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 10px;
+}
+.linkbar a:hover { text-decoration: underline; }
 
-  .class-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; justify-items:center; }
-  .btn6{ background:#FF5722 } .btn7{ background:#4CAF50 } .btn8{ background:#9C27B0 } .btn9{ background:#3F51B5 }
-  .btn10{ background:#FF8C00 } .btn11{ background:#00BFFF } .btn12{ background:#DC143C } .btn-mcq12{ background:#8B0000 }
+.small { font-size: 12px; color: #555; }
+.blue { color: #3366CC; font-weight: bold; }
 
-  #contact-buttons #whatsapp-btn{ background:#25D366; color:#fff } #contact-buttons #telegram-btn{ background:#1DA1F2; color:#fff }
+/* Buttons */
+button, .btn {
+  border: none;
+  padding: 12px 14px;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 6px;
+  width: 100%;
+  height: 60px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+button:hover, .btn:hover { filter: brightness(0.85); }
 
-  .welcome-cover{ background:#F3E5F5; padding:6px; border-radius:8px; margin:12px; border:6px solid #9C27B0; }
-  .welcome-cover .section-title{ margin:0; font-size:18px; background:transparent; color:black; border-radius:6px; }
-  .welcome-cover .section-title u{ text-decoration:underline; }
+.class-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  justify-items: center;
+}
 
-  /* Shoutbox styles */
-  #shoutbox { background:#fff; border:2px solid #F44336; border-radius:6px; padding:10px; margin:10px; }
-  #messages { max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; margin-bottom:8px; padding-right:6px; }
-  .msg { border-bottom:1px solid #eee; padding:6px 4px; background:#fff; border-radius:4px; }
-  .meta { font-size:12px; color:gray; margin-top:6px; }
-  #shoutbox input[type="text"]{ padding:8px; width:100%; border:1px solid #FFA500; border-radius:4px; margin-bottom:6px; box-sizing:border-box; }
-  #sendRow{ display:flex; gap:8px; align-items:center; }
-  #sendBtn{ padding:8px 12px; border-radius:4px; border:none; background:#4CAF50; color:#fff; cursor:pointer; }
-  #statusBar{ font-size:13px; color:#333; margin:6px 0 0; }
+/* Class Buttons */
+.btn6  { background: #FF5722; }
+.btn7  { background: #4CAF50; }
+.btn8  { background: #9C27B0; }
+.btn9  { background: #3F51B5; }
+.btn10 { background: #FF8C00; }
+.btn11 { background: #00BFFF; }
+.btn12 { background: #DC143C; }
 
-  @media(max-width:600px){
-    #sendRow{ flex-direction:column; } #sendBtn{ width:100% }
-  }
+/* MCQ Class 12 Button */
+.btn-mcq12 { background-color: #8B0000; }
+
+/* Contact Buttons */
+#contact-buttons #whatsapp-btn { background-color: #25D366; color: #fff; }
+#contact-buttons #telegram-btn { background-color: #1DA1F2; color: #fff; }
+
+/* Elegant Outer cover for Notice Board */
+.welcome-cover {
+  background: #F3E5F5; 
+  padding: 6px;
+  border-radius: 8px;
+  margin: 12px;
+  border: 6px solid #9C27B0; /* outer boundary thickness adjustable */
+}
+.welcome-cover .section-title {
+  margin: 0;
+  font-size: 18px;
+  background: transparent;
+  color: black;
+  border-radius: 6px;
+}
+.welcome-cover .section-title u { text-decoration: underline; }
+
+/* Shoutbox */
+#shoutbox {
+  background: #fff;
+  border: 2px solid #F44336;
+  border-radius: 6px;
+  padding: 10px;
+  margin: 10px;
+}
+#messages {
+  max-height: 250px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  margin-bottom: 8px;
+}
+.msg { border-bottom: 1px solid #ddd; padding: 4px 0; }
+.meta { font-size: 12px; color: gray; }
+#shoutbox input { padding: 6px; width: 100%; border: 1px solid #FFA500; border-radius: 4px; margin-bottom: 6px; box-sizing: border-box; }
+#shoutbox button { padding: 6px 12px; border: none; border-radius: 4px; background-color: #4CAF50; color: #fff; cursor: pointer; font-size: 12px; width: auto; display: block; margin-top: 4px; }
+#shoutbox button:hover { background-color: #45a049; }
+@media(max-width:600px){
+  #shoutbox input { width: 100%; margin-bottom:6px; }
+  #shoutbox button { width: 100%; margin-left:0; }
+}
 </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <div class="header-wrapper"><div class="header"><div>Welcome to Mathematics Hub</div><div>Class 6 to 12</div></div></div>
-
-  <!-- Notice Board -->
-  <div class="welcome-cover"><div class="section-title"><u>Notice Board</u> :-</div></div>
-  <div class="box-welcome">यह वेबसाइट खासतौर पर Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है — <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।</div>
-
-  <!-- Shoutbox -->
-  <div class="section-title title-shout">Shoutbox</div>
-  <div class="box" id="shoutbox">
-    <div id="messages" aria-live="polite" aria-atomic="true"></div>
-
-    <input type="text" id="username" placeholder="Name" />
-    <input type="text" id="message" placeholder="Type your message" />
-    <div id="sendRow">
-      <button id="sendBtn" type="button">Send</button>
-      <div id="statusBar">Shoutbox status: <span id="shoutStatus">Initializing...</span></div>
-    </div>
+<!-- Header -->
+<div class="header-wrapper">
+  <div class="header">
+    <div>Welcome to Mathematics Hub</div>
+    <div>Class 6 to 12</div>
   </div>
+</div>
 
-  <!-- (rest of page unchanged) -->
-  <div class="section-title title-updates" id="updates">Latest Updates</div>
-  <div class="box">• <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>• <b>Sample Paper 2024–25</b> — Solutions added<br>• <b>Weekly Test</b> — Integrals (Sun, 8 PM)</div>
+<!-- Notice Board -->
+<div class="welcome-cover">
+  <div class="section-title"><u>Notice Board</u> :-</div>
+</div>
 
-  <div class="section-title title-class">Select Your Class</div>
-  <div class="box class-grid">
-    <button class="btn btn6">Class 6</button>
-    <button class="btn btn7">Class 7</button>
-    <button class="btn btn8">Class 8</button>
-    <button class="btn btn9">Class 9</button>
-    <button class="btn btn10">Class 10</button>
-    <button class="btn btn11">Class 11</button>
-    <button class="btn btn12" style="grid-column: span 2;">Class 12</button>
+<div class="box-welcome">
+  यह वेबसाइट खासतौर पर Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
+  <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
+</div>
+
+<!-- Shoutbox -->
+<div class="section-title title-shout">Shoutbox</div>
+<div class="box" id="shoutbox">
+  <div id="messages"></div>
+  <input type="text" id="username" placeholder="Name" required>
+  <input type="text" id="message" placeholder="Type your message" required>
+  <button id="sendBtn">Send</button>
+</div>
+
+<!-- Updates -->
+<div class="section-title title-updates" id="updates">Latest Updates</div>
+<div class="box">
+  • <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>
+  • <b>Sample Paper 2024–25</b> — Solutions added<br>
+  • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
+</div>
+
+<!-- Classes -->
+<div class="section-title title-class">Select Your Class</div>
+<div class="box class-grid">
+  <button class="btn btn6">Class 6</button>
+  <button class="btn btn7">Class 7</button>
+  <button class="btn btn8">Class 8</button>
+  <button class="btn btn9">Class 9</button>
+  <button class="btn btn10">Class 10</button>
+  <button class="btn btn11">Class 11</button>
+  <button class="btn btn12" style="grid-column: span 2;">Class 12</button>
+</div>
+
+<!-- Practice Zone -->
+<div class="section-title title-practice" id="practice">Practice Zone</div>
+<div class="box">
+  Daily practice problems, MCQ quizzes और chapter-wise question banks.<br><br>
+  <button class="btn btn-mcq12">MCQ: Class 12</button>
+  <button class="btn btn9">MCQ: Class 10</button>
+  <button class="btn btn7">Daily Practice</button>
+</div>
+
+<!-- Resources -->
+<div class="section-title title-res" id="resources">Resources</div>
+<div class="box">
+  <b>Quick Links:</b><br>
+  • NCERT Solutions (All Classes)<br>
+  • Formula Sheets<br>
+  • Sample Papers
+</div>
+
+<!-- Contact -->
+<div class="section-title title-contact">Contact & Support</div>
+<div class="box" id="contact-buttons">
+  Email: dalbir46@gmail.com • WhatsApp: +91 9468067047<br><br>
+  <button id="whatsapp-btn" onclick="window.open('https://chat.whatsapp.com/I3kosBY1yVp2irNXhkPDZV?mode=ems_share_t','_blank')">
+    <i class="fab fa-whatsapp"></i> Join us on WhatsApp
+  </button>
+  <button id="telegram-btn" onclick="window.open('https://t.me/Mathematic_hub','_blank')">
+    <i class="fab fa-telegram-plane"></i> Join us on Telegram
+  </button>
+</div>
+
+<!-- Navigation Bar -->
+<div class="linkbar">
+  <a href="#">Home</a> | <a href="#updates">Latest Updates</a> | <a href="#practice">Practice Zone</a> | <a href="#resources">Resources</a>
+</div>
+
+<!-- Footer -->
+<div class="footer-wrapper">
+  <div class="footer-inner">
+    © 2025 Mathematics Hub
   </div>
+</div>
 
-  <div class="linkbar"><a href="#">Home</a> | <a href="#updates">Latest Updates</a> | <a href="#practice">Practice Zone</a> | <a href="#resources">Resources</a></div>
-
-  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-/* ---------- CONFIG ---------- */
-const firebaseConfig = {
+// Firebase config
+var firebaseConfig = {
   apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
   authDomain: "mathematics-hub-7087f.firebaseapp.com",
   databaseURL: "https://mathematics-hub-7087f-default-rtdb.firebaseio.com",
@@ -112,235 +278,58 @@ const firebaseConfig = {
   appId: "1:182359137920:web:1cf89e1d441ea1503a9065"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+var db = firebase.database();
 
-const messagesEl = document.getElementById('messages');
-const statusEl = document.getElementById('shoutStatus');
-const sendBtn = document.getElementById('sendBtn');
-const nameInput = document.getElementById('username');
-const msgInput = document.getElementById('message');
-
-let seenKeys = new Set();
-let lastLoadedTime = 0;
-const LOCAL_KEY = "shoutHistory_v2";
-const MAX_SAVE = 500;
-
-/* ---------- Helper: get IP/location ---------- */
-async function getUserInfo(){
-  try{
-    const res = await fetch("https://ipapi.co/json/");
-    if(!res.ok) throw new Error("ipapi not ok");
-    return await res.json();
-  }catch(err){
-    console.warn("IP lookup failed:", err);
-    return { ip:"Unknown", city:"Unknown", country:"Unknown" };
-  }
+// Get IP & Location
+async function getUserInfo() {
+  try { const res = await fetch("https://ipapi.co/json/"); return await res.json(); }
+  catch { return { ip: "Unknown", city: "Unknown", country: "Unknown" }; }
 }
 
-/* ---------- Helper: create and render message ---------- */
-function createMessageElement(key, data){
-  const div = document.createElement('div');
-  div.className = 'msg';
-  const date = new Date(data.time || Date.now());
-  const timeStr = date.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', hour12:true});
-  const dateStr = date.toLocaleDateString();
-  div.dataset.key = key;
-  div.innerHTML = `<strong>${escapeHtml(data.name)}</strong>: ${escapeHtml(data.message)}
-    <div class="meta">${escapeHtml(dateStr)} ${escapeHtml(timeStr)} | ${escapeHtml(data.ip||'Unknown')} | ${escapeHtml(data.location||'Unknown')}</div>`;
-  return div;
+// Add message to DOM & localStorage
+function addMessage(data) {
+  const div = document.createElement("div");
+  div.classList.add("msg");
+  const date = new Date(data.time);
+  div.innerHTML = `<b>${data.name}</b>: ${data.message}<div class='meta'>${date.toLocaleString()} | ${data.ip} | ${data.location}</div>`;
+  document.getElementById("messages").prepend(div);
+
+  let history = JSON.parse(localStorage.getItem("shoutHistory") || "[]");
+  history.push(data);
+  localStorage.setItem("shoutHistory", JSON.stringify(history));
 }
 
-function renderMessage(key, data){
-  if(!key || !data) return;
-  if(seenKeys.has(key)) return;
-  const el = createMessageElement(key, data);
-  // latest on top:
-  messagesEl.insertBefore(el, messagesEl.firstChild);
-  seenKeys.add(key);
-}
-
-/* ---------- Escape to avoid injection ---------- */
-function escapeHtml(s){
-  if(!s && s !== 0) return "";
-  return String(s).replace(/[&<>"'`]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',"`":'&#96;'})[c]; });
-}
-
-/* ---------- Save/Load localStorage fallback ---------- */
-function saveLocalHistory(items){
-  try{
-    const toSave = items.slice(0, MAX_SAVE); // limit
-    localStorage.setItem(LOCAL_KEY, JSON.stringify(toSave));
-  }catch(e){ console.warn("localStorage save failed", e); }
-}
-function loadLocalHistory(){
-  try{
-    const raw = localStorage.getItem(LOCAL_KEY);
-    if(!raw) return [];
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr : [];
-  }catch(e){
-    console.warn("localStorage read failed", e);
-    return [];
-  }
-}
-
-/* ---------- Load history from Firebase (preferred) ---------- */
-function loadHistoryFromFirebase(){
-  statusEl.textContent = "Loading from Firebase...";
-  console.log("Loading history from Firebase...");
-  return db.ref("shoutbox").orderByChild("time").limitToLast(MAX_SAVE).once("value")
-    .then(snapshot=>{
-      const items = [];
-      snapshot.forEach(child=>{
-        items.push({ key: child.key, val: child.val() });
-      });
-      // sort ascending by time so we can prepend oldest->newest to get newest on top
-      items.sort((a,b)=> (a.val.time||0) - (b.val.time||0) );
-      // clear DOM and seen set
-      messagesEl.innerHTML = "";
-      seenKeys.clear();
-      // render oldest->newest, but using prepend results in newest on top
-      items.forEach(it => renderMessage(it.key, it.val));
-      // compute lastLoadedTime
-      if(items.length) lastLoadedTime = items[items.length-1].val.time || 0;
-      else lastLoadedTime = 0;
-      // save to local storage (store array of {key,val})
-      saveLocalHistory(items.map(it => ({ key: it.key, val: it.val })));
-      statusEl.textContent = `Loaded ${items.length} messages (Firebase)`;
-      console.log(`Loaded ${items.length} messages from Firebase. lastLoadedTime=${lastLoadedTime}`);
-      return items;
-    })
-    .catch(err=>{
-      console.error("Firebase history load failed:", err);
-      statusEl.textContent = "Firebase load failed — using local cache (if any)";
-      return Promise.reject(err);
-    });
-}
-
-/* ---------- Load from localStorage fallback ---------- */
-function loadHistoryFromLocal(){
-  const arr = loadLocalHistory();
-  if(arr.length){
-    messagesEl.innerHTML = "";
-    seenKeys.clear();
-    // arr items are {key, val}
-    // sort ascending by time:
-    arr.sort((a,b)=> (a.val.time||0) - (b.val.time||0) );
-    arr.forEach(it => renderMessage(it.key, it.val));
-    lastLoadedTime = arr.length ? arr[arr.length-1].val.time || 0 : 0;
-    statusEl.textContent = `Loaded ${arr.length} messages (local cache)`;
-    console.log(`Loaded ${arr.length} messages from localStorage. lastLoadedTime=${lastLoadedTime}`);
-  } else {
-    statusEl.textContent = "No local history available";
-    console.log("No local history found.");
-  }
-}
-
-/* ---------- Attach realtime listener only for NEW messages ---------- */
-function listenForNewMessages(){
-  // start listening for messages with time > lastLoadedTime
-  let query = db.ref("shoutbox").orderByChild("time");
-  if(lastLoadedTime && typeof lastLoadedTime === "number"){
-    query = query.startAt(lastLoadedTime + 1);
-  } else {
-    // no last time — listen to last 1 to avoid reloading everything twice
-    query = query.limitToLast(1);
-  }
-  query.on("child_added", snapshot=>{
-    const key = snapshot.key;
-    const val = snapshot.val();
-    if(!val) return;
-    // avoid duplicates
-    if(seenKeys.has(key)) {
-      console.debug("Skipping duplicate child_added key:", key);
-      return;
-    }
-    renderMessage(key, val);
-    // update localStorage: prepend to local array
-    try{
-      const raw = localStorage.getItem(LOCAL_KEY);
-      let arr = raw ? JSON.parse(raw) : [];
-      arr = Array.isArray(arr) ? arr : [];
-      // push at end (we maintain ascending save), but keep size
-      arr.push({ key, val });
-      if(arr.length > MAX_SAVE) arr = arr.slice(arr.length - MAX_SAVE);
-      localStorage.setItem(LOCAL_KEY, JSON.stringify(arr));
-      // update lastLoadedTime
-      if(val.time && val.time > lastLoadedTime) lastLoadedTime = val.time;
-      statusEl.textContent = `Loaded (live) — ${seenKeys.size} messages`;
-    }catch(e){ console.warn("Failed to update local storage on new message", e); }
-  }, err=>{
-    console.error("Realtime child_added listener failed:", err);
-    statusEl.textContent = "Realtime listener error (see console)";
+// Load messages from localStorage
+function loadLocalMessages() {
+  const history = JSON.parse(localStorage.getItem("shoutHistory") || "[]");
+  history.forEach(msg => {
+    const div = document.createElement("div");
+    div.classList.add("msg");
+    const date = new Date(msg.time);
+    div.innerHTML = `<b>${msg.name}</b>: ${msg.message}<div class='meta'>${date.toLocaleString()} | ${msg.ip} | ${msg.location}</div>`;
+    document.getElementById("messages").prepend(div);
   });
 }
+loadLocalMessages();
 
-/* ---------- Public: send message ---------- */
-sendBtn.addEventListener('click', async ()=>{
-  const name = nameInput.value.trim();
-  const msg = msgInput.value.trim();
-  if(!name || !msg){
-    alert("Enter name and message");
-    return;
-  }
-  sendBtn.disabled = true;
-  sendBtn.textContent = "Sending...";
-  try{
-    const info = await getUserInfo();
-    const data = {
-      name: name,
-      message: msg,
-      ip: info.ip || "Unknown",
-      location: (info.city ? info.city + ", " : "") + (info.country || ""),
-      time: Date.now()
-    };
-    // push then set to reliably get key (safer for local merging)
-    const newRef = db.ref("shoutbox").push();
-    await newRef.set(data);
-    // new message will be delivered via 'child_added' listener and rendered
-    msgInput.value = "";
-    statusEl.textContent = "Message sent";
-    console.log("Message pushed, key=", newRef.key);
-  }catch(err){
-    console.error("Send failed:", err);
-    statusEl.textContent = "Send failed (see console)";
-    alert("Failed to send message — check console");
-  }finally{
-    sendBtn.disabled = false;
-    sendBtn.textContent = "Send";
-  }
+// Listen for new Firebase messages
+db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snapshot => {
+  const data = snapshot.val();
+  addMessage(data);
 });
 
-/* ---------- Bootstrapping: try Firebase -> fallback local -> attach listener ---------- */
-(async function bootstrap(){
-  try{
-    await loadHistoryFromFirebase();
-  }catch(e){
-    // firebase load failed — fallback to local
-    loadHistoryFromLocal();
-  } finally {
-    // always attach listener for new messages (startAt uses lastLoadedTime)
-    try{
-      listenForNewMessages();
-      console.log("Realtime listener attached (startAt lastLoadedTime=", lastLoadedTime, ")");
-    }catch(err){
-      console.error("Failed to attach realtime listener:", err);
-      statusEl.textContent = "Cannot attach realtime listener (see console)";
-    }
-  }
-})();
-
-/* ---------- Extra: show Firebase connection state in console ---------- */
-firebase.database().ref(".info/connected").on("value", snap => {
-  const connected = !!snap.val();
-  console.log("Firebase connected:", connected);
-  if(connected){
-    statusEl.style.opacity = "1";
-  } else {
-    statusEl.style.opacity = "0.7";
-  }
+// Send message
+document.getElementById("sendBtn").addEventListener("click", async () => {
+  const name = document.getElementById("username").value.trim();
+  const msg  = document.getElementById("message").value.trim();
+  if(!name || !msg) return;
+  const info = await getUserInfo();
+  const data = { name, message: msg, ip: info.ip, location: info.city + ", " + info.country, time: Date.now() };
+  db.ref("shoutbox").push(data);
+  document.getElementById("message").value="";
 });
 </script>
+
 </body>
   </html>
-      
+  
