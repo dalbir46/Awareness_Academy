@@ -167,8 +167,8 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 /* FIX: Shoutbox Send Button - right aligned and slightly up */
 #shoutbox .send-wrapper {
     display: flex;
-    justify-content: flex-end;  /* right align */
-    margin-top: -2px;           /* move slightly up */
+    justify-content: flex-end;
+    margin-top: -2px;
 }
 #shoutbox button#sendBtn {
     padding: 6px 14px;
@@ -182,9 +182,23 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 }
 #shoutbox button#sendBtn:hover { background-color: #45a049; }
 
+#clearBtn {
+    padding: 6px 14px;
+    font-size: 12px;
+    border-radius: 4px;
+    background-color: red;
+    color: #fff;
+    cursor: pointer;
+    width: auto;
+    height: auto;
+    display: none; /* default hidden */
+}
+#clearBtn:hover { background-color: darkred; }
+
 @media(max-width:600px){
   #shoutbox .send-wrapper { justify-content: flex-start; margin-top: 6px; }
   #shoutbox button#sendBtn { width: 100%; }
+  #clearBtn { width: 100%; }
 }
 </style>
 </head>
@@ -212,12 +226,17 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <div class="section-title title-shout">Shoutbox</div>
 <div class="box" id="shoutbox">
   <div id="messages"></div>
-  <input type="text" id="username" placeholder="Name" required>
-  <input type="text" id="message" placeholder="Type your message" required>
-  
-  <!-- Send button wrapper -->
+
+  <input type="text" id="username" placeholder="Name (type 'admin' to login as admin)">
+  <input type="text" id="message" placeholder="Type your message">
+
   <div class="send-wrapper">
     <button id="sendBtn">Send</button>
+  </div>
+
+  <!-- Clear Shoutbox Button (hidden by default, visible only for admin) -->
+  <div class="send-wrapper">
+    <button id="clearBtn">Clear Shoutbox</button>
   </div>
 </div>
 
@@ -288,7 +307,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-// Firebase config
+// ---------- CONFIG ----------
 var firebaseConfig = {
   apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
   authDomain: "mathematics-hub-7087f.firebaseapp.com",
@@ -301,53 +320,124 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
-// Get IP & Location
+// Admin password (client-side)
+const ADMIN_PASSWORD = "Dalbir@107";
+
+// ---------- Helpers ----------
 async function getUserInfo() {
   try { const res = await fetch("https://ipapi.co/json/"); return await res.json(); }
   catch { return { ip: "Unknown", city: "Unknown", country: "Unknown" }; }
 }
 
-// Add message to DOM & localStorage
-function addMessage(data) {
+function addMessageToDOM(data) {
   const div = document.createElement("div");
   div.classList.add("msg");
   const date = new Date(data.time);
-  div.innerHTML = `<b>${data.name}</b>: ${data.message}<div class='meta'>${date.toLocaleString()} | ${data.ip} | ${data.location}</div>`;
+  div.innerHTML = `<b>${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}<div class='meta'>${date.toLocaleString()} | ${escapeHtml(data.ip)} | ${escapeHtml(data.location)}</div>`;
   document.getElementById("messages").prepend(div);
-
-  let history = JSON.parse(localStorage.getItem("shoutHistory") || "[]");
-  history.push(data);
-  localStorage.setItem("shoutHistory", JSON.stringify(history));
 }
 
-// Load messages from localStorage
+function escapeHtml(str) {
+  if (!str && str !== "") return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// ---------- Local storage load ----------
 function loadLocalMessages() {
   const history = JSON.parse(localStorage.getItem("shoutHistory") || "[]");
-  history.forEach(msg => {
-    const div = document.createElement("div");
-    div.classList.add("msg");
-    const date = new Date(msg.time);
-    div.innerHTML = `<b>${msg.name}</b>: ${msg.message}<div class='meta'>${date.toLocaleString()} | ${msg.ip} | ${msg.location}</div>`;
-    document.getElementById("messages").prepend(div);
-  });
+  history.forEach(msg => addMessageToDOM(msg));
 }
 loadLocalMessages();
 
-// Listen for new Firebase messages
+// ---------- Firebase listener ----------
 db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snapshot => {
   const data = snapshot.val();
-  addMessage(data);
+  addMessageToDOM(data);
+
+  // save to local history
+  let history = JSON.parse(localStorage.getItem("shoutHistory") || "[]");
+  history.push(data);
+  localStorage.setItem("shoutHistory", JSON.stringify(history));
 });
 
-// Send message
+// ---------- Admin state ----------
+function isAdminAuthenticated() {
+  return sessionStorage.getItem("isAdmin") === "true";
+}
+function setAdminAuthenticated(flag) {
+  if (flag) sessionStorage.setItem("isAdmin", "true");
+  else sessionStorage.removeItem("isAdmin");
+  updateAdminUI();
+}
+function updateAdminUI() {
+  const clearBtn = document.getElementById("clearBtn");
+  if (isAdminAuthenticated()) clearBtn.style.display = "inline-block";
+  else clearBtn.style.display = "none";
+}
+// On page load, reflect admin state
+updateAdminUI();
+
+// ---------- Send message ----------
 document.getElementById("sendBtn").addEventListener("click", async () => {
-  const name = document.getElementById("username").value.trim();
-  const msg  = document.getElementById("message").value.trim();
-  if(!name || !msg) return;
+  const nameEl = document.getElementById("username");
+  const msgEl  = document.getElementById("message");
+  const name = nameEl.value.trim();
+  const msg  = msgEl.value.trim();
+  if (!name || !msg) return alert("Please enter name and message.");
+
+  // If user is trying to act as 'admin', require password
+  if (name.toLowerCase() === "admin" && !isAdminAuthenticated()) {
+    const pwd = prompt("Enter admin password:");
+    if (pwd === null) return; // user cancelled
+    if (pwd === ADMIN_PASSWORD) {
+      setAdminAuthenticated(true);
+      alert("Admin authenticated. Clear Shoutbox button visible.");
+    } else {
+      alert("Incorrect password. You will post as normal user.");
+      // do not return; allow posting as normal "admin" text if desired OR you may opt to block.
+      // Here we allow posting but do not give clear privileges.
+    }
+  }
+
   const info = await getUserInfo();
-  const data = { name, message: msg, ip: info.ip, location: info.city + ", " + info.country, time: Date.now() };
+  const data = { name, message: msg, ip: info.ip, location: (info.city || "Unknown") + ", " + (info.country || "Unknown"), time: Date.now() };
   db.ref("shoutbox").push(data);
-  document.getElementById("message").value="";
+  msgEl.value = "";
+});
+
+// ---------- Clear Shoutbox (admin only) ----------
+document.getElementById("clearBtn").addEventListener("click", () => {
+  if (!isAdminAuthenticated()) {
+    return alert("Only authenticated admin can clear the shoutbox.");
+  }
+  if (confirm("Are you sure you want to clear the shoutbox? This will delete all messages from Firebase.")) {
+    db.ref("shoutbox").remove()
+      .then(() => {
+        document.getElementById("messages").innerHTML = "";
+        localStorage.removeItem("shoutHistory");
+        alert("Shoutbox cleared!");
+      })
+      .catch(err => {
+        console.error("Error clearing shoutbox:", err);
+        alert("Error clearing shoutbox. Check console.");
+      });
+  }
+});
+
+// Optional: provide a way for admin to logout (clear session)
+window.addEventListener("keydown", function(e) {
+  // Ctrl+Shift+L to logout admin (hidden shortcut)
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "l") {
+    if (isAdminAuthenticated()) {
+      setAdminAuthenticated(false);
+      alert("Admin logged out.");
+    }
+  }
 });
 </script>
 
