@@ -6,7 +6,6 @@
 <title>Mathematics Hub Class 6 to 12</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* --- Your same CSS, no design changes --- */
 body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 0; color: #000; }
 .header-wrapper, .footer-wrapper { background: linear-gradient(135deg, #6a11cb, #2575fc); padding: 12px; }
 .header, .footer-inner { background: #FFFFCC; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; border: 2px solid #333; border-radius: 10px; text-shadow: 2px 2px 4px #888888; max-width: 600px; margin: auto; }
@@ -32,6 +31,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .msg { border-bottom:1px solid #ddd; padding:4px 0; }
 .meta { font-size:12px; color:gray; }
 #shoutbox input[type=text], #shoutbox input[type=file]{ padding:6px;width:100%;border:1px solid #FFA500;border-radius:4px;margin-bottom:6px;box-sizing:border-box;}
+#uploadProgress { color:blue; font-size:12px; margin-bottom:4px; }
 #shoutbox .send-wrapper { display:flex; justify-content:flex-end; margin-top:-2px; }
 #sendBtn { padding:6px 14px; font-size:12px; border-radius:4px; background:#4CAF50; color:#fff; width:auto; height:auto; }
 #clearBtn { padding:6px 14px; font-size:12px; border-radius:4px; background:red; color:#fff; width:auto; height:auto; }
@@ -43,44 +43,43 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 </head>
 <body>
 
-<!-- Header -->
 <div class="header-wrapper"><div class="header"><div>Welcome to Mathematics Hub</div><div>Class 6 to 12</div></div></div>
 
-<!-- Notice Board -->
 <div class="welcome-cover"><div class="section-title"><u>Notice Board</u> :-</div></div>
-<div class="box-welcome">यह वेबसाइट खासतौर पर Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है — <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।</div>
+<div class="box-welcome">यह वेबसाइट खासतौर पर hello Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है — <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।</div>
 
 <!-- Shoutbox -->
 <div class="section-title title-shout">Shoutbox</div>
 <div class="box" id="shoutbox">
-  <div id="adminStatus">✅ Admin login successful</div>
-  <div id="messages"></div>
-  <input type="text" id="username" placeholder="Name (type 'admin' to login as admin)">
-  <input type="text" id="message" placeholder="Type your message">
-  <input type="file" id="photoInput" accept="image/*">
-  <div class="send-wrapper"><button id="sendBtn">Send</button></div>
-  <div class="send-wrapper"><button id="clearBtn">Clear Shoutbox</button></div>
-  <div class="send-wrapper"><button id="deleteSelectedBtn">Delete Selected</button></div>
-  <div class="send-wrapper"><button id="logoutBtn">Admin Logout</button></div>
+  <div id="adminStatus">✅ Admin login successful</div>
+  <div id="messages"></div>
+  <input type="text" id="username" placeholder="Name (type 'admin' to login as admin)">
+  <input type="text" id="message" placeholder="Type your message">
+  <input type="file" id="photoInput" accept="image/*">
+  <div id="uploadProgress"></div>
+  <div class="send-wrapper"><button id="sendBtn">Send</button></div>
+  <div class="send-wrapper"><button id="clearBtn">Clear Shoutbox</button></div>
+  <div class="send-wrapper"><button id="deleteSelectedBtn">Delete Selected</button></div>
+  <div class="send-wrapper"><button id="logoutBtn">Admin Logout</button></div>
 </div>
 
-<!-- Other Sections -->
+<!-- Other Sections (Updates, Classes, etc.) -->
 <div class="section-title title-updates" id="updates">Latest Updates</div>
 <div class="box">• <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>• <b>Sample Paper 2024–25</b> — Solutions added<br>• <b>Weekly Test</b> — Integrals (Sun, 8 PM)</div>
 
 <div class="section-title title-class">Select Your Class</div>
 <div class="box class-grid">
-  <button class="btn btn6">Class 6</button><button class="btn btn7">Class 7</button>
-  <button class="btn btn8">Class 8</button><button class="btn btn9">Class 9</button>
-  <button class="btn btn10">Class 10</button><button class="btn btn11">Class 11</button>
-  <button class="btn btn12" style="grid-column: span 2;">Class 12</button>
+  <button class="btn btn6">Class 6</button><button class="btn btn7">Class 7</button>
+  <button class="btn btn8">Class 8</button><button class="btn btn9">Class 9</button>
+  <button class="btn btn10">Class 10</button><button class="btn btn11">Class 11</button>
+  <button class="btn btn12" style="grid-column: span 2;">Class 12</button>
 </div>
 
 <div class="section-title title-practice" id="practice">Practice Zone</div>
 <div class="box">Daily practice problems, MCQ quizzes और chapter-wise question banks.<br><br>
-  <button class="btn btn-mcq12">MCQ: Class 12</button>
-  <button class="btn btn9">MCQ: Class 10</button>
-  <button class="btn btn7">Daily Practice</button>
+  <button class="btn btn-mcq12">MCQ: Class 12</button>
+  <button class="btn btn9">MCQ: Class 10</button>
+  <button class="btn btn7">Daily Practice</button>
 </div>
 
 <div class="section-title title-res" id="resources">Resources</div>
@@ -88,8 +87,8 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 
 <div class="section-title title-contact">Contact & Support</div>
 <div class="box" id="contact-buttons">Email: dalbir46@gmail.com • WhatsApp: +91 9468067047<br><br>
-  <button id="whatsapp-btn" onclick="window.open('https://chat.whatsapp.com/I3kosBY1yVp2irNXhkPDZV?mode=ems_share_t','_blank')"><i class="fab fa-whatsapp"></i> Join us on WhatsApp</button>
-  <button id="telegram-btn" onclick="window.open('https://t.me/Mathematic_hub','_blank')"><i class="fab fa-telegram-plane"></i> Join us on Telegram</button>
+  <button id="whatsapp-btn" onclick="window.open('https://chat.whatsapp.com/I3kosBY1yVp2irNXhkPDZV?mode=ems_share_t','_blank')"><i class="fab fa-whatsapp"></i> Join us on WhatsApp</button>
+  <button id="telegram-btn" onclick="window.open('https://t.me/Mathematic_hub','_blank')"><i class="fab fa-telegram-plane"></i> Join us on Telegram</button>
 </div>
 
 <div class="linkbar"><a href="#">Home</a> | <a href="#updates">Latest Updates</a> | <a href="#practice">Practice Zone</a> | <a href="#resources">Resources</a></div>
@@ -100,7 +99,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 <script>
-var firebaseConfig={apiKey:"AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",authDomain:"mathematics-hub-7087f.firebaseapp.com",databaseURL:"https://mathematics-hub-7087f-default-rtdb.firebaseio.com",projectId:"mathematics-hub-7087f",storageBucket:"mathematics-hub-7087f.appspot.com",messagingSenderId:"182359137920",appId:"1:182359137920:web:1cf89e1d441ea1503a9065"}; 
+var firebaseConfig={apiKey:"AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",authDomain:"mathematics-hub-7087f.firebaseapp.com",databaseURL:"https://mathematics-hub-7087f-default-rtdb.firebaseio.com",projectId:"mathematics-hub-7087f",storageBucket:"mathematics-hub-7087f.appspot.com",messagingSenderId:"182359137920",appId:"1:182359137920:web:1cf89e1d441ea1503a9065"};
 firebase.initializeApp(firebaseConfig);
 var db=firebase.database(),storage=firebase.storage();
 const ADMIN_PASSWORD="Dalbir@107";
@@ -112,27 +111,87 @@ function setAdminAuthenticated(flag){if(flag)sessionStorage.setItem("isAdmin","t
 function updateAdminUI(){document.getElementById("adminStatus").style.display=isAdminAuthenticated()?"block":"none";document.getElementById("logoutBtn").style.display=isAdminAuthenticated()?"inline-block":"none";document.getElementById("deleteSelectedBtn").style.display=isAdminAuthenticated()?"inline-block":"none";updateCheckboxes();}
 
 // Add message
-function addMessageToDOM(key,data){const div=document.createElement("div");div.classList.add("msg");div.setAttribute("data-key",key);let checkboxHtml="";if(isAdminAuthenticated()){checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;}let content=`<b>${checkboxHtml}${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}`;if(data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;}content+=`<div class='meta'>${new Date(data.time).toLocaleString()}</div>`;div.innerHTML=content;document.getElementById("messages").prepend(div);}
-function updateCheckboxes(){document.querySelectorAll(".msg").forEach(msg=>{let chk=msg.querySelector(".msgCheck");if(isAdminAuthenticated()){if(!chk){const key=msg.getAttribute("data-key");const input=document.createElement("input");input.type="checkbox";input.className="msgCheck";input.setAttribute("data-key",key);msg.querySelector("b").prepend(input);}}else{if(chk)chk.remove();}});}
+function addMessageToDOM(key,data){
+  const div=document.createElement("div");
+  div.classList.add("msg");
+  div.setAttribute("data-key",key);
+  let checkboxHtml="";
+  if(isAdminAuthenticated()){checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;}
+  let content=`<b>${checkboxHtml}${escapeHtml(data.name)}</b>`;
+  if(data.message) content+=`: ${escapeHtml(data.message)}`;
+  if(data.photoURL) content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;
+  content+=`<div class='meta'>${new Date(data.time).toLocaleString()}</div>`;
+  div.innerHTML=content;
+  document.getElementById("messages").prepend(div);
+}
+
+function updateCheckboxes(){
+  document.querySelectorAll(".msg").forEach(msg=>{
+    let chk=msg.querySelector(".msgCheck");
+    if(isAdminAuthenticated()){
+      if(!chk){
+        const key=msg.getAttribute("data-key");
+        const input=document.createElement("input");
+        input.type="checkbox";
+        input.className="msgCheck";
+        input.setAttribute("data-key",key);
+        msg.querySelector("b").prepend(input);
+      }
+    } else if(chk) chk.remove();
+  });
+}
 
 // Listener
 db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added",snap=>{addMessageToDOM(snap.key,snap.val());});
 
-// Send
-document.getElementById("sendBtn").addEventListener("click",async()=>{const nameEl=document.getElementById("username"),msgEl=document.getElementById("message"),photoEl=document.getElementById("photoInput");const name=nameEl.value.trim(),msg=msgEl.value.trim();if(!name&&!photoEl.files[0])return alert("Enter message or photo.");
- if(name.toLowerCase()==="admin"&&!isAdminAuthenticated()){const pwd=prompt("Enter admin password:");if(pwd===ADMIN_PASSWORD){setAdminAuthenticated(true);}else{return alert("Incorrect password.");}}
- let photoURL="";if(photoEl.files[0]){const file=photoEl.files[0];const ref=storage.ref("shoutbox_photos/"+Date.now()+"_"+file.name);ref.put(file).then(snap=>snap.ref.getDownloadURL()).then(url=>{photoURL=url;db.ref("shoutbox").push({name,message:msg,photoURL,time:Date.now()});}).catch(e=>alert("Upload failed:"+e));photoEl.value="";}else{db.ref("shoutbox").push({name,message:msg,photoURL:"",time:Date.now()});}
- msgEl.value="";});
+// Send message/photo
+document.getElementById("sendBtn").addEventListener("click",()=>{
+  const nameEl=document.getElementById("username"), msgEl=document.getElementById("message"), photoEl=document.getElementById("photoInput");
+  const name=nameEl.value.trim(), msg=msgEl.value.trim();
+  if(!name) return alert("Name is required!");
+
+  if(name.toLowerCase()==="admin"&&!isAdminAuthenticated()){
+    const pwd=prompt("Enter admin password:");
+    if(pwd===ADMIN_PASSWORD){ setAdminAuthenticated(true); } else { return alert("Incorrect password."); }
+  }
+
+  const file=photoEl.files[0];
+  if(file){
+    const ref=storage.ref("shoutbox_photos/"+Date.now()+"_"+file.name);
+    const uploadTask=ref.put(file);
+    uploadTask.on("state_changed",
+      snap=>{
+        const progress=Math.round((snap.bytesTransferred/snap.totalBytes)*100);
+        document.getElementById("uploadProgress").innerText="Uploading: "+progress+"%";
+      },
+      err=>{alert("Upload failed: "+err); document.getElementById("uploadProgress").innerText="";},
+      async ()=>{
+        const photoURL=await ref.getDownloadURL();
+        document.getElementById("uploadProgress").innerText="";
+        db.ref("shoutbox").push({name,message:msg,photoURL,time:Date.now()});
+        msgEl.value="";
+        photoEl.value="";
+      }
+    );
+  } else if(msg){
+    db.ref("shoutbox").push({name,message:msg,photoURL:"",time:Date.now()});
+    msgEl.value="";
+  } else {
+    alert("Enter message or choose a photo.");
+  }
+});
 
 // Clear
-document.getElementById("clearBtn").addEventListener("click",()=>{if(!isAdminAuthenticated())return alert("Only admin can clear the shoutbox");if(confirm("Clear all messages?"))db.ref("shoutbox").remove().then(()=>document.getElementById("messages").innerHTML="");});
+document.getElementById("clearBtn").addEventListener("click",()=>{if(!isAdminAuthenticated())return alert("Only admin can clear shoutbox");if(confirm("Clear all messages?")) db.ref("shoutbox").remove().then(()=>document.getElementById("messages").innerHTML="");});
 
 // Delete selected
-document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{if(!isAdminAuthenticated())return alert("Only admin can delete messages.");document.querySelectorAll(".msgCheck:checked").forEach(ch=>{const key=ch.getAttribute("data-key");db.ref("shoutbox/"+key).remove();ch.closest(".msg").remove();});});
+document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{if(!isAdminAuthenticated())return alert("Only admin can delete messages"); document.querySelectorAll(".msgCheck:checked").forEach(ch=>{ const key=ch.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); ch.closest(".msg").remove(); });});
 
 // Logout
-document.getElementById("logoutBtn").addEventListener("click",()=>{setAdminAuthenticated(false);alert("Admin logged out.");document.getElementById("messages").innerHTML="";db.ref("shoutbox").once("value",snap=>{snap.forEach(s=>addMessageToDOM(s.key,s.val()));});});
+document.getElementById("logoutBtn").addEventListener("click",()=>{ setAdminAuthenticated(false); alert("Admin logged out."); document.getElementById("messages").innerHTML=""; db.ref("shoutbox").once("value",snap=>{ snap.forEach(s=>addMessageToDOM(s.key,s.val())); }); });
+
 updateAdminUI();
 </script>
 </body>
-</html>
+  </html>
+  
