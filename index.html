@@ -81,7 +81,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <div class="section-title"><u>Notice Board</u> :-</div>
 </div>
 <div class="box-welcome">
-  यह वेबसाइट खासतौर पर ho Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
+  यह वेबसाइट खासतौर पर jaat Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
   <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
 </div>
 
@@ -224,7 +224,7 @@ function updateCheckboxes(){
 // Firebase listener
 db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added",snap=>{ addMessageToDOM(snap.key,snap.val()); });
 
-// Send message with fixed upload
+// Send message
 document.getElementById("sendBtn").addEventListener("click", async ()=>{
   const nameEl=document.getElementById("username");
   const msgEl=document.getElementById("message");
@@ -234,9 +234,10 @@ document.getElementById("sendBtn").addEventListener("click", async ()=>{
   const msg=msgEl.value.trim();
   if(!name && !photoEl.files[0]) return alert("Enter message or photo.");
 
+  // Admin login
   if(name.toLowerCase()==="admin" && !isAdminAuthenticated()){
     const pwd=prompt("Enter admin password:");
-    if(pwd===ADMIN_PASSWORD){ setAdminAuthenticated(true); } 
+    if(pwd===ADMIN_PASSWORD){ setAdminAuthenticated(true); }
     else { alert("Incorrect password."); return; }
   }
 
@@ -247,27 +248,25 @@ document.getElementById("sendBtn").addEventListener("click", async ()=>{
     const ref = storage.ref("shoutbox_photos/"+Date.now()+"_"+file.name);
     uploadProgressEl.innerText = "Uploading: 0%";
 
-    try {
+    await new Promise((resolve, reject) => {
       const uploadTask = ref.put(file);
+      uploadTask.on("state_changed",
+        snapshot => {
+          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          uploadProgressEl.innerText = `Uploading: ${progress}%`;
+        },
+        error => { uploadProgressEl.innerText=""; alert("Upload failed: "+error); reject(error); },
+        async () => {
+          data.photoURL = await ref.getDownloadURL();
+          resolve();
+        }
+      );
+    });
 
-      // Track progress
-      uploadTask.on("state_changed", snapshot => {
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        uploadProgressEl.innerText = `Uploading: ${progress}%`;
-      });
-
-      await uploadTask; // Wait for upload completion
-
-      data.photoURL = await ref.getDownloadURL();
-      db.ref("shoutbox").push(data);
-      uploadProgressEl.innerText="";
-      msgEl.value="";
-      photoEl.value="";
-    } catch(err){
-      alert("Upload failed: "+err);
-      uploadProgressEl.innerText="";
-    }
-
+    db.ref("shoutbox").push(data);
+    uploadProgressEl.innerText = "";
+    msgEl.value = "";
+    photoEl.value = "";
   } else {
     db.ref("shoutbox").push(data);
     msgEl.value="";
@@ -302,5 +301,5 @@ updateAdminUI();
 </script>
 
 </body>
-  </html>
-  
+    </html>
+    
