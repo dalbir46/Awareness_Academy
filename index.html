@@ -81,7 +81,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <div class="section-title"><u>Notice Board</u> :-</div>
 </div>
 <div class="box-welcome">
-  यह वेबसाइट खासतौर पर h2 Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
+  यह वेबसाइट खासतौर पर hz Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
   <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
 </div>
 
@@ -164,6 +164,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
 <script>
+// Firebase Config
 var firebaseConfig = {
   apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
   authDomain: "mathematics-hub-7087f.firebaseapp.com",
@@ -179,9 +180,9 @@ var storage = firebase.storage();
 const ADMIN_PASSWORD = "Dalbir@107";
 
 // Helpers
-function escapeHtml(str){if(!str&&str!=="")return"";return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
-function isAdminAuthenticated(){return sessionStorage.getItem("isAdmin")==="true";}
-function setAdminAuthenticated(flag){if(flag) sessionStorage.setItem("isAdmin","true"); else sessionStorage.removeItem("isAdmin"); updateAdminUI();}
+function escapeHtml(str){ if(!str&&str!=="") return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+function isAdminAuthenticated(){ return sessionStorage.getItem("isAdmin")==="true"; }
+function setAdminAuthenticated(flag){ if(flag) sessionStorage.setItem("isAdmin","true"); else sessionStorage.removeItem("isAdmin"); updateAdminUI(); }
 function updateAdminUI(){
   document.getElementById("adminStatus").style.display=isAdminAuthenticated()?"block":"none";
   document.getElementById("logoutBtn").style.display=isAdminAuthenticated()?"inline-block":"none";
@@ -196,9 +197,9 @@ function addMessageToDOM(key,data){
   div.setAttribute("data-key",key); 
   const date=new Date(data.time); 
   let checkboxHtml=""; 
-  if(isAdminAuthenticated()){checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;} 
+  if(isAdminAuthenticated()){ checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `; } 
   let content=`<b>${checkboxHtml}${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}`; 
-  if(data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;} 
+  if(data.photoURL){ content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`; } 
   content+=`<div class='meta'>${date.toLocaleString()}</div>`; 
   div.innerHTML=content; 
   document.getElementById("messages").prepend(div);
@@ -221,9 +222,9 @@ function updateCheckboxes(){
 }
 
 // Firebase listener
-db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added",snap=>{addMessageToDOM(snap.key,snap.val());});
+db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added",snap=>{ addMessageToDOM(snap.key,snap.val()); });
 
-// Send message
+// Send message with reliable upload
 document.getElementById("sendBtn").addEventListener("click", async ()=>{
   const nameEl=document.getElementById("username");
   const msgEl=document.getElementById("message");
@@ -233,6 +234,7 @@ document.getElementById("sendBtn").addEventListener("click", async ()=>{
   const msg=msgEl.value.trim();
   if(!name && !photoEl.files[0]) return alert("Enter message or photo.");
 
+  // Admin login
   if(name.toLowerCase()==="admin" && !isAdminAuthenticated()){
     const pwd=prompt("Enter admin password:");
     if(pwd===ADMIN_PASSWORD){ setAdminAuthenticated(true); }
@@ -270,11 +272,11 @@ document.getElementById("sendBtn").addEventListener("click", async ()=>{
 
 // Clear shoutbox
 document.getElementById("clearBtn").addEventListener("click",()=>{
-  if(!isAdminAuthenticated()) return alert("Only admin can clear the shoutbox");
+  if(!isAdminAuthenticated()) return alert("Only admin can clear shoutbox");
   if(confirm("Clear all messages?")) db.ref("shoutbox").remove().then(()=>{document.getElementById("messages").innerHTML="";});
 });
 
-// Delete selected
+// Delete selected messages
 document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{
   if(!isAdminAuthenticated()) return alert("Only admin can delete messages.");
   document.querySelectorAll(".msgCheck:checked").forEach(ch=>{
