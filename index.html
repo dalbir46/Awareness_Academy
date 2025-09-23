@@ -30,6 +30,9 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
 .linkbar a { color: #fff; text-decoration: none; font-weight: bold; margin: 0 10px; }
 .linkbar a:hover { text-decoration: underline; }
 
+.small { font-size: 12px; color: #555; }
+.blue { color: #3366CC; font-weight: bold; }
+
 /* Buttons */
 button, .btn { border: none; padding: 12px 14px; color: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; margin: 6px; width: 100%; height: 60px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease; }
 button:hover, .btn:hover { filter: brightness(0.85); }
@@ -188,39 +191,35 @@ var db=firebase.database();
 var storage=firebase.storage();
 const ADMIN_PASSWORD="Dalbir@107";
 
+// Helpers
 function escapeHtml(str){if(!str&&str!=="")return"";return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
 function isAdminAuthenticated(){return sessionStorage.getItem("isAdmin")==="true";}
 function setAdminAuthenticated(flag){if(flag) sessionStorage.setItem("isAdmin","true"); else sessionStorage.removeItem("isAdmin"); updateAdminUI();}
 function updateAdminUI(){document.getElementById("adminStatus").style.display=isAdminAuthenticated()?"block":"none"; document.getElementById("logoutBtn").style.display=isAdminAuthenticated()?"inline-block":"none"; document.getElementById("deleteSelectedBtn").style.display=isAdminAuthenticated()?"inline-block":"none"; updateCheckboxes();}
+
+// Add message to DOM
 function addMessageToDOM(key,data){const div=document.createElement("div"); div.classList.add("msg"); div.setAttribute("data-key",key); const date=new Date(data.time); let checkboxHtml=""; if(isAdminAuthenticated()){checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;} let content=`<b>${checkboxHtml}${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}`; if(data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;} content+=`<div class='meta'>${date.toLocaleString()}</div>`; div.innerHTML=content; document.getElementById("messages").prepend(div);}
 function updateCheckboxes(){document.querySelectorAll(".msg").forEach(msg=>{ let chk=msg.querySelector(".msgCheck"); if(isAdminAuthenticated()){if(!chk){const key=msg.getAttribute("data-key"); const input=document.createElement("input"); input.type="checkbox"; input.className="msgCheck"; input.setAttribute("data-key",key); msg.querySelector("b").prepend(input);} } else { if(chk) chk.remove();}});}
 
+// Firebase listener
 db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added",snap=>{addMessageToDOM(snap.key,snap.val());});
 
+// Send message
 document.getElementById("sendBtn").addEventListener("click",async ()=>{
-  const nameEl=document.getElementById("username"); 
-  const msgEl=document.getElementById("message"); 
-  const photoEl=document.getElementById("photoInput"); 
-  const name=nameEl.value.trim(); 
-  const msg=msgEl.value.trim(); 
-  if(!name && !photoEl.files[0]) return alert("Enter message or photo.");
+  const nameEl=document.getElementById("username"); const msgEl=document.getElementById("message"); const photoEl=document.getElementById("photoInput"); const name=nameEl.value.trim(); const msg=msgEl.value.trim(); if(!name && !photoEl.files[0]) return alert("Enter message or photo.");
   if(name.toLowerCase()==="admin" && !isAdminAuthenticated()){const pwd=prompt("Enter admin password:"); if(pwd===ADMIN_PASSWORD){setAdminAuthenticated(true);} else {alert("Incorrect password."); return;}}
-  let photoURL="";
-  if(photoEl.files[0]){
-    const file=photoEl.files[0];
-    const ref=storage.ref("shoutbox_photos/"+Date.now()+"_"+file.name);
-    await ref.put(file);
-    photoURL=await ref.getDownloadURL();
-    photoEl.value="";
-  }
-  const data={name,message:msg,photoURL,time:Date.now()}; 
-  db.ref("shoutbox").push(data); 
-  msgEl.value="";
-});
+  let photoURL=""; if(photoEl.files[0]){const file=photoEl.files[0]; const ref=storage.ref("shoutbox_photos/"+Date.now()+"_"+file.name); await ref.put(file); console.log("Upload complete:", file.name); photoURL=await ref.getDownloadURL(); console.log("File URL:", photoURL); photoEl.value="";}
+  const data={name,message:msg,photoURL,time:Date.now()}; db.ref("shoutbox").push(data); msgEl.value="";});
 
+// Clear shoutbox
 document.getElementById("clearBtn").addEventListener("click",()=>{if(!isAdminAuthenticated()) return alert("Only admin can clear the shoutbox"); if(confirm("Clear all messages?")){db.ref("shoutbox").remove().then(()=>{document.getElementById("messages").innerHTML="";});}});
+
+// Delete selected
 document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{if(!isAdminAuthenticated()) return alert("Only admin can delete messages."); const checks=document.querySelectorAll(".msgCheck:checked"); checks.forEach(ch=>{ const key=ch.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); ch.closest(".msg").remove(); });});
+
+// Logout
 document.getElementById("logoutBtn").addEventListener("click",()=>{setAdminAuthenticated(false); alert("Admin logged out."); document.getElementById("messages").innerHTML=""; db.ref("shoutbox").once("value",snap=>{snap.forEach(s=>addMessageToDOM(s.key,s.val()));});});
+
 updateAdminUI();
 </script>
 
