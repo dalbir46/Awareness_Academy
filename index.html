@@ -99,7 +99,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 </div>
 
 <div class="box-welcome">
-  यह वेबसाइट खासतौर पर Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
+  यह वेबसाइट खासतौर पर pr Class 6 से 12 तक के गणित छात्रों के लिए बनाई गई है —  
   <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
 </div>
 
@@ -252,4 +252,19 @@ document.getElementById("clearBtn").addEventListener("click",()=>{if(!isAdminAut
 document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{if(!isAdminAuthenticated()) return alert("Only admin can delete messages."); const checks=document.querySelectorAll(".msgCheck:checked"); checks.forEach(ch=>{ const key=ch.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); ch.closest(".msg").remove(); });});
 
 // Logout
-document.getElementById("logoutBtn").addEventListener("click",()=>{setAdminAuthenticated(false); alert("Admin logged out."); document.getElementById("messages").innerHTML=""; db.ref("shoutbox").once("value",snap=>
+document.getElementById("logoutBtn").addEventListener("click",()=>{
+  setAdminAuthenticated(false);
+  alert("Admin logged out.");
+  document.getElementById("messages").innerHTML="";
+  db.ref("shoutbox").once("value",snap=>{
+    snap.forEach(child=>{
+      addMessageToDOM(child.key, child.val());
+    });
+  });
+});
+
+// Initial UI setup
+updateAdminUI();
+</script>
+</body>
+</html>
