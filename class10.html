@@ -17,7 +17,7 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
 .section-title { text-align: center; color: #fff; padding: 10px; font-weight: bold; font-size: 16px; }
 .title-class   { background: #2196F3; }
 .title-updates { background: #2F4F4F; }
-.title-chapters{ background: #455A64; } /* Brown for Class 10 */
+.title-chapters{ background: #455A64; }
 .title-res     { background: #009688; }
 .title-contact { background: #4B0082; }
 
@@ -33,21 +33,21 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .chapter-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
 /* Unique Chapter Button Colors for Class 10 */
-.chapter-btn:nth-child(1)  { background: #D32F2F; }  /* Red */
-.chapter-btn:nth-child(2)  { background: #1976D2; }  /* Blue */
-.chapter-btn:nth-child(3)  { background: #388E3C; }  /* Green */
-.chapter-btn:nth-child(4)  { background: #F57C00; }  /* Orange */
-.chapter-btn:nth-child(5)  { background: #7B1FA2; }  /* Purple */
-.chapter-btn:nth-child(6)  { background: #0097A7; }  /* Teal */
-.chapter-btn:nth-child(7)  { background: #512DA8; }  /* Deep Purple */
-.chapter-btn:nth-child(8)  { background: #C2185B; }  /* Pink */
-.chapter-btn:nth-child(9)  { background: #00796B; }  /* Dark Teal */
-.chapter-btn:nth-child(10) { background: #E64A19; }  /* Deep Orange */
-.chapter-btn:nth-child(11) { background: #455A64; }  /* Blue Grey */
-.chapter-btn:nth-child(12) { background: #AFB42B; }  /* Lime Green */
-.chapter-btn:nth-child(13) { background: #5D4037; }  /* Brown */
-.chapter-btn:nth-child(14) { background: #0288D1; }  /* Light Blue */
-.chapter-btn:nth-child(15) { background: #FBC02D; }  /* Yellow */
+.chapter-btn:nth-child(1)  { background: #D32F2F; }
+.chapter-btn:nth-child(2)  { background: #1976D2; }
+.chapter-btn:nth-child(3)  { background: #388E3C; }
+.chapter-btn:nth-child(4)  { background: #F57C00; }
+.chapter-btn:nth-child(5)  { background: #7B1FA2; }
+.chapter-btn:nth-child(6)  { background: #0097A7; }
+.chapter-btn:nth-child(7)  { background: #512DA8; }
+.chapter-btn:nth-child(8)  { background: #C2185B; }
+.chapter-btn:nth-child(9)  { background: #00796B; }
+.chapter-btn:nth-child(10) { background: #E64A19; }
+.chapter-btn:nth-child(11) { background: #455A64; }
+.chapter-btn:nth-child(12) { background: #AFB42B; }
+.chapter-btn:nth-child(13) { background: #5D4037; }
+.chapter-btn:nth-child(14) { background: #0288D1; }
+.chapter-btn:nth-child(15) { background: #FBC02D; }
 
 /* Linkbar */
 .linkbar { background: linear-gradient(45deg, #FF9800, #E91E63); padding: 8px; text-align: center; }
@@ -74,7 +74,8 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <!-- Chapters Section -->
 <div class="section-title title-chapters">Class 10 - Chapters 2025-2026</div>
 <div class="box chapter-grid">
-  <button class="btn chapter-btn">Chapter 1: Real Numbers</button>
+  <!-- Chapter 1 now opens chapter1.html -->
+  <button class="btn chapter-btn" onclick="location.href='chapter1.html'">Chapter 1: Real Numbers</button>
   <button class="btn chapter-btn">Chapter 2: Polynomials</button>
   <button class="btn chapter-btn">Chapter 3: Pair of Linear Equations in Two Variables</button>
   <button class="btn chapter-btn">Chapter 4: Quadratic Equations</button>
