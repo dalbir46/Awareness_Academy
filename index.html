@@ -117,7 +117,7 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 </div>
 
 <div class="box-welcome">
-  This website is specially designed for Students of class 6 to class 12 to clear their Maths problem in simple way यह वेबसाइट विशेष रूप से कक्षा 6 से कक्षा 12 तक के विद्यार्थियों के लिए आसान तरीके से गणित की समस्याओं को हल करने हेतु डिज़ाइन की गई है।   
+  This website is 2 specially designed for Students of class 6 to class 12 to clear their Maths problem in simple way यह वेबसाइट विशेष रूप से कक्षा 6 से कक्षा 12 तक के विद्यार्थियों के लिए आसान तरीके से गणित की समस्याओं को हल करने हेतु डिज़ाइन की गई है।   
   <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
 </div>
 
@@ -147,13 +147,13 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 <!-- Classes -->
 <div class="section-title title-class">Select Your Class</div>
 <div class="box class-grid">
-  <button class="btn btn6">Class 6</button>
-  <button class="btn btn7">Class 7</button>
-  <button class="btn btn8">Class 8</button>
-  <button class="btn btn9">Class 9</button>
-  <button class="btn btn10">Class 10</button>
-  <button class="btn btn11">Class 11</button>
-  <button class="btn btn12" style="grid-column: span 2;">Class 12</button>
+  <button class="btn btn6" onclick="location.href='class6.html'">Class 6</button>
+  <button class="btn btn7" onclick="location.href='class7.html'">Class 7</button>
+  <button class="btn btn8" onclick="location.href='class8.html'">Class 8</button>
+  <button class="btn btn9" onclick="location.href='class9.html'">Class 9</button>
+  <button class="btn btn10" onclick="location.href='class10.html'">Class 10</button>
+  <button class="btn btn11" onclick="location.href='class11.html'">Class 11</button>
+  <button class="btn btn12" onclick="location.href='class12.html'" style="grid-column: span 2;">Class 12</button>
 </div>
 
 <!-- Practice Zone -->
@@ -210,7 +210,7 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 var db=firebase.database();
-const ADMIN_PASSWORD="Dalbir@107";
+const ADMIN_PASSWORD="Dalbir@551";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 
 function escapeHtml(str){if(!str&&str!=="")return"";return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
@@ -272,30 +272,14 @@ document.getElementById("sendBtn").addEventListener("click",async ()=>{
 
   let photoURL=""; if(photoEl.files[0]){ try{ photoURL=await uploadToImgbb(photoEl.files[0]); photoEl.value=""; }catch(e){ alert("Image upload failed: "+e); return; } }
 
-  const data={name,message:msg,photoURL,time:Date.now()};
+  const data={name:name||"Guest",message:msg,time:Date.now(),photoURL};
   db.ref("shoutbox").push(data); msgEl.value="";
 });
 
-document.getElementById("clearBtn").addEventListener("click",()=>{
-  if(!isAdminAuthenticated()) return alert("Only admin can clear the shoutbox");
-  if(confirm("Clear all messages?")){db.ref("shoutbox").remove().then(()=>{document.getElementById("messages").innerHTML="";});}
-});
-
-document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{
-  if(!isAdminAuthenticated()) return alert("Only admin can delete messages.");
-  const checks=document.querySelectorAll(".msgCheck:checked");
-  checks.forEach(ch=>{ const key=ch.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); ch.closest(".msg").remove(); });
-});
-
-document.getElementById("logoutBtn").addEventListener("click",()=>{
-  setAdminAuthenticated(false);
-  alert("Admin logged out.");
-  document.getElementById("messages").innerHTML="";
-  db.ref("shoutbox").once("value",snap=>{ snap.forEach(child=>{ addMessageToDOM(child.key, child.val()); }); });
-});
-
+document.getElementById("clearBtn").addEventListener("click",()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; } else { alert("Admin only"); } });
+document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key=chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); document.querySelector(".msg[data-key='"+key+"']").remove(); }); } });
+document.getElementById("logoutBtn").addEventListener("click",()=>{ setAdminAuthenticated(false); });
 updateAdminUI();
 </script>
 </body>
-                              </html>
-                       
+</html>
