@@ -1,135 +1,439 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Class 10 - Chapter 1: Real Numbers</title>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<style>
-  body { font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; }
-  .q-box{ border:1px solid #ccc; padding:10px; margin:10px 0; border-radius:8px; background:#fff; }
-  .q-head{ font-weight:bold; margin-bottom:6px; }
-  .ans-box{ min-height:40px; border:1px dashed #aaa; padding:6px; border-radius:4px; background:#fafafa; }
-  .btn{ padding:6px 10px; margin:4px 2px; border:none; border-radius:4px; cursor:pointer; font-size:13px; }
-  .btn-save{ background:#4CAF50; color:#fff; }
-  .btn-copy{ background:#9C27B0; color:#fff; }   /* 🔹 Purple copy button */
-  .btn-preview{ background:#2196F3; color:#fff; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Class 10 — Chapter 1: Real Numbers</title>
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}
+    body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}
+    .header-wrapper,.footer-wrapper{background:linear-gradient(135deg,var(--accent1),var(--accent2));padding:12px}
+    .header,.footer-inner{background:#ffffcc;padding:14px;text-align:center;font-weight:700;border:2px solid #333;border-radius:10px;max-width:980px;margin:auto}
+    .container{max-width:980px;margin:18px auto;padding:0 12px}
+    .login-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+    .login-row input{padding:8px;border-radius:6px;border:1px solid #999}
+    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700}
+    #adminStatus{display:none;color:green;font-weight:700;text-align:center;margin-bottom:8px}
+    .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
+    .question-title{font-weight:700;margin-bottom:8px}
+    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff;white-space:pre-wrap}
+    .answer-box[contenteditable='false']{background:#f7f7f7}
+    .btns{margin-top:8px}
+    .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
+    .btn-edit{background:#2196F3}
+    .btn-save{background:#4CAF50}
+    .btn-clear{background:#f44336}
+    .btn-copy{background:#9C27B0} /* 🔹 Purple copy button */
+    .btn-preview{background:#2196F3}
+    .preview-area{margin-top:8px;padding:8px;border-radius:6px;border:1px solid #e0e0e0;background:#fcfcfc;min-height:36px}
+    .small{font-size:13px;color:var(--muted)}
+    .meta{font-size:12px;color:#777;margin-top:6px}
+    @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}
+  </style>
 </head>
 <body>
+  <div class="header-wrapper"><div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers</div></div>
 
-<h2>Class 10 - Mathematics</h2>
-<h3>Chapter 1: Real Numbers</h3>
+  <div class="container">
+    <div class="login-row">
+      <input id="loginUser" placeholder="Username" />
+      <input id="loginPass" placeholder="Password" type="password" />
+      <button id="loginBtn">Login as Admin</button>
+    </div>
+    <div id="adminStatus">✅ Admin login successful</div>
 
-<div id="questions"></div>
+    <!-- Questions (NCERT Ch 1 sample set: Ex 1.1 - 1.4 as in your original) -->
+    <!-- Q1 -->
+    <div class="question-box" id="q1">
+      <div class="question-title">Ex 1.1 — Q1. Express each number as a product of its prime factors:<br> (i) 140 &nbsp; (ii) 156 &nbsp; (iii) 3825 &nbsp; (iv) 5005 &nbsp; (v) 7429</div>
+      <div class="answer-box" id="ans1" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="1">Edit</button>
+        <button class="btn btn-save" data-q="1">Save</button>
+        <button class="btn btn-clear" data-q="1">Clear</button>
+        <button class="btn btn-copy" data-q="1">Copy</button>
+        <button class="btn btn-preview" data-q="1">Preview</button>
+      </div>
+      <div class="preview-area" id="preview1"></div>
+    </div>
 
-<script>
-  // 🔹 Firebase config (replace with your actual config)
-  const firebaseConfig = {
-    apiKey: "YOUR_KEY",
-    authDomain: "YOUR_DOMAIN",
-    databaseURL: "YOUR_DB_URL",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_BUCKET",
-    messagingSenderId: "YOUR_SENDER",
-    appId: "YOUR_APP_ID"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+    <!-- Q2 -->
+    <div class="question-box" id="q2">
+      <div class="question-title">Ex 1.1 — Q2. Find the HCF and LCM of the following pairs and verify that HCF × LCM = product of the numbers: (i) 26 and 91 (ii) 510 and 92 (iii) 336 and 54</div>
+      <div class="answer-box" id="ans2" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="2">Edit</button>
+        <button class="btn btn-save" data-q="2">Save</button>
+        <button class="btn btn-clear" data-q="2">Clear</button>
+        <button class="btn btn-copy" data-q="2">Copy</button>
+        <button class="btn btn-preview" data-q="2">Preview</button>
+      </div>
+      <div class="preview-area" id="preview2"></div>
+    </div>
 
-  // Sample 20 questions (Chapter 1: Real Numbers)
-  const questions = [
-    "Q1. Use Euclid’s division lemma to show that the cube of any positive integer is divisible by 9, 3 or 1.",
-    "Q2. Find HCF of 65 and 117 using Euclid’s algorithm.",
-    "Q3. Show that 5 – √3 is irrational.",
-    "Q4. Prove that there are infinitely many prime numbers.",
-    "Q5. Find LCM and HCF of 6 and 20 and verify that LCM × HCF = product of two numbers.",
-    "Q6. Express 3825 as the product of prime factors.",
-    "Q7. Show that 7 × 11 × 13 + 13 is a composite number.",
-    "Q8. Write whether decimal expansion of 441/210 will be terminating or non-terminating repeating.",
-    "Q9. Without actual division, show that 987/10500 is a terminating decimal expansion.",
-    "Q10. Prove that √7 is irrational.",
-    "Q11. Prove that 3 + 2√5 is irrational.",
-    "Q12. Write the prime factorisation of 5005 and 7429 and hence find their HCF.",
-    "Q13. Show that 1/2, 1/3 and 1/4 are not in A.P.",
-    "Q14. Use Euclid’s division lemma to find HCF of 867 and 255.",
-    "Q15. Express 360 as product of prime factors.",
-    "Q16. Write whether decimal expansion of 43/2^4×5^3 will terminate or not.",
-    "Q17. Prove that there is no prime number between 19 and 23.",
-    "Q18. State and prove Fundamental Theorem of Arithmetic.",
-    "Q19. Show that any odd positive integer is of the form (6q + 1) or (6q + 3) or (6q + 5).",
-    "Q20. If p is a prime, show that √p is irrational."
-  ];
+    <!-- Q3 -->
+    <div class="question-box" id="q3">
+      <div class="question-title">Ex 1.1 — Q3. Find HCF and LCM by prime factorisation: (i) 12, 15 and 21 (ii) 17, 23 and 29 (iii) 8, 9 and 25</div>
+      <div class="answer-box" id="ans3" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="3">Edit</button>
+        <button class="btn btn-save" data-q="3">Save</button>
+        <button class="btn btn-clear" data-q="3">Clear</button>
+        <button class="btn btn-copy" data-q="3">Copy</button>
+        <button class="btn btn-preview" data-q="3">Preview</button>
+      </div>
+      <div class="preview-area" id="preview3"></div>
+    </div>
 
-  // Render Q boxes
-  const qDiv=document.getElementById("questions");
-  questions.forEach((q,i)=>{
-    let id=i+1;
-    qDiv.innerHTML+=`
-      <div class="q-box">
-        <div class="q-head">${q}</div>
-        <div id="ans${id}" class="ans-box" contenteditable="true"></div>
-        <button class="btn btn-save" data-q="${id}">💾 Save</button>
-        <button class="btn btn-preview" data-q="${id}">👁 Preview</button>
-        <button class="btn btn-copy" data-q="${id}">📋 Copy</button>
-      </div>`;
-  });
+    <!-- Q4 -->
+    <div class="question-box" id="q4">
+      <div class="question-title">Ex 1.1 — Q4. Given HCF(306,657) = 9, find LCM(306,657).</div>
+      <div class="answer-box" id="ans4" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="4">Edit</button>
+        <button class="btn btn-save" data-q="4">Save</button>
+        <button class="btn btn-clear" data-q="4">Clear</button>
+        <button class="btn btn-copy" data-q="4">Copy</button>
+        <button class="btn btn-preview" data-q="4">Preview</button>
+      </div>
+      <div class="preview-area" id="preview4"></div>
+    </div>
 
-  // Load answers from Firebase
-  function loadAnswers(){ 
-    for(let i=1;i<=20;i++){ 
-      (function(i){ 
-        db.ref('chapter1/ans'+i).once('value').then(snap=>{ 
-          if(snap.exists()){ 
-            let el = document.getElementById('ans'+i);
-            if(el){
-              el.innerHTML = snap.val(); 
-              MathJax.typesetPromise([el]); // render after load
+    <!-- Q5 -->
+    <div class="question-box" id="q5">
+      <div class="question-title">Ex 1.1 — Q5. Check whether 6^n can end with digit 0 for any natural number n.</div>
+      <div class="answer-box" id="ans5" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="5">Edit</button>
+        <button class="btn btn-save" data-q="5">Save</button>
+        <button class="btn btn-clear" data-q="5">Clear</button>
+        <button class="btn btn-copy" data-q="5">Copy</button>
+        <button class="btn btn-preview" data-q="5">Preview</button>
+      </div>
+      <div class="preview-area" id="preview5"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-box" id="q6">
+      <div class="question-title">Ex 1.1 — Q6. Explain why 7×11×13 + 13 and 7×6×5×4×3×2×1 + 5 are composite numbers.</div>
+      <div class="answer-box" id="ans6" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="6">Edit</button>
+        <button class="btn btn-save" data-q="6">Save</button>
+        <button class="btn btn-clear" data-q="6">Clear</button>
+        <button class="btn btn-copy" data-q="6">Copy</button>
+        <button class="btn btn-preview" data-q="6">Preview</button>
+      </div>
+      <div class="preview-area" id="preview6"></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-box" id="q7">
+      <div class="question-title">Ex 1.1 — Q7. Prove that √2, √3 and √5 are irrational numbers.</div>
+      <div class="answer-box" id="ans7" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="7">Edit</button>
+        <button class="btn btn-save" data-q="7">Save</button>
+        <button class="btn btn-clear" data-q="7">Clear</button>
+        <button class="btn btn-copy" data-q="7">Copy</button>
+        <button class="btn btn-preview" data-q="7">Preview</button>
+      </div>
+      <div class="preview-area" id="preview7"></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-box" id="q8">
+      <div class="question-title">Ex 1.2 — Q1. Use Euclid's division lemma to show that the square of any positive integer is either of the form 3m or 3m+1.</div>
+      <div class="answer-box" id="ans8" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="8">Edit</button>
+        <button class="btn btn-save" data-q="8">Save</button>
+        <button class="btn btn-clear" data-q="8">Clear</button>
+        <button class="btn btn-copy" data-q="8">Copy</button>
+        <button class="btn btn-preview" data-q="8">Preview</button>
+      </div>
+      <div class="preview-area" id="preview8"></div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-box" id="q9">
+      <div class="question-title">Ex 1.2 — Q2. Use Euclid's division lemma to show that the cube of any positive integer is of the form 9m, 9m+1 or 9m+8.</div>
+      <div class="answer-box" id="ans9" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="9">Edit</button>
+        <button class="btn btn-save" data-q="9">Save</button>
+        <button class="btn btn-clear" data-q="9">Clear</button>
+        <button class="btn btn-copy" data-q="9">Copy</button>
+        <button class="btn btn-preview" data-q="9">Preview</button>
+      </div>
+      <div class="preview-area" id="preview9"></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-box" id="q10">
+      <div class="question-title">Ex 1.2 — Q3. An army contingent of 616 members is to march behind an army band of 32 members in a parade. Find the maximum number of columns in which they can march.</div>
+      <div class="answer-box" id="ans10" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="10">Edit</button>
+        <button class="btn btn-save" data-q="10">Save</button>
+        <button class="btn btn-clear" data-q="10">Clear</button>
+        <button class="btn btn-copy" data-q="10">Copy</button>
+        <button class="btn btn-preview" data-q="10">Preview</button>
+      </div>
+      <div class="preview-area" id="preview10"></div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="question-box" id="q11">
+      <div class="question-title">Ex 1.3 — Q1. Prove that √2 is irrational. (Classical proof by contradiction)</div>
+      <div class="answer-box" id="ans11" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="11">Edit</button>
+        <button class="btn btn-save" data-q="11">Save</button>
+        <button class="btn btn-clear" data-q="11">Clear</button>
+        <button class="btn btn-copy" data-q="11">Copy</button>
+        <button class="btn btn-preview" data-q="11">Preview</button>
+      </div>
+      <div class="preview-area" id="preview11"></div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="question-box" id="q12">
+      <div class="question-title">Ex 1.3 — Q2. Prove that √3 and √5 are irrational numbers.</div>
+      <div class="answer-box" id="ans12" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="12">Edit</button>
+        <button class="btn btn-save" data-q="12">Save</button>
+        <button class="btn btn-clear" data-q="12">Clear</button>
+        <button class="btn btn-copy" data-q="12">Copy</button>
+        <button class="btn btn-preview" data-q="12">Preview</button>
+      </div>
+      <div class="preview-area" id="preview12"></div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="question-box" id="q13">
+      <div class="question-title">Ex 1.4 — Q1. State and explain the Fundamental Theorem of Arithmetic. Illustrate with examples.</div>
+      <div class="answer-box" id="ans13" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="13">Edit</button>
+        <button class="btn btn-save" data-q="13">Save</button>
+        <button class="btn btn-clear" data-q="13">Clear</button>
+        <button class="btn btn-copy" data-q="13">Copy</button>
+        <button class="btn btn-preview" data-q="13">Preview</button>
+      </div>
+      <div class="preview-area" id="preview13"></div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="question-box" id="q14">
+      <div class="question-title">Ex 1.4 — Q2. If p is a prime and p divides a^2, show that p divides a.</div>
+      <div class="answer-box" id="ans14" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="14">Edit</button>
+        <button class="btn btn-save" data-q="14">Save</button>
+        <button class="btn btn-clear" data-q="14">Clear</button>
+        <button class="btn btn-copy" data-q="14">Copy</button>
+        <button class="btn btn-preview" data-q="14">Preview</button>
+      </div>
+      <div class="preview-area" id="preview14"></div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="question-box" id="q15">
+      <div class="question-title">Ex 1.4 — Q3. Show that √(p/q) (in lowest terms) is irrational for prime p not dividing q. (Optional extended exercise)</div>
+      <div class="answer-box" id="ans15" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="15">Edit</button>
+        <button class="btn btn-save" data-q="15">Save</button>
+        <button class="btn btn-clear" data-q="15">Clear</button>
+        <button class="btn btn-copy" data-q="15">Copy</button>
+        <button class="btn btn-preview" data-q="15">Preview</button>
+      </div>
+      <div class="preview-area" id="preview15"></div>
+    </div>
+
+    <div class="small">Note: NCERT Chapter 1 (Exercises 1.1 to 1.4) questions added. Use Admin login to Edit/Save.</div>
+  </div>
+
+  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
+
+
+  <!-- Firebase libs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <script>
+    // === Firebase config (your original values preserved) ===
+    var firebaseConfig = {
+      apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
+      authDomain: "mathematics-hub-7087f.firebaseapp.com",
+      databaseURL: "https://mathematics-hub-7087f-default-rtdb.firebaseio.com",
+      projectId: "mathematics-hub-7087f",
+      storageBucket: "mathematics-hub-7087f.appspot.com",
+      messagingSenderId: "182359137920",
+      appId: "1:182359137920:web:1cf89e1d441ea1503a9065"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.database();
+
+    const ADMIN_USERNAME = "admin";
+    const ADMIN_PASSWORD = "Dalbir@551";
+    const IMGBB_API_KEY = "9a1627658ec3732fd03cb87cbff0ed66";
+
+    function isAdmin() { return sessionStorage.getItem('isAdmin')==='true'; }
+    function setAdmin(flag){ if(flag) sessionStorage.setItem('isAdmin','true'); else sessionStorage.removeItem('isAdmin'); updateUI(); }
+
+    function updateUI(){
+      document.getElementById('adminStatus').style.display = isAdmin() ? 'block' : 'none';
+      // show/hide admin buttons
+      document.querySelectorAll('.btn-save, .btn-edit, .btn-clear').forEach(b=>{
+        b.style.display = isAdmin() ? 'inline-block' : 'none';
+      });
+      // set contenteditable on answer boxes
+      document.querySelectorAll('.answer-box').forEach(ab=>{
+        if(isAdmin()){
+          ab.setAttribute('contenteditable','true');
+          ab.style.background = '#fff';
+        } else {
+          ab.setAttribute('contenteditable','false');
+          ab.style.background = '#f7f7f7';
+        }
+      });
+    }
+
+    // Load answers from Firebase and render in preview (editable keeps raw source)
+    function loadAnswers(){
+      for(let i=1;i<=15;i++){
+        (function(i){
+          db.ref('chapter1/ans'+i).once('value').then(snap=>{
+            const el = document.getElementById('ans'+i);
+            const previa = document.getElementById('preview'+i);
+            if(snap.exists()){
+              const raw = snap.val();
+              if(el) el.textContent = raw;           // keep raw in editable box
+              if(previa){
+                previa.textContent = raw;            // set preview source
+                MathJax.typesetPromise([previa]).catch(()=>{/* ignore */});
+              }
+            } else {
+              if(previa) previa.innerHTML = '';
             }
-          } 
-        }); 
-      })(i); 
-    } 
-  }
-  loadAnswers();
+          }).catch(err=>{
+            console.error('load error',i,err);
+          });
+        })(i);
+      }
+    }
 
-  // Save button
-  document.querySelectorAll('.btn-save').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      let q=btn.getAttribute('data-q');
-      let ab=document.getElementById('ans'+q); 
-      let html=ab.innerHTML;
-      db.ref('chapter1/ans'+q).set(html).then(()=>{
-        alert('Saved Q'+q);
-        MathJax.typesetPromise([ab]); // render after save
+    window.onload = ()=>{
+      updateUI();
+      loadAnswers();
+    };
+
+    // Login button
+    document.getElementById('loginBtn').addEventListener('click',()=>{
+      const u=document.getElementById('loginUser').value.trim(); const p=document.getElementById('loginPass').value;
+      if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){ setAdmin(true); alert('Admin login successful'); }
+      else { alert('Invalid credentials'); setAdmin(false); }
+    });
+
+    // Edit buttons
+    document.querySelectorAll('.btn-edit').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const q=btn.getAttribute('data-q'); const ab=document.getElementById('ans'+q);
+        if(isAdmin()){ ab.focus(); } else alert('Admin only');
       });
     });
-  });
 
-  // Preview button (render without save)
-  document.querySelectorAll('.btn-preview').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      let q=btn.getAttribute('data-q');
-      let ab=document.getElementById('ans'+q);
-      MathJax.typesetPromise([ab]); // render live
-    });
-  });
-
-  // Copy button
-  document.querySelectorAll('.btn-copy').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      let q=btn.getAttribute('data-q');
-      let ab=document.getElementById('ans'+q);
-      navigator.clipboard.writeText(ab.innerText).then(()=>{
-        alert('Copied Q'+q);
+    // Save buttons — SAVE raw text (not MathJax HTML). After save update preview and render.
+    document.querySelectorAll('.btn-save').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const q=btn.getAttribute('data-q'); if(!isAdmin()) return alert('Admin only');
+        const ab=document.getElementById('ans'+q);
+        // save raw text (innerText) so we don't store MathJax HTML
+        const raw = ab.innerText || ab.textContent || '';
+        db.ref('chapter1/ans'+q).set(raw).then(()=>{
+          alert('Saved Q'+q);
+          const previa=document.getElementById('preview'+q);
+          if(previa){
+            previa.textContent = raw;
+            MathJax.typesetPromise([previa]).catch(()=>{/*ignore*/});
+          }
+        }).catch(err=>alert('Save error: '+err));
       });
     });
-  });
-</script>
 
+    // Clear buttons (clears editable box & preview only locally)
+    document.querySelectorAll('.btn-clear').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const q=btn.getAttribute('data-q'); if(!isAdmin()) return alert('Admin only');
+        const ab=document.getElementById('ans'+q);
+        const previa=document.getElementById('preview'+q);
+        if(ab) ab.textContent = '';
+        if(previa) previa.innerHTML = '';
+      });
+    });
+
+    // Copy buttons — copies raw text (source)
+    document.querySelectorAll('.btn-copy').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const q=btn.getAttribute('data-q'); const ab=document.getElementById('ans'+q);
+        const text = (ab && (ab.innerText || ab.textContent)) || '';
+        if(!text) { alert('Nothing to copy'); return; }
+        // try navigator.clipboard then fallback
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(()=>{ alert('Copied Q'+q); }).catch(()=>fallbackCopy(text));
+        } else fallbackCopy(text);
+
+        function fallbackCopy(t){
+          const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta);
+          ta.select(); try{ document.execCommand('copy'); alert('Copied Q'+q); }catch(e){ alert('Copy failed'); }
+          document.body.removeChild(ta);
+        }
+      });
+    });
+
+    // Preview buttons — render into preview-area WITHOUT modifying editable source
+    document.querySelectorAll('.btn-preview').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const q=btn.getAttribute('data-q'); const ab=document.getElementById('ans'+q);
+        const previa=document.getElementById('preview'+q);
+        const raw = (ab && (ab.innerText || ab.textContent)) || '';
+        if(previa){
+          previa.textContent = raw;
+          MathJax.typesetPromise([previa]).catch(()=>{ alert('Preview failed'); });
+        }
+      });
+    });
+
+    // imgbb upload helper (same as original)
+    async function uploadToImgbb(file){
+      return new Promise((resolve,reject)=>{
+        const r=new FileReader();
+        r.onloadend=()=>{
+          const base64=r.result.split(',')[1];
+          const xhr=new XMLHttpRequest();
+          xhr.open('POST','https://api.imgbb.com/1/upload?key='+IMGBB_API_KEY);
+          xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+          xhr.onload=()=>{
+            if(xhr.status===200){
+              const res=JSON.parse(xhr.responseText);
+              resolve(res.data.url);
+            } else reject('Upload failed');
+          };
+          xhr.onerror=()=>reject('Upload error');
+          xhr.send('image='+encodeURIComponent(base64));
+        };
+        r.readAsDataURL(file);
+      });
+    }
+
+  </script>
 </body>
 </html>
