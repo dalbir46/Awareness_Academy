@@ -1,187 +1,135 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Class 10 — Chapter 1: Real Numbers</title>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <style>
-    :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}
-    body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}
-    .header-wrapper,.footer-wrapper{background:linear-gradient(135deg,var(--accent1),var(--accent2));padding:12px}
-    .header,.footer-inner{background:#ffffcc;padding:14px;text-align:center;font-weight:700;border:2px solid #333;border-radius:10px;max-width:980px;margin:auto}
-    .container{max-width:980px;margin:18px auto;padding:0 12px}
-    .login-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
-    .login-row input{padding:8px;border-radius:6px;border:1px solid #999}
-    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700}
-    #adminStatus{display:none;color:green;font-weight:700;text-align:center;margin-bottom:8px}
-    .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
-    .question-title{font-weight:700;margin-bottom:8px}
-    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff}
-    .answer-box[contenteditable='false']{background:#f7f7f7}
-    .btns{margin-top:8px}
-    .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
-    .btn-edit{background:#2196F3}
-    .btn-save{background:#4CAF50}
-    .btn-clear{background:#f44336}
-    .btn-copy{background:#9C27B0} /* 🔹 Purple copy button */
-    .small{font-size:13px;color:var(--muted)}
-    .meta{font-size:12px;color:#777;margin-top:6px}
-    @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 10 - Chapter 1: Real Numbers</title>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; background:#f0f8ff; padding:20px; }
+  .q-box{ border:1px solid #ccc; padding:10px; margin:10px 0; border-radius:8px; background:#fff; }
+  .q-head{ font-weight:bold; margin-bottom:6px; }
+  .ans-box{ min-height:40px; border:1px dashed #aaa; padding:6px; border-radius:4px; background:#fafafa; }
+  .btn{ padding:6px 10px; margin:4px 2px; border:none; border-radius:4px; cursor:pointer; font-size:13px; }
+  .btn-save{ background:#4CAF50; color:#fff; }
+  .btn-copy{ background:#9C27B0; color:#fff; }   /* 🔹 Purple copy button */
+  .btn-preview{ background:#2196F3; color:#fff; }
+</style>
 </head>
 <body>
-  <div class="header-wrapper"><div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers</div></div>
 
-  <div class="container">
-    <div class="login-row">
-      <input id="loginUser" placeholder="Username" />
-      <input id="loginPass" placeholder="Password" type="password" />
-      <button id="loginBtn">Login as Admin</button>
-    </div>
-    <div id="adminStatus">✅ Admin login successful</div>
+<h2>Class 10 - Mathematics</h2>
+<h3>Chapter 1: Real Numbers</h3>
 
-    <!-- All NCERT Chapter 1 questions (Exercise 1.1 - 1.4) added as question boxes. Answers left blank. -->
+<div id="questions"></div>
 
-    <!-- Exercise 1.1 -->
-    <div class="question-box" id="q1">
-      <div class="question-title">Ex 1.1 — Q1. Express each number as a product of its prime factors:<br> (i) 140 &nbsp; (ii) 156 &nbsp; (iii) 3825 &nbsp; (iv) 5005 &nbsp; (v) 7429</div>
-      <div class="answer-box" id="ans1" contenteditable="false"></div>
-      <div class="btns small">
-        <button class="btn btn-edit" data-q="1">Edit</button>
-        <button class="btn btn-save" data-q="1">Save</button>
-        <button class="btn btn-clear" data-q="1">Clear</button>
-        <button class="btn btn-copy" data-q="1">Copy</button>
-      </div>
-    </div>
+<script>
+  // 🔹 Firebase config (replace with your actual config)
+  const firebaseConfig = {
+    apiKey: "YOUR_KEY",
+    authDomain: "YOUR_DOMAIN",
+    databaseURL: "YOUR_DB_URL",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_BUCKET",
+    messagingSenderId: "YOUR_SENDER",
+    appId: "YOUR_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-    <!-- ... (baaki questions same rahenge, koi change nahi kiya) ... -->
+  // Sample 20 questions (Chapter 1: Real Numbers)
+  const questions = [
+    "Q1. Use Euclid’s division lemma to show that the cube of any positive integer is divisible by 9, 3 or 1.",
+    "Q2. Find HCF of 65 and 117 using Euclid’s algorithm.",
+    "Q3. Show that 5 – √3 is irrational.",
+    "Q4. Prove that there are infinitely many prime numbers.",
+    "Q5. Find LCM and HCF of 6 and 20 and verify that LCM × HCF = product of two numbers.",
+    "Q6. Express 3825 as the product of prime factors.",
+    "Q7. Show that 7 × 11 × 13 + 13 is a composite number.",
+    "Q8. Write whether decimal expansion of 441/210 will be terminating or non-terminating repeating.",
+    "Q9. Without actual division, show that 987/10500 is a terminating decimal expansion.",
+    "Q10. Prove that √7 is irrational.",
+    "Q11. Prove that 3 + 2√5 is irrational.",
+    "Q12. Write the prime factorisation of 5005 and 7429 and hence find their HCF.",
+    "Q13. Show that 1/2, 1/3 and 1/4 are not in A.P.",
+    "Q14. Use Euclid’s division lemma to find HCF of 867 and 255.",
+    "Q15. Express 360 as product of prime factors.",
+    "Q16. Write whether decimal expansion of 43/2^4×5^3 will terminate or not.",
+    "Q17. Prove that there is no prime number between 19 and 23.",
+    "Q18. State and prove Fundamental Theorem of Arithmetic.",
+    "Q19. Show that any odd positive integer is of the form (6q + 1) or (6q + 3) or (6q + 5).",
+    "Q20. If p is a prime, show that √p is irrational."
+  ];
 
-    <div class="small">Note: I have added the canonical NCERT Chapter 1 questions (Exercises 1.1 to 1.4). Answers are intentionally left blank for admin to fill.</div>
-  </div>
+  // Render Q boxes
+  const qDiv=document.getElementById("questions");
+  questions.forEach((q,i)=>{
+    let id=i+1;
+    qDiv.innerHTML+=`
+      <div class="q-box">
+        <div class="q-head">${q}</div>
+        <div id="ans${id}" class="ans-box" contenteditable="true"></div>
+        <button class="btn btn-save" data-q="${id}">💾 Save</button>
+        <button class="btn btn-preview" data-q="${id}">👁 Preview</button>
+        <button class="btn btn-copy" data-q="${id}">📋 Copy</button>
+      </div>`;
+  });
 
-  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
+  // Load answers from Firebase
+  function loadAnswers(){ 
+    for(let i=1;i<=20;i++){ 
+      (function(i){ 
+        db.ref('chapter1/ans'+i).once('value').then(snap=>{ 
+          if(snap.exists()){ 
+            let el = document.getElementById('ans'+i);
+            if(el){
+              el.innerHTML = snap.val(); 
+              MathJax.typesetPromise([el]); // render after load
+            }
+          } 
+        }); 
+      })(i); 
+    } 
+  }
+  loadAnswers();
 
-  <!-- Firebase + imgbb (using your GitHub index config) -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <script>
-    // Using your provided Firebase config and API keys (from index.html)
-    var firebaseConfig = {
-      apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
-      authDomain: "mathematics-hub-7087f.firebaseapp.com",
-      databaseURL: "https://mathematics-hub-7087f-default-rtdb.firebaseio.com",
-      projectId: "mathematics-hub-7087f",
-      storageBucket: "mathematics-hub-7087f.appspot.com",
-      messagingSenderId: "182359137920",
-      appId: "1:182359137920:web:1cf89e1d441ea1503a9065"
-    };
-    firebase.initializeApp(firebaseConfig);
-    var db = firebase.database();
-    const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "Dalbir@551"; // as requested: same as index
-    const IMGBB_API_KEY = "9a1627658ec3732fd03cb87cbff0ed66"; // from your index
-
-    function isAdmin() { return sessionStorage.getItem('isAdmin')==='true'; }
-    function setAdmin(flag){ if(flag) sessionStorage.setItem('isAdmin','true'); else sessionStorage.removeItem('isAdmin'); updateUI(); }
-
-    function updateUI(){
-      document.getElementById('adminStatus').style.display = isAdmin() ? 'block' : 'none';
-      document.querySelectorAll('.btn-save, .btn-edit, .btn-clear').forEach(b=>{ b.style.display = isAdmin() ? 'inline-block' : 'none'; });
-      document.querySelectorAll('.answer-box').forEach(ab=>{ ab.contentEditable = isAdmin(); if(!isAdmin()) ab.setAttribute('contenteditable','false'); });
-    }
-
-    // Load answers from Firebase (with MathJax render)
-    function loadAnswers(){ 
-      for(let i=1;i<=20;i++){ 
-        (function(i){ 
-          db.ref('chapter1/ans'+i).once('value').then(snap=>{ 
-            if(snap.exists()){ 
-              let el = document.getElementById('ans'+i);
-              if(el){
-                el.innerHTML = snap.val(); 
-                MathJax.typeset(); // 🔹 LaTeX render karega
-              }
-            } 
-          }); 
-        })(i); 
-      } 
-    }
-
-    window.onload = ()=>{ updateUI(); loadAnswers(); }
-
-    document.getElementById('loginBtn').addEventListener('click',()=>{
-      const u=document.getElementById('loginUser').value.trim(); const p=document.getElementById('loginPass').value;
-      if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){ setAdmin(true); alert('Admin login successful'); }
-      else { alert('Invalid credentials'); setAdmin(false); }
-    });
-
-    // Buttons behaviour (edit/save/clear/copy)
-    document.querySelectorAll('.btn-edit').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const q=btn.getAttribute('data-q'); 
-        const ab=document.getElementById('ans'+q); 
-        if(isAdmin()){ ab.focus(); } else alert('Admin only'); 
+  // Save button
+  document.querySelectorAll('.btn-save').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      let q=btn.getAttribute('data-q');
+      let ab=document.getElementById('ans'+q); 
+      let html=ab.innerHTML;
+      db.ref('chapter1/ans'+q).set(html).then(()=>{
+        alert('Saved Q'+q);
+        MathJax.typesetPromise([ab]); // render after save
       });
     });
+  });
 
-    document.querySelectorAll('.btn-save').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const q=btn.getAttribute('data-q'); 
-        if(!isAdmin()) return alert('Admin only'); 
-        const ab=document.getElementById('ans'+q); 
-        const html=ab.innerHTML; 
-        db.ref('chapter1/ans'+q).set(html).then(()=>{
-          alert('Saved Q'+q);
-          MathJax.typeset(); // 🔹 Save ke baad bhi render
-        }).catch(err=>alert('Save error:'+err)); 
+  // Preview button (render without save)
+  document.querySelectorAll('.btn-preview').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      let q=btn.getAttribute('data-q');
+      let ab=document.getElementById('ans'+q);
+      MathJax.typesetPromise([ab]); // render live
+    });
+  });
+
+  // Copy button
+  document.querySelectorAll('.btn-copy').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      let q=btn.getAttribute('data-q');
+      let ab=document.getElementById('ans'+q);
+      navigator.clipboard.writeText(ab.innerText).then(()=>{
+        alert('Copied Q'+q);
       });
     });
+  });
+</script>
 
-    document.querySelectorAll('.btn-clear').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const q=btn.getAttribute('data-q'); 
-        if(!isAdmin()) return alert('Admin only'); 
-        document.getElementById('ans'+q).innerHTML='';
-      });
-    });
-
-    document.querySelectorAll('.btn-copy').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const q=btn.getAttribute('data-q'); 
-        const ab=document.getElementById('ans'+q); 
-        const range=document.createRange(); 
-        range.selectNodeContents(ab); 
-        const sel=window.getSelection(); 
-        sel.removeAllRanges(); 
-        sel.addRange(range); 
-        try{ document.execCommand('copy'); alert('Copied Q'+q); }
-        catch(e){ alert('Copy failed'); } 
-        sel.removeAllRanges(); 
-      });
-    });
-
-    // imgbb helper (same as original)
-    async function uploadToImgbb(file){ 
-      return new Promise((resolve,reject)=>{ 
-        const r=new FileReader(); 
-        r.onloadend=()=>{ 
-          const base64=r.result.split(',')[1]; 
-          const xhr=new XMLHttpRequest(); 
-          xhr.open('POST','https://api.imgbb.com/1/upload?key='+IMGBB_API_KEY); 
-          xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded'); 
-          xhr.onload=()=>{ 
-            if(xhr.status===200){ 
-              const res=JSON.parse(xhr.responseText); 
-              resolve(res.data.url); 
-            } else reject('Upload failed'); 
-          }; 
-          xhr.onerror=()=>reject('Upload error'); 
-          xhr.send('image='+encodeURIComponent(base64)); 
-        }; 
-        r.readAsDataURL(file); 
-      }); 
-    }
-  </script>
 </body>
 </html>
