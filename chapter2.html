@@ -15,7 +15,7 @@
   </style>
 </head>
 <body>
-  <h2>8MathPix Snippet Converter</h2>
+  <h2>11MathPix Snippet Converter</h2>
   <textarea id="input"></textarea><br><br>
   <button onclick="convert()">Convert</button>
 
@@ -26,18 +26,27 @@
 function convert() {
   let input = document.getElementById("input").value;
 
-  // Convert block math $$...$$ into \[...\]
+  // Step 1: Block math $$...$$ → \[...\]
   input = input.replace(/\$\$([\s\S]*?)\$\$/g, function(_, content) {
-    return "\\[" + content.trim() + "\\]";
+    return "\n\\[" + content.trim() + "\\]\n";
   });
 
-  // Inline math ($...$) remains untouched
+  // Step 2: Inline math untouched ($...$)
 
-  // Preserve normal newlines for text (avoid breaking block math)
-  // We'll replace only double newlines with <br><br> for paragraph breaks
-  input = input.replace(/\n{2,}/g, "<br><br>");
+  // Step 3: Normal text ko <p> me wrap karo
+  let lines = input.split(/\n/);
+  let processed = "";
+  lines.forEach(line => {
+    if (line.trim().startsWith("\\[") && line.trim().endsWith("\\]")) {
+      // Pure block math → as is
+      processed += line + "\n";
+    } else if (line.trim() !== "") {
+      // Normal text (with inline math)
+      processed += "<p>" + line.trim() + "</p>\n";
+    }
+  });
 
-  document.getElementById("preview").innerHTML = input;
+  document.getElementById("preview").innerHTML = processed;
 
   // Re-render MathJax
   MathJax.typesetClear();
