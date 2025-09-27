@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MathPix Converter</title>
+  <title>Mathpix → MathJax Converter</title>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script>
     MathJax = {
       tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['\\[', '\\]']]
+        inlineMath: [['$', '$'], ['\\(', '\\)']],  // inline math
+        displayMath: [['\\[', '\\]']]              // block math
       }
     };
   </script>
@@ -18,12 +18,12 @@
   </script>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
-    textarea { width: 100%; height: 200px; }
+    textarea { width: 100%; height: 220px; }
     .preview { border: 1px solid #ccc; padding: 15px; margin-top: 20px; white-space: normal; }
   </style>
 </head>
 <body>
-  <h2>MathPix Snippet Converter</h2>
+  <h2>check all Mathpix → MathJax Converter</h2>
   <textarea id="input"></textarea><br><br>
   <button onclick="convert()">Convert</button>
 
@@ -34,40 +34,41 @@
 function convert() {
   let input = document.getElementById("input").value;
 
-  // Step 1: Convert $$...$$ → \[...\]
+  // 1) Convert $$...$$ → \[...\]
   input = input.replace(/\$\$([\s\S]*?)\$\$/g, (_, content) => {
-    return "\n\\[" + content.trim() + "\\]\n";
+    return "\\[" + content.trim() + "\\]";
   });
 
-  // Step 2: Replace tabular → array
+  // 2) Convert tabular → array
   input = input.replace(/\\begin\{tabular\}/g, "\\begin{array}");
   input = input.replace(/\\end\{tabular\}/g, "\\end{array}");
 
-  // Step 3: Remove \hline
+  // 3) Remove all \hline (unsupported)
   input = input.replace(/\\hline/g, "");
 
-  // Step 4: Wrap every environment (\begin...\end) in \[...\]
-  input = input.replace(/(\\begin\{[\s\S]+?\\end\{[\s\S]+?\})/g, function(match) {
-    return "\n\\[" + match + "\\]\n";
-  });
+  // 4) Replace \\[something] → \\
+  input = input.replace(/\\\\\[[^\]]*\]/g, "\\\\");
 
-  // Step 5: Split into lines
+  // 5) Wrap non-math text lines into <p>
   let lines = input.split(/\n/);
   let processed = "";
+  let mathMode = false;
 
   lines.forEach(line => {
-    line = line.trim();
-    if (!line) return;
+    if (!line.trim()) return; // skip empty
 
     if (line.startsWith("\\[") && line.endsWith("\\]")) {
-      processed += line + "\n"; // already block math
+      // pure math block
+      processed += line + "\n";
     } else {
-      processed += "<p>" + line + "</p>\n"; // normal text
+      // normal text or inline math
+      processed += "<p>" + line + "</p>\n";
     }
   });
 
   document.getElementById("preview").innerHTML = processed;
 
+  // Render MathJax
   MathJax.typesetClear();
   MathJax.typesetPromise();
 }
