@@ -23,7 +23,7 @@
   </style>
 </head>
 <body>
-  <h2>📘 7Mathpix Snippet → MathJax Converter</h2>
+  <h2>📘 Mathpix Snippet → MathJax Converter</h2>
   <label for="snippetInput">Paste Mathpix Snippet:</label>
   <textarea id="snippetInput" placeholder="Paste your LaTeX/Mathpix snippet here..."></textarea>
   <button onclick="convertSnippet()">Convert</button>
@@ -41,10 +41,15 @@
   <script>
     function autoCleanLatex(input) {
       let cleaned = input;
-      // Replace tabular -> array
+
+      // Tabular → Array
       cleaned = cleaned.replace(/\\begin\{tabular\}(\{[^\}]*\})/g, "\\begin{array}$1");
       cleaned = cleaned.replace(/\\end\{tabular\}/g, "\\end{array}");
       cleaned = cleaned.replace(/\\hline/g, "\\hline ");
+
+      // Convert $$...$$ → \[...\]
+      cleaned = cleaned.replace(/\$\$([\s\S]*?)\$\$/g, "\\[\n$1\n\\]");
+
       return cleaned;
     }
 
@@ -54,7 +59,7 @@
 
       let cleaned = autoCleanLatex(input);
 
-      // Split lines
+      // Split lines for text/math separation
       let lines = cleaned.split(/\n/);
       let convertedHTML = "";
       let insideMath = false;
@@ -63,19 +68,25 @@
         line = line.trim();
         if (!line) return;
 
-        // Detect math lines
-        if (line.startsWith("\\begin") || line.startsWith("\\end") || line.startsWith("$$") || line.match(/&/)) {
+        // Already converted block math (\[ ... \])
+        if (line.startsWith("\\[") || line.startsWith("\\]")) {
+          convertedHTML += line + "\n";
+          insideMath = false;
+        }
+        // Array or alignment (block math)
+        else if (line.startsWith("\\begin") || line.startsWith("\\end") || line.match(/&/)) {
           if (!insideMath) {
             convertedHTML += "\\[\n";
             insideMath = true;
           }
           convertedHTML += line + "\n";
-          if (line.startsWith("\\end") || line.startsWith("$$")) {
+          if (line.startsWith("\\end")) {
             convertedHTML += "\\]\n";
             insideMath = false;
           }
-        } else {
-          // Normal text
+        } 
+        // Normal text
+        else {
           if (insideMath) {
             convertedHTML += "\\]\n";
             insideMath = false;
@@ -83,9 +94,10 @@
           convertedHTML += `<p>${line}</p>\n`;
         }
       });
+
       if (insideMath) convertedHTML += "\\]\n";
 
-      // Show code
+      // Show converted code
       document.getElementById("convertedCode").value = convertedHTML;
 
       // Render preview
