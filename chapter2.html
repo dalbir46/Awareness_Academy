@@ -23,7 +23,7 @@
   </style>
 </head>
 <body>
-  <h2>14MathPix Snippet Converter</h2>
+  <h2>15MathPix Snippet Converter</h2>
   <textarea id="input"></textarea><br><br>
   <button onclick="convert()">Convert</button>
 
@@ -35,26 +35,46 @@ function convert() {
   let input = document.getElementById("input").value;
 
   // Step 1: Block equations: $$...$$ → \[...\]
-  input = input.replace(/\$\$([\s\S]*?)\$\$/g, function(_, content) {
+  input = input.replace(/\$\$([\s\S]*?)\$\$/g, (_, content) => {
     return "\n\\[" + content.trim() + "\\]\n";
   });
 
   // Step 2: Split into lines
   let lines = input.split(/\n/);
   let processed = "";
+  let insideBlock = false;
 
   lines.forEach(line => {
     line = line.trim();
     if (!line) return;
 
-    if (line.startsWith("\\[") && line.endsWith("\\]")) {
-      // Pure block math
+    // Detect LaTeX environments (tabular, array, align etc.)
+    if (line.startsWith("\\begin{") || line.startsWith("\\end{") || line.includes("&")) {
+      if (!insideBlock) {
+        processed += "\\[\n";
+        insideBlock = true;
+      }
       processed += line + "\n";
-    } else {
-      // Text line (may contain inline math $...$)
+      if (line.startsWith("\\end{")) {
+        processed += "\\]\n";
+        insideBlock = false;
+      }
+    }
+    else if (line.startsWith("\\[") && line.endsWith("\\]")) {
+      // Already a block math line
+      processed += line + "\n";
+    }
+    else {
+      // Normal text line (inline math $...$ will auto-render)
+      if (insideBlock) {
+        processed += "\\]\n";
+        insideBlock = false;
+      }
       processed += "<p>" + line + "</p>\n";
     }
   });
+
+  if (insideBlock) processed += "\\]\n";
 
   document.getElementById("preview").innerHTML = processed;
 
