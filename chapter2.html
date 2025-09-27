@@ -63,8 +63,8 @@
         line = line.trim();
         if (!line) return;
 
-        // Agar line sirf $$ hai to usko waise hi rehne do
-        if (line === "$$") {
+        // Agar line me $$ hai to waise hi rehne do (duplicate wrapper na lage)
+        if (line.includes("$$")) {
           if (insideMath) {
             convertedHTML += "\\]\n";
             insideMath = false;
