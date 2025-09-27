@@ -1,38 +1,199 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Math Question</title>
-  <!-- MathJax CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Class 10 — Chapter 1: Real Numbers</title>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}
+    body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}
+    .header-wrapper,.footer-wrapper{background:linear-gradient(135deg,var(--accent1),var(--accent2));padding:12px}
+    .header,.footer-inner{background:#ffffcc;padding:14px;text-align:center;font-weight:700;border:2px solid #333;border-radius:10px;max-width:980px;margin:auto}
+    .container{max-width:980px;margin:18px auto;padding:0 12px}
+    .login-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+    .login-row input{padding:8px;border-radius:6px;border:1px solid #999}
+    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700}
+    #adminStatus{display:none;color:green;font-weight:700;text-align:center;margin-bottom:8px}
+    .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
+    .question-title{font-weight:700;margin-bottom:8px}
+    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff}
+    .answer-box[contenteditable='false']{background:#f7f7f7}
+    .btns{margin-top:8px}
+    .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
+    .btn-edit{background:#2196F3}
+    .btn-save{background:#4CAF50}
+    .btn-clear{background:#f44336}
+    .btn-copy{background:#FF9800}
+    .small{font-size:13px;color:var(--muted)}
+    .meta{font-size:12px;color:#777;margin-top:6px}
+    @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}
+  </style>
 </head>
 <body>
-  <h2>Math Question:</h2>
+  <div class="header-wrapper"><div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers</div></div>
 
-  <p>
-    Express each number as a product of its prime factors:
-    (i) 140
-  </p>
+  <div class="container">
+    <div class="login-row">
+      <input id="loginUser" placeholder="Username" />
+      <input id="loginPass" placeholder="Password" type="password" />
+      <button id="loginBtn">Login as Admin</button>
+    </div>
+    <div id="adminStatus">✅ Admin login successful</div>
 
-  <p>
-    <!-- Tabular ko bhi render karega -->
-    \[
-    \begin{array}{r|r}
-    2 & 140 \\
-    \hline 2 & 70 \\
-    \hline 5 & 35 \\
-    \hline 7 & 7 \\
-    \hline & 1
-    \end{array}
-    \]
-  </p>
+    <!-- Example Question -->
+    <div class="question-box" id="q1">
+      <div class="question-title">Ex 1.1 — Q1. Express each number as a product of its prime factors: (i) 140</div>
+      <div class="answer-box" id="ans1" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="1">Edit</button>
+        <button class="btn btn-save" data-q="1">Save</button>
+        <button class="btn btn-clear" data-q="1">Clear</button>
+        <button class="btn btn-copy" data-q="1">Copy</button>
+      </div>
+    </div>
 
-  <p>
-    Hence,  
-    \[
-    140 = 2 \times 2 \times 5 \times 7 = 2^2 \times 5 \times 7
-    \]
-  </p>
+    <!-- Add more questions like above... -->
 
+  </div>
+
+  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
+
+  <!-- Firebase + imgbb (using your GitHub index config) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script>
+    // Firebase config
+    var firebaseConfig = {
+      apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
+      authDomain: "mathematics-hub-7087f.firebaseapp.com",
+      databaseURL: "https://mathematics-hub-7087f-default-rtdb.firebaseio.com",
+      projectId: "mathematics-hub-7087f",
+      storageBucket: "mathematics-hub-7087f.appspot.com",
+      messagingSenderId: "182359137920",
+      appId: "1:182359137920:web:1cf89e1d441ea1503a9065"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.database();
+
+    const ADMIN_USERNAME = "admin";
+    const ADMIN_PASSWORD = "Dalbir@551";
+    const IMGBB_API_KEY = "9a1627658ec3732fd03cb87cbff0ed66";
+
+    function isAdmin(){ return sessionStorage.getItem('isAdmin')==='true'; }
+    function setAdmin(flag){ 
+      if(flag) sessionStorage.setItem('isAdmin','true'); 
+      else sessionStorage.removeItem('isAdmin'); 
+      updateUI(); 
+    }
+
+    function updateUI(){
+      document.getElementById('adminStatus').style.display = isAdmin() ? 'block' : 'none';
+      document.querySelectorAll('.btn-save, .btn-edit, .btn-clear').forEach(b=>{
+        b.style.display = isAdmin() ? 'inline-block' : 'none';
+      });
+      document.querySelectorAll('.answer-box').forEach(ab=>{
+        ab.contentEditable = isAdmin(); 
+        if(!isAdmin()) ab.setAttribute('contenteditable','false');
+      });
+    }
+
+    // Load answers from Firebase
+    function loadAnswers(){
+      for(let i=1;i<=20;i++){
+        (function(i){
+          db.ref('chapter1/ans'+i).once('value').then(snap=>{
+            if(snap.exists()){
+              let box = document.getElementById('ans'+i);
+              if(box){
+                box.innerHTML = snap.val();
+                MathJax.typesetPromise([box]); // render after load
+              }
+            }
+          });
+        })(i);
+      }
+    }
+
+    window.onload = ()=>{ updateUI(); loadAnswers(); }
+
+    document.getElementById('loginBtn').addEventListener('click',()=>{
+      const u=document.getElementById('loginUser').value.trim();
+      const p=document.getElementById('loginPass').value;
+      if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){ 
+        setAdmin(true); alert('Admin login successful'); 
+      } else { 
+        alert('Invalid credentials'); setAdmin(false); 
+      }
+    });
+
+    // Buttons behaviour
+    document.querySelectorAll('.btn-edit').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const q=btn.getAttribute('data-q'); 
+        const ab=document.getElementById('ans'+q); 
+        if(isAdmin()){ ab.focus(); } else alert('Admin only');
+      });
+    });
+
+    document.querySelectorAll('.btn-save').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const q=btn.getAttribute('data-q'); 
+        if(!isAdmin()) return alert('Admin only'); 
+        const ab=document.getElementById('ans'+q); 
+        const html=ab.innerHTML; 
+        db.ref('chapter1/ans'+q).set(html).then(()=>{
+          alert('Saved Q'+q); 
+          MathJax.typesetPromise([ab]); // render after save
+        }).catch(err=>alert('Save error:'+err));
+      });
+    });
+
+    document.querySelectorAll('.btn-clear').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const q=btn.getAttribute('data-q'); 
+        if(!isAdmin()) return alert('Admin only'); 
+        const ab=document.getElementById('ans'+q); 
+        ab.innerHTML='';
+      });
+    });
+
+    document.querySelectorAll('.btn-copy').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const q=btn.getAttribute('data-q'); 
+        const ab=document.getElementById('ans'+q); 
+        const range=document.createRange(); 
+        range.selectNodeContents(ab); 
+        const sel=window.getSelection(); 
+        sel.removeAllRanges(); 
+        sel.addRange(range); 
+        try{ document.execCommand('copy'); alert('Copied Q'+q); }
+        catch(e){ alert('Copy failed'); } 
+        sel.removeAllRanges();
+      });
+    });
+
+    // imgbb upload helper
+    async function uploadToImgbb(file){
+      return new Promise((resolve,reject)=>{
+        const r=new FileReader(); 
+        r.onloadend=()=>{
+          const base64=r.result.split(',')[1]; 
+          const xhr=new XMLHttpRequest(); 
+          xhr.open('POST','https://api.imgbb.com/1/upload?key='+IMGBB_API_KEY); 
+          xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded'); 
+          xhr.onload=()=>{ 
+            if(xhr.status===200){ 
+              const res=JSON.parse(xhr.responseText); 
+              resolve(res.data.url); 
+            } else reject('Upload failed'); 
+          }; 
+          xhr.onerror=()=>reject('Upload error'); 
+          xhr.send('image='+encodeURIComponent(base64)); 
+        }; 
+        r.readAsDataURL(file); 
+      });
+    }
+  </script>
 </body>
-</html>
+    </html>
