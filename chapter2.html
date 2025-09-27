@@ -1,44 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Render API Test</title>
+  <meta charset="UTF-8">
+  <title>Math Question</title>
+  <!-- MathJax CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 </head>
 <body>
-  <h2>🔬 Test Render API</h2>
-  <input id="latex" placeholder="Enter LaTeX (e.g. x^2+y^2)" size="40"/>
-  <button onclick="sendLatex()">Send Test</button>
+  <h2>Math Question:</h2>
 
-  <div id="result"></div>
+  <p>
+    Express each number as a product of its prime factors:
+    (i) 140
+  </p>
 
-  <script>
-    const API_URL = "https://admin-pannel-1l76.onrender.com/render"; // ✅ your Render API
+  <p>
+    <!-- Tabular ko bhi render karega -->
+    \[
+    \begin{array}{r|r}
+    2 & 140 \\
+    \hline 2 & 70 \\
+    \hline 5 & 35 \\
+    \hline 7 & 7 \\
+    \hline & 1
+    \end{array}
+    \]
+  </p>
 
-    async function sendLatex() {
-      const latex = document.getElementById("latex").value.trim();
-      document.getElementById("result").innerHTML = "⏳ Processing...";
+  <p>
+    Hence,  
+    \[
+    140 = 2 \times 2 \times 5 \times 7 = 2^2 \times 5 \times 7
+    \]
+  </p>
 
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ latex })
-        });
-
-        const data = await res.json();
-
-        if (data.image_url) {
-          document.getElementById("result").innerHTML =
-            `✅ Success! <br><img src="${data.image_url}" style="max-width:300px"><br>
-             <a href="${data.image_url}" target="_blank">Open Image</a>`;
-        } else {
-          document.getElementById("result").innerHTML =
-            "❌ Error: " + JSON.stringify(data);
-        }
-      } catch (err) {
-        document.getElementById("result").innerHTML = "⚠️ API failed: " + err;
-      }
-    }
-  </script>
 </body>
 </html>
