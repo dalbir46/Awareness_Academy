@@ -11,11 +11,11 @@
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
     textarea { width: 100%; height: 200px; }
-    .preview { border: 1px solid #ccc; padding: 15px; margin-top: 20px; }
+    .preview { border: 1px solid #ccc; padding: 15px; margin-top: 20px; white-space: pre-wrap; }
   </style>
 </head>
 <body>
-  <h2>7MathPix Snippet Converter</h2>
+  <h2>8MathPix Snippet Converter</h2>
   <textarea id="input"></textarea><br><br>
   <button onclick="convert()">Convert</button>
 
@@ -26,16 +26,16 @@
 function convert() {
   let input = document.getElementById("input").value;
 
-  // 1. Handle block equations: $$...$$ → \[...\]
+  // Convert block math $$...$$ into \[...\]
   input = input.replace(/\$\$([\s\S]*?)\$\$/g, function(_, content) {
     return "\\[" + content.trim() + "\\]";
   });
 
-  // 2. Keep inline math ($...$) untouched
-  // (no replacement needed — MathJax already understands $...$)
+  // Inline math ($...$) remains untouched
 
-  // 3. Convert newlines into <br> (so formatting looks same as original)
-  input = input.replace(/\n/g, "<br>");
+  // Preserve normal newlines for text (avoid breaking block math)
+  // We'll replace only double newlines with <br><br> for paragraph breaks
+  input = input.replace(/\n{2,}/g, "<br><br>");
 
   document.getElementById("preview").innerHTML = input;
 
