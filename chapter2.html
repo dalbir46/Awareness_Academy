@@ -1,35 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <title>Render API Test</title>
 </head>
 <body>
-  <h2>🔍 Render API Test</h2>
-  <input id="latex" type="text" value="x^2 + y^2 = z^2" style="width:300px">
+  <h2>🔬 Test Render API</h2>
+  <input id="latex" placeholder="Enter LaTeX (e.g. x^2+y^2)" size="40"/>
   <button onclick="sendLatex()">Send Test</button>
 
-  <div id="result" style="margin-top:20px;"></div>
+  <div id="result"></div>
 
   <script>
-    const API_URL = "https://admin-pannel-1l76.onrender.com/render"; // ✅ आपका API
+    const API_URL = "https://admin-pannel-1l76.onrender.com/render"; // ✅ your Render API
 
     async function sendLatex() {
-      const latex = document.getElementById("latex").value;
-      document.getElementById("result").innerHTML = "⏳ Sending...";
+      const latex = document.getElementById("latex").value.trim();
+      document.getElementById("result").innerHTML = "⏳ Processing...";
+
       try {
-        let res = await fetch(API_URL, {
+        const res = await fetch(API_URL, {
           method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({ latex: latex })
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ latex })
         });
-        let data = await res.json();
+
+        const data = await res.json();
+
         if (data.image_url) {
           document.getElementById("result").innerHTML =
-            `<p>✅ Success:</p><img src="${data.image_url}" alt="LaTeX Output"/>`;
+            `✅ Success! <br><img src="${data.image_url}" style="max-width:300px"><br>
+             <a href="${data.image_url}" target="_blank">Open Image</a>`;
         } else {
           document.getElementById("result").innerHTML =
-            `<p>❌ Error: ${data.error || "Unknown error"}</p>`;
+            "❌ Error: " + JSON.stringify(data);
         }
       } catch (err) {
         document.getElementById("result").innerHTML = "⚠️ API failed: " + err;
