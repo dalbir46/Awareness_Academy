@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>M12athPix Converter</title>
+  <title>MathPix Converter</title>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],  // inline math
+        displayMath: [['\\[', '\\]']]              // block math
+      }
+    };
+  </script>
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
@@ -15,7 +23,7 @@
   </style>
 </head>
 <body>
-  <h2>MathPix Snippet Converter</h2>
+  <h2>14MathPix Snippet Converter</h2>
   <textarea id="input"></textarea><br><br>
   <button onclick="convert()">Convert</button>
 
@@ -26,7 +34,7 @@
 function convert() {
   let input = document.getElementById("input").value;
 
-  // Step 1: Convert block math $$...$$ → \[...\]
+  // Step 1: Block equations: $$...$$ → \[...\]
   input = input.replace(/\$\$([\s\S]*?)\$\$/g, function(_, content) {
     return "\n\\[" + content.trim() + "\\]\n";
   });
@@ -40,10 +48,10 @@ function convert() {
     if (!line) return;
 
     if (line.startsWith("\\[") && line.endsWith("\\]")) {
-      // Pure block math line
+      // Pure block math
       processed += line + "\n";
     } else {
-      // Normal text (can contain inline $...$)
+      // Text line (may contain inline math $...$)
       processed += "<p>" + line + "</p>\n";
     }
   });
