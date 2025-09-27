@@ -47,7 +47,7 @@
       cleaned = cleaned.replace(/\\end\{tabular\}/g, "\\end{array}");
       cleaned = cleaned.replace(/\\hline/g, "\\hline ");
 
-      // Convert $$...$$ → \[...\]
+      // Convert block $$...$$ → \[...\] (inline untouched)
       cleaned = cleaned.replace(/\$\$([\s\S]*?)\$\$/g, "\\[\n$1\n\\]");
 
       return cleaned;
@@ -68,7 +68,7 @@
         line = line.trim();
         if (!line) return;
 
-        // Already converted block math (\[ ... \])
+        // Already block math
         if (line.startsWith("\\[") || line.startsWith("\\]")) {
           convertedHTML += line + "\n";
           insideMath = false;
@@ -85,7 +85,7 @@
             insideMath = false;
           }
         } 
-        // Normal text
+        // Normal text (keep inline math $...$ as is)
         else {
           if (insideMath) {
             convertedHTML += "\\]\n";
