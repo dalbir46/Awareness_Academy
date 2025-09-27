@@ -8,8 +8,8 @@
   <script>
     MathJax = {
       tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],  // inline math
-        displayMath: [['\\[', '\\]']]              // block math
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
       }
     };
   </script>
@@ -23,7 +23,7 @@
   </style>
 </head>
 <body>
-  <h2>16MathPix Snippet Converter</h2>
+  <h2>MathPix Snippet Converter</h2>
   <textarea id="input"></textarea><br><br>
   <button onclick="convert()">Convert</button>
 
@@ -34,8 +34,8 @@
 function convert() {
   let input = document.getElementById("input").value;
 
-  // Step 1: Replace $$...$$ → \[...\]
-  input = input.replace(/\$\$([\s\S]*?)\$\$/g, function(_, content) {
+  // Step 1: Convert $$...$$ → \[...\]
+  input = input.replace(/\$\$([\s\S]*?)\$\$/g, (_, content) => {
     return "\n\\[" + content.trim() + "\\]\n";
   });
 
@@ -43,10 +43,15 @@ function convert() {
   input = input.replace(/\\begin\{tabular\}/g, "\\begin{array}");
   input = input.replace(/\\end\{tabular\}/g, "\\end{array}");
 
-  // Step 3: Remove all \hline (since array doesn’t support it in MathJax)
+  // Step 3: Remove \hline
   input = input.replace(/\\hline/g, "");
 
-  // Step 4: Split into lines for processing
+  // Step 4: Wrap every environment (\begin...\end) in \[...\]
+  input = input.replace(/(\\begin\{[\s\S]+?\\end\{[\s\S]+?\})/g, function(match) {
+    return "\n\\[" + match + "\\]\n";
+  });
+
+  // Step 5: Split into lines
   let lines = input.split(/\n/);
   let processed = "";
 
@@ -55,18 +60,14 @@ function convert() {
     if (!line) return;
 
     if (line.startsWith("\\[") && line.endsWith("\\]")) {
-      // Pure block math
-      processed += line + "\n";
+      processed += line + "\n"; // already block math
     } else {
-      // Normal text line (can contain inline $...$)
-      processed += "<p>" + line + "</p>\n";
+      processed += "<p>" + line + "</p>\n"; // normal text
     }
   });
 
-  // Show in preview
   document.getElementById("preview").innerHTML = processed;
 
-  // Re-render MathJax
   MathJax.typesetClear();
   MathJax.typesetPromise();
 }
