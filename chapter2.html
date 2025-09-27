@@ -3,8 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Class 10 — Chapter 1: Real Numbers</title>
-  <!-- MathJax -->
+  <title>Mathpix Snippet Converter</title>
   <script>
     MathJax = {
       tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
@@ -14,180 +13,45 @@
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; }
-    header, footer { background: #673ab7; color: #fff; padding: 10px; text-align: center; }
-    .container { padding: 20px; }
-    .question { background: #fff; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    .answer-box { margin-top: 10px; }
-    textarea { width: 100%; min-height: 60px; padding: 8px; border-radius: 6px; border: 1px solid #ccc; }
-    button { padding: 6px 12px; border: none; border-radius: 4px; margin-top: 6px; cursor: pointer; }
-    .save-btn { background: #4caf50; color: white; }
-    .logout-btn { background: #f44336; color: white; float: right; }
-    .hidden { display: none; }
-    .snippet-tools textarea { font-size: 14px; }
+    body { font-family: Arial, sans-serif; margin: 20px; background:#f9f9f9; }
+    textarea { width: 100%; min-height: 150px; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; }
+    button { padding: 8px 16px; border:none; border-radius:6px; background:#673ab7; color:#fff; font-weight:bold; cursor:pointer; }
+    .output-area { margin-top: 20px; }
+    .preview { margin-top: 15px; padding: 15px; background: #fff; border: 1px dashed #aaa; border-radius: 6px; }
+    label { font-weight: bold; display:block; margin-bottom:6px; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Class 10 — Chapter 1: Real Numbers</h1>
-    <button id="logoutBtn" class="logout-btn hidden" onclick="logout()">Logout</button>
-  </header>
-  <div class="container" id="content"></div>
-  <footer>
-    <p>&copy; 2025 Math Practice</p>
-  </footer>
+  <h2>📘 Mathpix Snippet → MathJax Converter</h2>
+  <label for="snippetInput">Paste Mathpix Snippet:</label>
+  <textarea id="snippetInput" placeholder="Paste your LaTeX/Mathpix snippet here..."></textarea>
+  <button onclick="convertSnippet()">Convert</button>
 
-  <script type="module">
-    // Firebase Config
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+  <div class="output-area">
+    <label for="convertedCode">Converted HTML + MathJax Code:</label>
+    <textarea id="convertedCode" readonly></textarea>
 
-    const firebaseConfig = {
-      apiKey: "YOUR_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-      projectId: "YOUR_PROJECT",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "SENDER_ID",
-      appId: "APP_ID"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    <div>
+      <label>Live Preview:</label>
+      <div id="preview" class="preview"></div>
+    </div>
+  </div>
 
-    let adminLoggedIn = false;
-
-    function isAdmin() { return adminLoggedIn; }
-
-    function login(password) {
-      if (password === "admin123") {
-        adminLoggedIn = true;
-        localStorage.setItem("isAdmin", "true");
-        updateUI();
-      } else {
-        alert("Wrong password!");
-      }
-    }
-
-    function logout() {
-      adminLoggedIn = false;
-      localStorage.removeItem("isAdmin");
-      updateUI();
-    }
-
-    window.logout = logout;
-
-    function updateUI() {
-      document.getElementById("logoutBtn").classList.toggle("hidden", !isAdmin());
-      document.querySelectorAll("textarea, .save-btn, .snippet-tools").forEach(el => {
-        el.style.display = isAdmin() ? "block" : "none";
-      });
-    }
-
-    function saveAnswer(q) {
-      const ans = document.getElementById("ans" + q).value;
-      set(ref(db, "answers/q" + q), ans);
-    }
-
-    function loadAnswers() {
-      const dbRef = ref(db);
-      get(child(dbRef, "answers")).then(snapshot => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          for (let q in data) {
-            const num = q.replace("q", "");
-            const ansBox = document.getElementById("ans" + num);
-            if (ansBox) ansBox.value = data[q];
-            const prev = document.getElementById("previewAns" + num);
-            if (prev) {
-              prev.innerHTML = data[q];
-              if (window.MathJax) MathJax.typesetPromise();
-            }
-          }
-        }
-      });
-    }
-
-    function createQuestion(q, text) {
-      const div = document.createElement("div");
-      div.className = "question";
-      div.innerHTML = `
-        <b>Q${q}.</b> ${text}
-        <div class="answer-box">
-          <textarea id="ans${q}" placeholder="Enter answer here..."></textarea>
-          <button class="save-btn" onclick="saveAnswer(${q})">Save</button>
-          <div id="previewAns${q}" class="math-answer" style="margin-top:8px;padding:6px;background:#fafafa;border-radius:6px;"></div>
-        </div>
-      `;
-      document.getElementById("content").appendChild(div);
-      createSnippetTools(q);
-    }
-
-    window.saveAnswer = saveAnswer;
-
-    // Questions
-    const questions = [
-      "Find the prime factorization of 140 using division method.",
-      "Find the HCF of 48 and 60 using Euclid’s algorithm."
-    ];
-
-    questions.forEach((q, i) => createQuestion(i + 1, q));
-    if (localStorage.getItem("isAdmin") === "true") adminLoggedIn = true;
-    updateUI();
-    loadAnswers();
-
-    // Image Upload helper
-    async function uploadToImgbb(file) {
-      const formData = new FormData();
-      formData.append("image", file);
-      const res = await fetch("https://api.imgbb.com/1/upload?key=YOUR_IMGBB_KEY", {
-        method: "POST",
-        body: formData
-      });
-      return await res.json();
-    }
-
-    // ---- Mathpix Snippet Converter ----
-    function createSnippetTools(q) {
-      const ab = document.getElementById('ans' + q);
-      const wrapper = document.createElement("div");
-      wrapper.className = "snippet-tools small";
-      wrapper.style.marginTop = "8px";
-      wrapper.style.display = isAdmin() ? "block" : "none";
-
-      wrapper.innerHTML = `
-        <textarea id="snippetInput${q}" rows="3" placeholder="Paste Mathpix LaTeX snippet here" style="width:100%;padding:6px;margin-bottom:4px;"></textarea>
-        <button onclick="convertSnippet(${q})" style="padding:4px 8px;border:none;border-radius:4px;background:#673ab7;color:#fff;font-weight:700;cursor:pointer;">Convert</button>
-        <textarea id="convertedCode${q}" rows="3" readonly style="width:100%;margin-top:6px;padding:6px;"></textarea>
-        <div id="preview${q}" style="margin-top:6px;padding:8px;border:1px dashed #999;background:#fafafa;border-radius:6px;"></div>
-      `;
-      ab.insertAdjacentElement("afterend", wrapper);
-    }
-
-    function convertSnippet(q) {
-      const input = document.getElementById("snippetInput" + q).value.trim();
-      if (!input) return alert("Paste Mathpix snippet first!");
-
+  <script>
+    function convertSnippet() {
+      const input = document.getElementById("snippetInput").value.trim();
+      if (!input) return alert("⚠️ Please paste a Mathpix snippet first!");
+      
+      // Wrap inside MathJax div
       const converted = `<div class="math-answer">\\[${input}\\]</div>`;
-      document.getElementById("convertedCode" + q).value = converted;
-      document.getElementById("preview" + q).innerHTML = converted;
+      
+      // Show in readonly textarea
+      document.getElementById("convertedCode").value = converted;
+      
+      // Render in preview
+      document.getElementById("preview").innerHTML = converted;
       if (window.MathJax) MathJax.typesetPromise();
     }
-
-    const oldUpdateUI = updateUI;
-    updateUI = function() {
-      oldUpdateUI();
-      document.querySelectorAll('.snippet-tools').forEach(div => {
-        div.style.display = isAdmin() ? 'block' : 'none';
-      });
-    };
-
-    window.addEventListener("load", () => {
-      for (let i = 1; i <= questions.length; i++) {
-        if (document.getElementById("ans" + i)) {
-          createSnippetTools(i);
-        }
-      }
-    });
   </script>
 </body>
-  </html>
+</html>
