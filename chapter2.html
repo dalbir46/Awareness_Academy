@@ -47,8 +47,10 @@
       cleaned = cleaned.replace(/\\end\{tabular\}/g, "\\end{array}");
       cleaned = cleaned.replace(/\\hline/g, "\\hline ");
 
-      // Convert block $$...$$ → \[...\] (inline untouched)
-      cleaned = cleaned.replace(/\$\$([\s\S]*?)\$\$/g, "\\[\n$1\n\\]");
+      // Convert block $$...$$ → \[...\]
+      cleaned = cleaned.replace(/\$\$([\s\S]*?)\$\$/g, function(_, expr) {
+        return "\\[\n" + expr.trim() + "\n\\]";
+      });
 
       return cleaned;
     }
@@ -59,7 +61,7 @@
 
       let cleaned = autoCleanLatex(input);
 
-      // Split lines for text/math separation
+      // Split lines
       let lines = cleaned.split(/\n/);
       let convertedHTML = "";
       let insideMath = false;
@@ -68,13 +70,12 @@
         line = line.trim();
         if (!line) return;
 
-        // Already block math
+        // Block math (\[...\]) should be added directly
         if (line.startsWith("\\[") || line.startsWith("\\]")) {
           convertedHTML += line + "\n";
-          insideMath = false;
         }
-        // Array or alignment (block math)
-        else if (line.startsWith("\\begin") || line.startsWith("\\end") || line.match(/&/)) {
+        // Arrays / alignment
+        else if (line.startsWith("\\begin") || line.startsWith("\\end") || line.includes("&")) {
           if (!insideMath) {
             convertedHTML += "\\[\n";
             insideMath = true;
@@ -84,8 +85,8 @@
             convertedHTML += "\\]\n";
             insideMath = false;
           }
-        } 
-        // Normal text (keep inline math $...$ as is)
+        }
+        // Normal text (with inline $...$)
         else {
           if (insideMath) {
             convertedHTML += "\\]\n";
