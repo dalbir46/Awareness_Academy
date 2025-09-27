@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mathpix Snippet Converter</title>
   <script>
-    MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+    };
   </script>
   <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; background:#f9f9f9; }
     textarea { width: 100%; min-height: 150px; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-family: monospace; }
@@ -19,7 +22,7 @@
   </style>
 </head>
 <body>
-  <h2>📘4 Mathpix Snippet → MathJax Converter (Fixed)</h2>
+  <h2>📘 Mathpix Snippet → MathJax Converter</h2>
   <label for="snippetInput">Paste Mathpix Snippet:</label>
   <textarea id="snippetInput" placeholder="Paste your LaTeX/Mathpix snippet here..."></textarea>
   <button onclick="convertSnippet()">Convert</button>
@@ -38,9 +41,11 @@
     function autoCleanLatex(input) {
       let cleaned = input;
 
-      // tabular → array
+      // Replace tabular{...} with array{...}
       cleaned = cleaned.replace(/\\begin\{tabular\}(\{[^\}]*\})/g, "\\begin{array}$1");
       cleaned = cleaned.replace(/\\end\{tabular\}/g, "\\end{array}");
+
+      // Ensure \hline spacing works
       cleaned = cleaned.replace(/\\hline/g, "\\hline ");
 
       return cleaned;
@@ -49,31 +54,17 @@
     function convertSnippet() {
       let input = document.getElementById("snippetInput").value.trim();
       if (!input) return alert("⚠️ Please paste a Mathpix snippet first!");
-
+      
+      // auto-cleaning
       const cleaned = autoCleanLatex(input);
 
-      // Split lines and decide: text vs math
-      const lines = cleaned.split(/\n+/);
-      let htmlParts = [];
-
-      lines.forEach(line => {
-        if (!line.trim()) return; // skip empty
-        if (line.startsWith("\\begin") || line.startsWith("$$") || line.startsWith("\\[")) {
-          // math block
-          htmlParts.push(`<div class="math-answer">\\[${line}\\]</div>`);
-        } else if (line.startsWith("\\end")) {
-          htmlParts.push(`<div class="math-answer">\\[${line}\\]</div>`);
-        } else if (line.includes("\\times") || line.includes("=") || line.includes("\\mathbf") || line.includes("\\frac")) {
-          htmlParts.push(`<div class="math-answer">\\[${line}\\]</div>`);
-        } else {
-          // normal text
-          htmlParts.push(`<p>${line}</p>`);
-        }
-      });
-
-      const converted = htmlParts.join("\n");
-
+      // Wrap inside MathJax div
+      const converted = `<div class="math-answer">\\[${cleaned}\\]</div>`;
+      
+      // Show in readonly textarea
       document.getElementById("convertedCode").value = converted;
+      
+      // Render in preview
       document.getElementById("preview").innerHTML = converted;
       if (window.MathJax) MathJax.typesetPromise();
     }
