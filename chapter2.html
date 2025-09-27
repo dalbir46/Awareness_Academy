@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Class 10 — Chapter 1: Real Numbers</title>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Firebase (v8) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
   <style>
     :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}
     body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}
@@ -30,6 +35,7 @@
     input.latexInput{display:block;width:100%;margin-top:6px;padding:6px;border:1px solid #ccc;border-radius:6px}
     .small{font-size:13px;color:var(--muted)}
     .meta{font-size:12px;color:#777;margin-top:6px}
+    pre.debug { white-space:pre-wrap; background:#fee; padding:6px; border-radius:6px; color:#900; }
     @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}
   </style>
 </head>
@@ -49,148 +55,260 @@
 
     <div id="questions"></div>
 
-    <div class="small">Note: Use the Render button to convert LaTeX into images using your API and store via imgbb.</div>
+    <div class="small">Note: This page will send LaTeX to your Render API, upload resulting image to imgbb and save URL to Firebase (admin only).</div>
+    <div id="debugArea"></div>
   </div>
 
   <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
 
-  <script>
-    // ================= CONFIG =================
-    const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "Dalbir@551";
-    const API_URL = "https://admin-pannel-1l76.onrender.com/render"; // Render API
-    const IMGBB_API_KEY = "9a1627658ec3732fd03cb87cbff0ed66"; // imgbb
+<script>
+/* ================= CONFIG (replace if needed) ================= */
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "Dalbir@551";
 
-    // ================= HELPERS =================
-    function isAdmin(){ return sessionStorage.getItem("isAdmin")==="true"; }
-    function setAdmin(flag){
-      if(flag) sessionStorage.setItem("isAdmin","true");
-      else sessionStorage.removeItem("isAdmin");
-      updateUI();
-    }
-    function updateUI(){
-      document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
-      document.getElementById("logoutBtn").style.display = isAdmin() ? "inline-block" : "none";
-      document.querySelectorAll(".btn-save,.btn-edit,.btn-clear").forEach(b=>{
-        b.style.display = isAdmin() ? "inline-block":"none";
-      });
-      document.querySelectorAll(".answer-box").forEach(ab=>{
-        ab.contentEditable = isAdmin();
-        if(!isAdmin()) ab.setAttribute("contenteditable","false");
-      });
+// Render API (must accept POST JSON { latex: "..." } and respond with either:
+// - JSON { image_base64: "..." } OR { image_url: "..." } 
+// - or raw image/png bytes
+const API_URL = "https://admin-pannel-1l76.onrender.com/render";
+
+// imgbb key (from you)
+const IMGBB_API_KEY = "9a1627658ec3732fd03cb87cbff0ed66";
+
+// Firebase config (your project)
+var firebaseConfig = {
+  apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
+  authDomain: "mathematics-hub-7087f.firebaseapp.com",
+  databaseURL: "https://mathematics-hub-7087f-default-rtdb.firebaseio.com",
+  projectId: "mathematics-hub-7087f",
+  storageBucket: "mathematics-hub-7087f.appspot.com",
+  messagingSenderId: "182359137920",
+  appId: "1:182359137920:web:1cf89e1d441ea1503a9065"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+
+/* ================= HELPERS ================= */
+function isAdmin(){ return sessionStorage.getItem("isAdmin")==="true"; }
+function setAdmin(flag){ if(flag) sessionStorage.setItem("isAdmin","true"); else sessionStorage.removeItem("isAdmin"); updateUI(); }
+function updateUI(){
+  document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
+  document.getElementById("logoutBtn").style.display = isAdmin() ? "inline-block" : "none";
+  document.querySelectorAll(".btn-save,.btn-edit,.btn-clear").forEach(b=>{
+    b.style.display = isAdmin() ? "inline-block" : "none";
+  });
+  document.querySelectorAll(".answer-box").forEach(ab=>{
+    ab.contentEditable = isAdmin();
+    if(!isAdmin()) ab.setAttribute("contenteditable","false");
+  });
+}
+function escapeHtml(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function debug(msg){ console.log(msg); document.getElementById("debugArea").innerHTML = "<pre class='debug'>"+escapeHtml(String(msg))+"</pre>"; }
+
+/* ================= imgbb uploader helpers ================= */
+function blobToBase64(blob){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onloadend = ()=> resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+async function uploadBase64ToImgbb(base64){
+  const body = "image=" + encodeURIComponent(base64);
+  const resp = await fetch("https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body
+  });
+  const j = await resp.json();
+  if(j && j.data && j.data.url) return j.data.url;
+  throw new Error("imgbb upload failed: " + JSON.stringify(j));
+}
+async function uploadBlobToImgbb(blob){
+  const base64 = await blobToBase64(blob);
+  return await uploadBase64ToImgbb(base64);
+}
+
+/* ================= Render -> imgbb -> Firebase flow ================= */
+async function renderLatex(latex, qid){
+  const outEl = document.getElementById("ans"+qid);
+  outEl.innerHTML = "Rendering..."; // quick UI feedback
+  debug("Sending to Render API...");
+
+  try{
+    // 1) POST to Render API
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ latex })
+    });
+
+    const ct = (res.headers.get("content-type") || "").toLowerCase();
+    debug("Response content-type: " + ct + "  status:"+res.status);
+
+    if(!res.ok){
+      // show server error page / text
+      const txt = await res.text();
+      outEl.innerHTML = `<pre style="color:red">Render API error ${res.status}:\n${escapeHtml(txt)}</pre>`;
+      debug("Render API returned error:\n"+txt);
+      return;
     }
 
-    // Upload image blob to imgbb
-    async function uploadToImgbb(blob){
-      return new Promise((resolve,reject)=>{
-        const reader=new FileReader();
-        reader.onloadend=()=>{
-          const base64=reader.result.split(",")[1];
-          fetch("https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY,{
-            method:"POST",
-            headers:{"Content-Type":"application/x-www-form-urlencoded"},
-            body:"image="+encodeURIComponent(base64)
-          })
-          .then(r=>r.json())
-          .then(d=>{
-            if(d && d.data && d.data.url) resolve(d.data.url);
-            else reject("Upload failed");
-          })
-          .catch(err=>reject(err));
-        };
-        reader.readAsDataURL(blob);
-      });
-    }
+    // 2) handle by content-type
+    if(ct.includes("application/json")){
+      // parse JSON safely
+      const data = await res.json();
+      debug("JSON from Render API: " + JSON.stringify(data).slice(0,800));
 
-    // Call Render API, then upload to imgbb
-    async function renderLatex(latex,qid){
-      try{
-        let res = await fetch(API_URL,{
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({latex:latex})
-        });
-        let data = await res.json();
-        if(data.image_base64){
-          // convert base64 to blob
-          let byteChars=atob(data.image_base64);
-          let byteNumbers=new Array(byteChars.length);
-          for(let i=0;i<byteChars.length;i++) byteNumbers[i]=byteChars.charCodeAt(i);
-          let byteArray=new Uint8Array(byteNumbers);
-          let blob=new Blob([byteArray],{type:"image/png"});
-          // upload to imgbb
-          let url=await uploadToImgbb(blob);
-          document.getElementById("ans"+qid).innerHTML = `<img src="${url}" alt="latex output"/>`;
-        }else{
-          document.getElementById("ans"+qid).innerHTML = "❌ Error: "+(data.error||"Unknown");
+      // If server already uploaded to imgbb and returns image_url
+      if(data.image_url){
+        const url = data.image_url;
+        outEl.innerHTML = `<img src="${url}" alt="latex output" />`;
+        // save to firebase (admin only)
+        if(isAdmin()){
+          await db.ref("chapter1/ans"+qid).set(outEl.innerHTML);
+          alert("Saved answer to Firebase (image_url).");
         }
-      }catch(err){
-        document.getElementById("ans"+qid).innerHTML="⚠️ API failed: "+err;
+        return;
       }
+
+      // If server returns base64 string
+      const base64Key = data.image_base64 || data.base64 || data.image;
+      if(base64Key){
+        // convert base64 to blob, then upload to imgbb
+        const byteChars = atob(base64Key);
+        const byteNumbers = new Array(byteChars.length);
+        for (let i = 0; i < byteChars.length; i++) byteNumbers[i] = byteChars.charCodeAt(i);
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "image/png" });
+
+        debug("Uploading PNG blob from base64 to imgbb...");
+        const imgbbUrl = await uploadBlobToImgbb(blob);
+        outEl.innerHTML = `<img src="${imgbbUrl}" alt="latex output" />`;
+        if(isAdmin()){
+          await db.ref("chapter1/ans"+qid).set(outEl.innerHTML);
+          alert("Saved answer to Firebase (imgbb URL).");
+        }
+        return;
+      }
+
+      // Unexpected JSON structure
+      outEl.innerHTML = `<pre style="color:red">Unexpected JSON response: ${escapeHtml(JSON.stringify(data))}</pre>`;
+      return;
     }
 
-    // ================= LOGIN =================
-    document.getElementById("loginBtn").addEventListener("click",()=>{
-      const u=document.getElementById("loginUser").value.trim();
-      const p=document.getElementById("loginPass").value;
-      if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){
-        setAdmin(true);
-        alert("✅ Admin login successful");
-      }else{
-        alert("❌ Invalid credentials");
-        setAdmin(false);
+    // If server returned an image (PNG)
+    if(ct.includes("image/")){
+      const blob = await res.blob();
+      debug("Received image blob from Render API, uploading to imgbb...");
+      const imgbbUrl = await uploadBlobToImgbb(blob);
+      outEl.innerHTML = `<img src="${imgbbUrl}" alt="latex output" />`;
+      if(isAdmin()){
+        await db.ref("chapter1/ans"+qid).set(outEl.innerHTML);
+        alert("Saved answer to Firebase (imgbb URL).");
       }
-    });
-    document.getElementById("logoutBtn").addEventListener("click",()=>{
-      setAdmin(false);
-      alert("🔒 You have been logged out");
-    });
+      return;
+    }
 
-    // ================= QUESTIONS =================
-    const questionTexts = [
-      "Ex 1.1 — Q1. Express each number as a product of its prime factors",
-      "Ex 1.1 — Q2. Find the HCF and LCM...",
-      "Ex 1.1 — Q3. Find HCF and LCM by prime factorisation..."
-    ];
-    let qHTML="";
-    questionTexts.forEach((q,i)=>{
-      let id=i+1;
-      qHTML+=`
-        <div class="question-box" id="q${id}">
-          <div class="question-title">${q}</div>
-          <div class="answer-box" id="ans${id}" contenteditable="false"></div>
-          <input id="latexInput${id}" class="latexInput" placeholder="Enter LaTeX for Q${id}..." />
-          <div class="btns small">
-            <button class="btn btn-edit" data-q="${id}">Edit</button>
-            <button class="btn btn-save" data-q="${id}">Save</button>
-            <button class="btn btn-clear" data-q="${id}">Clear</button>
-            <button class="btn btn-copy" data-q="${id}">Copy</button>
-            <button class="btn btn-render" onclick="renderLatex(document.getElementById('latexInput${id}').value,${id})">Render Answer</button>
-          </div>
-        </div>`;
-    });
-    document.getElementById("questions").innerHTML=qHTML;
+    // If server returned text/html or plain text (probably an error page)
+    const text = await res.text();
+    outEl.innerHTML = `<pre style="color:red">Unexpected response from Render API:\n${escapeHtml(text)}</pre>`;
+    debug("Unexpected response text: " + text);
 
-    // ================= EXTRA BTNS =================
-    document.addEventListener("click",e=>{
-      if(e.target.classList.contains("btn-clear")){
-        let q=e.target.dataset.q;
-        if(!isAdmin()) return alert("Admin only");
-        document.getElementById("ans"+q).innerHTML="";
-      }
-      if(e.target.classList.contains("btn-edit")){
-        let q=e.target.dataset.q;
-        if(!isAdmin()) return alert("Admin only");
-        document.getElementById("ans"+q).focus();
-      }
-      if(e.target.classList.contains("btn-save")){
-        let q=e.target.dataset.q;
-        if(!isAdmin()) return alert("Admin only");
-        alert("💾 Saved Q"+q+" (Firebase save add karna hoga)");
-      }
-    });
+  }catch(err){
+    console.error("renderLatex error:", err);
+    outEl.innerHTML = "⚠️ API failed: " + escapeHtml(String(err));
+    debug("Exception: " + String(err));
+  }
+}
 
-    window.onload=()=>{ updateUI(); };
-  </script>
+/* ================= UI, Login, Questions generation ================= */
+document.getElementById("loginBtn").addEventListener("click", ()=>{
+  const u = document.getElementById("loginUser").value.trim();
+  const p = document.getElementById("loginPass").value;
+  if(u === ADMIN_USERNAME && p === ADMIN_PASSWORD){
+    setAdmin(true);
+    alert("✅ Admin login successful");
+  } else {
+    setAdmin(false);
+    alert("❌ Invalid credentials");
+  }
+});
+document.getElementById("logoutBtn").addEventListener("click", ()=>{ setAdmin(false); alert("🔒 You have been logged out"); });
+
+const questionTexts = [
+  "Ex 1.1 — Q1. Express each number as a product of its prime factors",
+  "Ex 1.1 — Q2. Find the HCF and LCM...",
+  "Ex 1.1 — Q3. Find HCF and LCM by prime factorisation...",
+  "Ex 1.1 — Q4. Given HCF(306,657) = 9, find LCM(306,657).",
+  "Ex 1.1 — Q5. Check whether 6^n can end with digit 0..."
+];
+
+let qHTML = "";
+questionTexts.forEach((q,i)=>{
+  const id = i+1;
+  qHTML += `
+    <div class="question-box" id="q${id}">
+      <div class="question-title">${q}</div>
+      <div class="answer-box" id="ans${id}" contenteditable="false"></div>
+      <input id="latexInput${id}" class="latexInput" placeholder="Enter LaTeX for Q${id}..." />
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="${id}">Edit</button>
+        <button class="btn btn-save" data-q="${id}">Save</button>
+        <button class="btn btn-clear" data-q="${id}">Clear</button>
+        <button class="btn btn-copy" data-q="${id}">Copy</button>
+        <button class="btn btn-render" onclick="renderLatex(document.getElementById('latexInput${id}').value,${id})">Render Answer</button>
+      </div>
+    </div>
+  `;
+});
+document.getElementById("questions").innerHTML = qHTML;
+
+/* copy/clear/edit/save handlers */
+document.addEventListener("click", async (e)=>{
+  if(e.target.classList.contains("btn-copy")){
+    const q = e.target.dataset.q;
+    const ab = document.getElementById("ans"+q);
+    const range = document.createRange(); range.selectNodeContents(ab);
+    const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+    try{ document.execCommand("copy"); alert("✅ Copied Q"+q); } catch { alert("❌ Copy failed"); }
+    sel.removeAllRanges();
+  }
+  if(e.target.classList.contains("btn-clear")){
+    const q = e.target.dataset.q;
+    if(!isAdmin()) return alert("Admin only");
+    document.getElementById("ans"+q).innerHTML = "";
+    // Also remove from Firebase
+    await db.ref("chapter1/ans"+q).remove();
+    alert("Cleared Q"+q);
+  }
+  if(e.target.classList.contains("btn-edit")){
+    const q = e.target.dataset.q;
+    if(!isAdmin()) return alert("Admin only");
+    document.getElementById("ans"+q).focus();
+  }
+  if(e.target.classList.contains("btn-save")){
+    const q = e.target.dataset.q;
+    if(!isAdmin()) return alert("Admin only");
+    const html = document.getElementById("ans"+q).innerHTML;
+    await db.ref("chapter1/ans"+q).set(html);
+    alert("💾 Saved Q"+q+" to Firebase");
+  }
+});
+
+/* Load saved answers on init */
+window.onload = ()=>{
+  updateUI();
+  // load all saved answers (if any)
+  questionTexts.forEach((_,i)=>{
+    const qid = i+1;
+    db.ref("chapter1/ans"+qid).once("value").then(snap=>{
+      if(snap.exists()){
+        document.getElementById("ans"+qid).innerHTML = snap.val();
+      }
+    }).catch(err=>console.error("Firebase read error:", err));
+  });
+};
+</script>
 </body>
-  </html>
+</html>
