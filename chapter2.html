@@ -8,9 +8,8 @@
   <script>
     MathJax = {
       tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],   // inline math
-        displayMath: [['\\[', '\\]']],              // block math
-        packages: {'[+]': ['ams', 'array']}        // important for aligned & tabular
+        inlineMath: [['$', '$'], ['\\(', '\\)']],  // inline math
+        displayMath: [['\\[', '\\]']]              // block math
       }
     };
   </script>
@@ -24,7 +23,7 @@
   </style>
 </head>
 <body>
-  <h2>MathPix Snippet Converter</h2>
+  <h2>16MathPix Snippet Converter</h2>
   <textarea id="input"></textarea><br><br>
   <button onclick="convert()">Convert</button>
 
@@ -35,49 +34,39 @@
 function convert() {
   let input = document.getElementById("input").value;
 
-  // Step 1: $$...$$ → \[...\]
-  input = input.replace(/\$\$([\s\S]*?)\$\$/g, (_, content) => {
+  // Step 1: Replace $$...$$ → \[...\]
+  input = input.replace(/\$\$([\s\S]*?)\$\$/g, function(_, content) {
     return "\n\\[" + content.trim() + "\\]\n";
   });
 
-  // Step 2: split into lines
+  // Step 2: Replace tabular → array
+  input = input.replace(/\\begin\{tabular\}/g, "\\begin{array}");
+  input = input.replace(/\\end\{tabular\}/g, "\\end{array}");
+
+  // Step 3: Remove all \hline (since array doesn’t support it in MathJax)
+  input = input.replace(/\\hline/g, "");
+
+  // Step 4: Split into lines for processing
   let lines = input.split(/\n/);
   let processed = "";
-  let insideBlock = false;
 
   lines.forEach(line => {
     line = line.trim();
     if (!line) return;
 
-    // Handle LaTeX environments like tabular, aligned, etc.
-    if (line.startsWith("\\begin{") || line.startsWith("\\end{") || line.includes("&")) {
-      if (!insideBlock) {
-        processed += "\\[\n";
-        insideBlock = true;
-      }
+    if (line.startsWith("\\[") && line.endsWith("\\]")) {
+      // Pure block math
       processed += line + "\n";
-      if (line.startsWith("\\end{")) {
-        processed += "\\]\n";
-        insideBlock = false;
-      }
-    }
-    else if (line.startsWith("\\[") && line.endsWith("\\]")) {
-      processed += line + "\n";
-    }
-    else {
-      if (insideBlock) {
-        processed += "\\]\n";
-        insideBlock = false;
-      }
+    } else {
+      // Normal text line (can contain inline $...$)
       processed += "<p>" + line + "</p>\n";
     }
   });
 
-  if (insideBlock) processed += "\\]\n";
-
+  // Show in preview
   document.getElementById("preview").innerHTML = processed;
 
-  // Render MathJax
+  // Re-render MathJax
   MathJax.typesetClear();
   MathJax.typesetPromise();
 }
