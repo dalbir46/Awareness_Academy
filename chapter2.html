@@ -63,14 +63,24 @@
         line = line.trim();
         if (!line) return;
 
-        // Detect math lines
-        if (line.startsWith("\\begin") || line.startsWith("\\end") || line.startsWith("$$") || line.match(/&/)) {
+        // Agar line sirf $$ hai to usko waise hi rehne do
+        if (line === "$$") {
+          if (insideMath) {
+            convertedHTML += "\\]\n";
+            insideMath = false;
+          }
+          convertedHTML += line + "\n";
+          return;
+        }
+
+        // Detect math environments
+        if (line.startsWith("\\begin") || line.startsWith("\\end") || line.match(/&/)) {
           if (!insideMath) {
             convertedHTML += "\\[\n";
             insideMath = true;
           }
           convertedHTML += line + "\n";
-          if (line.startsWith("\\end") || line.startsWith("$$")) {
+          if (line.startsWith("\\end")) {
             convertedHTML += "\\]\n";
             insideMath = false;
           }
