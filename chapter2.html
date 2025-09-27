@@ -14,7 +14,7 @@
   </script>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; background:#f9f9f9; }
-    textarea { width: 100%; min-height: 150px; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; }
+    textarea { width: 100%; min-height: 150px; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-family: monospace; }
     button { padding: 8px 16px; border:none; border-radius:6px; background:#673ab7; color:#fff; font-weight:bold; cursor:pointer; }
     .output-area { margin-top: 20px; }
     .preview { margin-top: 15px; padding: 15px; background: #fff; border: 1px dashed #aaa; border-radius: 6px; }
@@ -38,12 +38,28 @@
   </div>
 
   <script>
+    function autoCleanLatex(input) {
+      let cleaned = input;
+
+      // Replace tabular{...} with array{...}
+      cleaned = cleaned.replace(/\\begin\{tabular\}(\{[^\}]*\})/g, "\\begin{array}$1");
+      cleaned = cleaned.replace(/\\end\{tabular\}/g, "\\end{array}");
+
+      // Ensure \hline spacing works
+      cleaned = cleaned.replace(/\\hline/g, "\\hline ");
+
+      return cleaned;
+    }
+
     function convertSnippet() {
-      const input = document.getElementById("snippetInput").value.trim();
+      let input = document.getElementById("snippetInput").value.trim();
       if (!input) return alert("⚠️ Please paste a Mathpix snippet first!");
       
+      // auto-cleaning
+      const cleaned = autoCleanLatex(input);
+
       // Wrap inside MathJax div
-      const converted = `<div class="math-answer">\\[${input}\\]</div>`;
+      const converted = `<div class="math-answer">\\[${cleaned}\\]</div>`;
       
       // Show in readonly textarea
       document.getElementById("convertedCode").value = converted;
