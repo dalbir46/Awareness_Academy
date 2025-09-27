@@ -1,110 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mathpix Snippet Converter</title>
-  <script>
-    MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
-    };
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MathPix Converter</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background:#f9f9f9; }
-    textarea { width: 100%; min-height: 150px; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-family: monospace; }
-    button { padding: 8px 16px; border:none; border-radius:6px; background:#673ab7; color:#fff; font-weight:bold; cursor:pointer; }
-    .output-area { margin-top: 20px; }
-    .preview { margin-top: 15px; padding: 15px; background: #fff; border: 1px dashed #aaa; border-radius: 6px; }
-    label { font-weight: bold; display:block; margin-bottom:6px; }
-    p { margin: 5px 0; }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    textarea { width: 100%; height: 200px; }
+    .preview { border: 1px solid #ccc; padding: 15px; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h2>📘 Mathpix Snippet → MathJax Converter</h2>
-  <label for="snippetInput">Paste Mathpix Snippet:</label>
-  <textarea id="snippetInput" placeholder="Paste your LaTeX/Mathpix snippet here..."></textarea>
-  <button onclick="convertSnippet()">Convert</button>
+  <h2>7MathPix Snippet Converter</h2>
+  <textarea id="input"></textarea><br><br>
+  <button onclick="convert()">Convert</button>
 
-  <div class="output-area">
-    <label for="convertedCode">Converted HTML + MathJax Code:</label>
-    <textarea id="convertedCode" readonly></textarea>
+  <h3>Live Preview:</h3>
+  <div class="preview" id="preview"></div>
 
-    <div>
-      <label>Live Preview:</label>
-      <div id="preview" class="preview"></div>
-    </div>
-  </div>
+<script>
+function convert() {
+  let input = document.getElementById("input").value;
 
-  <script>
-    function autoCleanLatex(input) {
-      let cleaned = input;
+  // 1. Handle block equations: $$...$$ → \[...\]
+  input = input.replace(/\$\$([\s\S]*?)\$\$/g, function(_, content) {
+    return "\\[" + content.trim() + "\\]";
+  });
 
-      // Tabular → Array
-      cleaned = cleaned.replace(/\\begin\{tabular\}(\{[^\}]*\})/g, "\\begin{array}$1");
-      cleaned = cleaned.replace(/\\end\{tabular\}/g, "\\end{array}");
-      cleaned = cleaned.replace(/\\hline/g, "\\hline ");
+  // 2. Keep inline math ($...$) untouched
+  // (no replacement needed — MathJax already understands $...$)
 
-      // Convert block $$...$$ → \[...\]
-      cleaned = cleaned.replace(/\$\$([\s\S]*?)\$\$/g, function(_, expr) {
-        return "\\[\n" + expr.trim() + "\n\\]";
-      });
+  // 3. Convert newlines into <br> (so formatting looks same as original)
+  input = input.replace(/\n/g, "<br>");
 
-      return cleaned;
-    }
+  document.getElementById("preview").innerHTML = input;
 
-    function convertSnippet() {
-      let input = document.getElementById("snippetInput").value.trim();
-      if (!input) return alert("⚠️ Please paste a Mathpix snippet first!");
-
-      let cleaned = autoCleanLatex(input);
-
-      // Split lines
-      let lines = cleaned.split(/\n/);
-      let convertedHTML = "";
-      let insideMath = false;
-
-      lines.forEach(line => {
-        line = line.trim();
-        if (!line) return;
-
-        // Block math (\[...\]) should be added directly
-        if (line.startsWith("\\[") || line.startsWith("\\]")) {
-          convertedHTML += line + "\n";
-        }
-        // Arrays / alignment
-        else if (line.startsWith("\\begin") || line.startsWith("\\end") || line.includes("&")) {
-          if (!insideMath) {
-            convertedHTML += "\\[\n";
-            insideMath = true;
-          }
-          convertedHTML += line + "\n";
-          if (line.startsWith("\\end")) {
-            convertedHTML += "\\]\n";
-            insideMath = false;
-          }
-        }
-        // Normal text (with inline $...$)
-        else {
-          if (insideMath) {
-            convertedHTML += "\\]\n";
-            insideMath = false;
-          }
-          convertedHTML += `<p>${line}</p>\n`;
-        }
-      });
-
-      if (insideMath) convertedHTML += "\\]\n";
-
-      // Show converted code
-      document.getElementById("convertedCode").value = convertedHTML;
-
-      // Render preview
-      document.getElementById("preview").innerHTML = convertedHTML;
-      if (window.MathJax) MathJax.typesetPromise();
-    }
-  </script>
+  // Re-render MathJax
+  MathJax.typesetClear();
+  MathJax.typesetPromise();
+}
+</script>
 </body>
 </html>
