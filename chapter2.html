@@ -4,20 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mathpix Snippet Converter</title>
-
-  <!-- MathJax Config -->
   <script>
     MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']]
-      }
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
     };
   </script>
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
-
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; background:#f9f9f9; }
     textarea { width: 100%; min-height: 150px; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; font-family: monospace; }
@@ -25,11 +19,11 @@
     .output-area { margin-top: 20px; }
     .preview { margin-top: 15px; padding: 15px; background: #fff; border: 1px dashed #aaa; border-radius: 6px; }
     label { font-weight: bold; display:block; margin-bottom:6px; }
+    p { margin: 5px 0; }
   </style>
 </head>
 <body>
-  <h2>📘 Mathpix Snippet → MathJax Converter</h2>
-
+  <h2>📘 7Mathpix Snippet → MathJax Converter</h2>
   <label for="snippetInput">Paste Mathpix Snippet:</label>
   <textarea id="snippetInput" placeholder="Paste your LaTeX/Mathpix snippet here..."></textarea>
   <button onclick="convertSnippet()">Convert</button>
@@ -47,47 +41,54 @@
   <script>
     function autoCleanLatex(input) {
       let cleaned = input;
-
-      // Replace tabular with array for MathJax compatibility
+      // Replace tabular -> array
       cleaned = cleaned.replace(/\\begin\{tabular\}(\{[^\}]*\})/g, "\\begin{array}$1");
       cleaned = cleaned.replace(/\\end\{tabular\}/g, "\\end{array}");
-
-      // Fix \hline spacing
       cleaned = cleaned.replace(/\\hline/g, "\\hline ");
-
       return cleaned;
     }
 
     function convertSnippet() {
       let input = document.getElementById("snippetInput").value.trim();
       if (!input) return alert("⚠️ Please paste a Mathpix snippet first!");
-      
-      const cleaned = autoCleanLatex(input);
-      const lines = cleaned.split(/\r?\n/);
+
+      let cleaned = autoCleanLatex(input);
+
+      // Split lines
+      let lines = cleaned.split(/\n/);
       let convertedHTML = "";
+      let insideMath = false;
 
       lines.forEach(line => {
         line = line.trim();
         if (!line) return;
 
-        // Block math $$ ... $$
-        if (line.startsWith("$$") && line.endsWith("$$")) {
+        // Detect math lines
+        if (line.startsWith("\\begin") || line.startsWith("\\end") || line.startsWith("$$") || line.match(/&/)) {
+          if (!insideMath) {
+            convertedHTML += "\\[\n";
+            insideMath = true;
+          }
           convertedHTML += line + "\n";
-        }
-        // Inline math or text with math
-        else if (line.includes("$")) {
-          convertedHTML += `<p>${line}</p>\n`;
-        }
-        // Normal plain text
-        else {
+          if (line.startsWith("\\end") || line.startsWith("$$")) {
+            convertedHTML += "\\]\n";
+            insideMath = false;
+          }
+        } else {
+          // Normal text
+          if (insideMath) {
+            convertedHTML += "\\]\n";
+            insideMath = false;
+          }
           convertedHTML += `<p>${line}</p>\n`;
         }
       });
+      if (insideMath) convertedHTML += "\\]\n";
 
-      // Show converted HTML
+      // Show code
       document.getElementById("convertedCode").value = convertedHTML;
 
-      // Render in preview
+      // Render preview
       document.getElementById("preview").innerHTML = convertedHTML;
       if (window.MathJax) MathJax.typesetPromise();
     }
