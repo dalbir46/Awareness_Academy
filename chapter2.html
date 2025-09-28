@@ -2,75 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mathpix → MathJax Converter</title>
+  <title>Mathpix to MathJax Converter</title>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['\\[', '\\]']]
-      }
-    };
-  </script>
   <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    textarea { width: 100%; height: 220px; }
-    .preview { border: 1px solid #ccc; padding: 15px; margin-top: 20px; white-space: normal; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background: #f4f6f9;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    #output {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      min-height: 50px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
-  <h2>MMathpix → MathJax Converter</h2>
-  <textarea id="input"></textarea><br><br>
-  <button onclick="convert()">Convert</button>
 
-  <h3>Live Preview:</h3>
-  <div class="preview" id="preview"></div>
+  <h2>Mathpix → MathJax Converter</h2>
+  <p>Paste Mathpix LaTeX code below:</p>
+  <textarea id="inputLatex">\displaystyle \color{red}{\frac{a}{b}} + \sqrt{x^2 + y^2}</textarea>
+  <br>
+  <button onclick="convertLatex()">Convert & Render</button>
 
-<script>
-function convert() {
-  let input = document.getElementById("input").value;
+  <h3>MathJax Output:</h3>
+  <div id="output"></div>
 
-  // 1) $$...$$ → \[...\]
-  input = input.replace(/\$\$([\s\S]*?)\$\$/g, (_, content) => {
-    return "\\[" + content.trim() + "\\]";
-  });
+  <script>
+    function cleanLatex(latex) {
+      // Remove \displaystyle
+      latex = latex.replace(/\\displaystyle/g, "");
 
-  // 2) Tabular → Array
-  input = input.replace(/\\begin\{tabular\}/g, "\\begin{array}");
-  input = input.replace(/\\end\{tabular\}/g, "\\end{array}");
-  input = input.replace(/\\hline/g, "");
+      // Remove \color{...}{...} but keep inner part
+      latex = latex.replace(/\\color\{.*?\}\{(.*?)\}/g, "$1");
 
-  // 3) Preserve block math \[...\] as-is, wrap only normal text in <p>
-  let processed = "";
-  let regex = /(\\\[([\s\S]*?)\\\])/g;
-  let lastIndex = 0;
-  let match;
+      // Remove unnecessary \text{ } wrappers (optional keep)
+      latex = latex.replace(/\\text\s*\{([^}]*)\}/g, "$1");
 
-  while ((match = regex.exec(input)) !== null) {
-    let before = input.slice(lastIndex, match.index).trim();
-    if (before) {
-      before.split(/\n/).forEach(line => {
-        if (line.trim()) processed += "<p>" + line + "</p>\n";
-      });
+      // Remove extra spaces
+      latex = latex.replace(/\s+/g, " ").trim();
+
+      return latex;
     }
-    processed += match[1] + "\n"; // keep full math block
-    lastIndex = regex.lastIndex;
-  }
 
-  let after = input.slice(lastIndex).trim();
-  if (after) {
-    after.split(/\n/).forEach(line => {
-      if (line.trim()) processed += "<p>" + line + "</p>\n";
-    });
-  }
+    function convertLatex() {
+      let latex = document.getElementById("inputLatex").value;
 
-  document.getElementById("preview").innerHTML = processed;
-  MathJax.typesetClear();
-  MathJax.typesetPromise();
-}
-</script>
+      // Auto-clean unwanted Mathpix commands
+      let cleaned = cleanLatex(latex);
+
+      // Wrap in MathJax block mode
+      let formatted = "\\[" + cleaned + "\\]";
+
+      document.getElementById("output").innerHTML = formatted;
+      MathJax.typesetPromise([document.getElementById("output")]);
+    }
+  </script>
+
 </body>
 </html>
