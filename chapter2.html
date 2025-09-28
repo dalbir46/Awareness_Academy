@@ -23,6 +23,7 @@
     .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
     .btn-preview{background:#2196F3}
     .btn-save{background:#4CAF50}
+    .btn-clear{background:#9E9E9E}
     .preview-input{width:100%;min-height:50px;border:1px solid #999;border-radius:6px;padding:6px;margin-top:6px}
     .preview-output{min-height:40px;border:1px solid #ccc;background:#fafafa;padding:8px;margin-top:6px;border-radius:6px}
     .small{font-size:13px;color:var(--muted)}
@@ -44,28 +45,26 @@
     <!-- Question 1 -->
     <div class="question-box" id="q1">
       <div class="question-title">Ex 1.1 — Q1. Express each number as a product of its prime factors:<br>(i) 140 (ii) 156 (iii) 3825 (iv) 5005 (v) 7429</div>
-      <!-- User will see this -->
       <div class="answer-box" id="ans1"></div>
-      <!-- Admin controls -->
       <textarea id="input1" class="preview-input" placeholder="Enter MathJax code here..."></textarea>
       <div class="preview-output" id="preview1"></div>
       <div class="btns">
         <button class="btn btn-preview" data-q="1">Preview</button>
         <button class="btn btn-save" data-q="1">Save</button>
+        <button class="btn btn-clear" data-q="1">Clear</button>
       </div>
     </div>
 
     <!-- Question 2 -->
     <div class="question-box" id="q2">
       <div class="question-title">Ex 1.1 — Q2. Find the HCF and LCM of the following pairs and verify HCF × LCM = product of the numbers:<br>(i) 26, 91 (ii) 510, 92 (iii) 336, 54</div>
-      <!-- User will see this -->
       <div class="answer-box" id="ans2"></div>
-      <!-- Admin controls -->
       <textarea id="input2" class="preview-input" placeholder="Enter MathJax code here..."></textarea>
       <div class="preview-output" id="preview2"></div>
       <div class="btns">
         <button class="btn btn-preview" data-q="2">Preview</button>
         <button class="btn btn-save" data-q="2">Save</button>
+        <button class="btn btn-clear" data-q="2">Clear</button>
       </div>
     </div>
 
@@ -93,23 +92,21 @@
     const ADMIN_USERNAME = "admin";
     const ADMIN_PASSWORD = "Dalbir@551";
 
-    function isAdmin(){ return sessionStorage.getItem("isAdmin")==="true"; }
+    function isAdmin(){ return localStorage.getItem("isAdmin")==="true"; }
     function setAdmin(flag){
-      if(flag) sessionStorage.setItem("isAdmin","true");
-      else sessionStorage.removeItem("isAdmin");
+      if(flag) localStorage.setItem("isAdmin","true");
+      else localStorage.removeItem("isAdmin");
       updateUI();
     }
 
     function updateUI(){
       document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
       document.getElementById("logoutBtn").style.display = isAdmin() ? "block" : "none";
-      // hide inputs from non-admin
       document.querySelectorAll(".preview-input,.btns,.preview-output").forEach(el=>{
         el.style.display = isAdmin() ? "block" : "none";
       });
     }
 
-    // Load saved answers (rendered output for users)
     function loadAnswers(){
       ["1","2"].forEach(i=>{
         db.ref("chapter1/ans"+i).once("value").then(snap=>{
@@ -135,14 +132,13 @@
       alert("Logged out");
     });
 
-    // Preview & Save logic
     document.querySelectorAll(".btn-preview").forEach(btn=>{
       btn.addEventListener("click",()=>{
         if(!isAdmin()) return alert("Admin only");
         const q=btn.getAttribute("data-q");
         const input=document.getElementById("input"+q).value;
         const preview=document.getElementById("preview"+q);
-        preview.innerHTML="$$"+input+"$$";
+        preview.innerHTML="$$"+input+"$$";  // Input should NOT contain \[ \]
         MathJax.typesetPromise([preview]);
       });
     });
@@ -157,6 +153,16 @@
           MathJax.typesetPromise();
           alert("Saved output for Q"+q);
         });
+      });
+    });
+
+    // Clear buttons
+    document.querySelectorAll(".btn-clear").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        if(!isAdmin()) return alert("Admin only");
+        const q=btn.getAttribute("data-q");
+        document.getElementById("input"+q).value="";
+        document.getElementById("preview"+q).innerHTML="";
       });
     });
   </script>
