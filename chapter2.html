@@ -22,7 +22,7 @@
   </style>
 </head>
 <body>
-  <h2>Mathpix → MathJax Converter</h2>
+  <h2>MMathpix → MathJax Converter</h2>
   <textarea id="input"></textarea><br><br>
   <button onclick="convert()">Convert</button>
 
@@ -33,39 +33,41 @@
 function convert() {
   let input = document.getElementById("input").value;
 
-  // 1) Convert $$...$$ → \[...\]
+  // 1) $$...$$ → \[...\]
   input = input.replace(/\$\$([\s\S]*?)\$\$/g, (_, content) => {
     return "\\[" + content.trim() + "\\]";
   });
 
-  // 2) Convert tabular → array
+  // 2) Tabular → Array
   input = input.replace(/\\begin\{tabular\}/g, "\\begin{array}");
   input = input.replace(/\\end\{tabular\}/g, "\\end{array}");
   input = input.replace(/\\hline/g, "");
 
-  // 3) Split into blocks (math blocks vs text)
-  let parts = input.split(/(\[.*?\])/s); // keep math blocks intact
+  // 3) Preserve block math \[...\] as-is, wrap only normal text in <p>
   let processed = "";
+  let regex = /(\\\[([\s\S]*?)\\\])/g;
+  let lastIndex = 0;
+  let match;
 
-  parts.forEach(part => {
-    if (!part.trim()) return;
-
-    if (part.startsWith("\\[") && part.endsWith("\\]")) {
-      // Pure math block (keep as is)
-      processed += part + "\n";
-    } else {
-      // Normal text block, wrap paragraphs
-      let lines = part.split(/\n/);
-      lines.forEach(line => {
-        if (line.trim()) {
-          processed += "<p>" + line + "</p>\n";
-        }
+  while ((match = regex.exec(input)) !== null) {
+    let before = input.slice(lastIndex, match.index).trim();
+    if (before) {
+      before.split(/\n/).forEach(line => {
+        if (line.trim()) processed += "<p>" + line + "</p>\n";
       });
     }
-  });
+    processed += match[1] + "\n"; // keep full math block
+    lastIndex = regex.lastIndex;
+  }
+
+  let after = input.slice(lastIndex).trim();
+  if (after) {
+    after.split(/\n/).forEach(line => {
+      if (line.trim()) processed += "<p>" + line + "</p>\n";
+    });
+  }
 
   document.getElementById("preview").innerHTML = processed;
-
   MathJax.typesetClear();
   MathJax.typesetPromise();
 }
