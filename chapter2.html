@@ -8,8 +8,8 @@
   <script>
     MathJax = {
       tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],  // inline math
-        displayMath: [['\\[', '\\]']]              // block math
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
       }
     };
   </script>
@@ -23,7 +23,7 @@
   </style>
 </head>
 <body>
-  <h2>check all Mathpix → MathJax Converter</h2>
+  <h2>cMathpix → MathJax Converter</h2>
   <textarea id="input"></textarea><br><br>
   <button onclick="convert()">Convert</button>
 
@@ -43,32 +43,30 @@ function convert() {
   input = input.replace(/\\begin\{tabular\}/g, "\\begin{array}");
   input = input.replace(/\\end\{tabular\}/g, "\\end{array}");
 
-  // 3) Remove all \hline (unsupported)
+  // 3) Remove \hline
   input = input.replace(/\\hline/g, "");
 
   // 4) Replace \\[something] → \\
   input = input.replace(/\\\\\[[^\]]*\]/g, "\\\\");
 
-  // 5) Wrap non-math text lines into <p>
+  // 5) Force wrap array environments into block math
+  input = input.replace(/(\\begin\{array[\s\S]*?\\end\{array\})/g, "\\[$1\\]");
+
+  // 6) Wrap lines properly
   let lines = input.split(/\n/);
   let processed = "";
-  let mathMode = false;
-
   lines.forEach(line => {
-    if (!line.trim()) return; // skip empty
+    if (!line.trim()) return;
 
     if (line.startsWith("\\[") && line.endsWith("\\]")) {
-      // pure math block
-      processed += line + "\n";
+      processed += line + "\n";   // already math block
     } else {
-      // normal text or inline math
-      processed += "<p>" + line + "</p>\n";
+      processed += "<p>" + line + "</p>\n"; // normal text
     }
   });
 
   document.getElementById("preview").innerHTML = processed;
 
-  // Render MathJax
   MathJax.typesetClear();
   MathJax.typesetPromise();
 }
