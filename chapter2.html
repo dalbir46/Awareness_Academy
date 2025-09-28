@@ -55,13 +55,12 @@
     <div id="adminStatus">✅ Admin login successful</div>      
     <button id="logoutBtn">Logout</button>    
 
-    <!-- Exercise 1.1 questions (NCERT exercise 1.1 - sample items) -->    
+    <!-- Questions list (unchanged) -->    
     <div id="ex11-wrapper">      
-      <!-- Question (i) 140 -->      
       <div class="question-box" id="q1">      
         <div class="question-title">(i) 140 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans1"></div>    
-        <textarea id="input1" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here (do not include outer $$ unless desired)"></textarea>      
+        <textarea id="input1" class="preview-input"></textarea>      
         <div class="preview-output" id="preview1"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="1">Preview</button>      
@@ -71,11 +70,10 @@
         </div>    
       </div>      
 
-      <!-- Question (ii) 156 -->      
       <div class="question-box" id="q2">      
         <div class="question-title">(ii) 156 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans2"></div>    
-        <textarea id="input2" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>      
+        <textarea id="input2" class="preview-input"></textarea>      
         <div class="preview-output" id="preview2"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="2">Preview</button>      
@@ -85,11 +83,10 @@
         </div>    
       </div>      
 
-      <!-- Question (iii) 3825 -->      
       <div class="question-box" id="q3">      
         <div class="question-title">(iii) 3825 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans3"></div>    
-        <textarea id="input3" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>      
+        <textarea id="input3" class="preview-input"></textarea>      
         <div class="preview-output" id="preview3"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="3">Preview</button>      
@@ -99,11 +96,10 @@
         </div>    
       </div>      
 
-      <!-- Question (iv) 5005 -->      
       <div class="question-box" id="q4">      
         <div class="question-title">(iv) 5005 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans4"></div>    
-        <textarea id="input4" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>      
+        <textarea id="input4" class="preview-input"></textarea>      
         <div class="preview-output" id="preview4"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="4">Preview</button>      
@@ -113,11 +109,10 @@
         </div>    
       </div>      
 
-      <!-- Question (v) 7429 -->      
       <div class="question-box" id="q5">      
         <div class="question-title">(v) 7429 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans5"></div>    
-        <textarea id="input5" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>      
+        <textarea id="input5" class="preview-input"></textarea>      
         <div class="preview-output" id="preview5"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="5">Preview</button>      
@@ -132,7 +127,6 @@
       <button id="downloadPdfBtn" class="btn" style="background:#6a11cb;color:#fff;display:none">Download Ex 1.1 PDF (saved answers)</button>      
     </div>    
 
-    <div class="small">Note: Paste only LaTeX fragment (no outer $$) OR paste full HTML with inline `...` or `$$ ... $$` if you prefer. Preview will auto-detect and avoid double-wrapping.</div>    
   </div>    
 
   <div class="footer-wrapper">
@@ -165,7 +159,6 @@
       document.getElementById("downloadPdfBtn").style.display = isAdmin() ? "inline-block" : "none";
       document.getElementById("loginRow").style.display = isAdmin() ? "none" : "flex";
     }
-
     updateUI();
 
     function loadSaved(){
@@ -252,11 +245,7 @@
       alert("Saved answer for question " + q);
     }
 
-    document.querySelectorAll(".btn-save").forEach(btn=>{
-      btn.addEventListener("click", (e)=>{});
-    });
-
-    // ✅ FIXED: High-resolution clear images in PDF
+    // ✅ FIXED PDF code
     document.getElementById("downloadPdfBtn").addEventListener("click", async ()=>{
       const savedIndices = [];
       for(let i=1;i<=5;i++){
@@ -282,7 +271,7 @@
         await MathJax.typesetPromise([clone]).catch(()=>{});
 
         const canvas = await html2canvas(clone, {
-          scale: window.devicePixelRatio * 2,  // ✅ clear
+          scale: window.devicePixelRatio * 2,
           useCORS: true,
           backgroundColor: "#ffffff"
         });
@@ -302,4 +291,4 @@
     if(isAdmin()) updateUI();
   </script>  
 </body>
-</html>
+          </html>
