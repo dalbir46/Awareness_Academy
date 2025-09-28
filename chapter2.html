@@ -4,14 +4,11 @@
   <meta charset="utf-8" />      
   <meta name="viewport" content="width=device-width, initial-scale=1" />      
   <title>Class 10 — Chapter 1: Real Numbers — Ex 1.1</title>    
-
   <!-- MathJax -->    
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>    
-
   <!-- html2canvas + jspdf for PDF download -->    
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>    
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>    
-
   <style>      
     :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}      
     body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}      
@@ -39,28 +36,24 @@
     @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}      
   </style>  
 </head>      
-
 <body>      
-  <div class="header-wrapper">
-    <div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers (Ex 1.1)</div>
-  </div>    
-
+  <div class="header-wrapper"><div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers (Ex 1.1)</div></div>    
   <div class="container">      
     <div class="login-row" id="loginRow">      
       <input id="loginUser" placeholder="Username" value="admin" />      
       <input id="loginPass" placeholder="Password" type="password" />      
       <button id="loginBtn">Login as Admin</button>      
     </div>  
-
-    <div id="adminStatus">✅ Admin login successful</div>      
+    <div id="adminStatus">✅ Admin login successful ! </div>      
     <button id="logoutBtn">Logout</button>    
 
-    <!-- Questions list (unchanged) -->    
+    <!-- Exercise 1.1 questions -->    
     <div id="ex11-wrapper">      
+      <!-- Question (i) 140 -->      
       <div class="question-box" id="q1">      
         <div class="question-title">(i) 140 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans1"></div>    
-        <textarea id="input1" class="preview-input"></textarea>      
+        <textarea id="input1" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>      
         <div class="preview-output" id="preview1"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="1">Preview</button>      
@@ -70,10 +63,11 @@
         </div>    
       </div>      
 
+      <!-- Question (ii) 156 -->      
       <div class="question-box" id="q2">      
         <div class="question-title">(ii) 156 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans2"></div>    
-        <textarea id="input2" class="preview-input"></textarea>      
+        <textarea id="input2" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>      
         <div class="preview-output" id="preview2"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="2">Preview</button>      
@@ -83,10 +77,11 @@
         </div>    
       </div>      
 
+      <!-- Question (iii) 3825 -->      
       <div class="question-box" id="q3">      
         <div class="question-title">(iii) 3825 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans3"></div>    
-        <textarea id="input3" class="preview-input"></textarea>      
+        <textarea id="input3" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>      
         <div class="preview-output" id="preview3"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="3">Preview</button>      
@@ -96,10 +91,11 @@
         </div>    
       </div>      
 
+      <!-- Question (iv) 5005 -->      
       <div class="question-box" id="q4">      
         <div class="question-title">(iv) 5005 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans4"></div>    
-        <textarea id="input4" class="preview-input"></textarea>      
+        <textarea id="input4" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>      
         <div class="preview-output" id="preview4"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="4">Preview</button>      
@@ -109,10 +105,11 @@
         </div>    
       </div>      
 
+      <!-- Question (v) 7429 -->      
       <div class="question-box" id="q5">      
         <div class="question-title">(v) 7429 — Express as product of prime factors</div>      
         <div class="answer-box" id="ans5"></div>    
-        <textarea id="input5" class="preview-input"></textarea>      
+        <textarea id="input5" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>      
         <div class="preview-output" id="preview5"></div>      
         <div class="btns">      
           <button class="btn btn-preview" data-q="5">Preview</button>      
@@ -126,12 +123,10 @@
     <div class="download-wrap">      
       <button id="downloadPdfBtn" class="btn" style="background:#6a11cb;color:#fff;display:none">Download Ex 1.1 PDF (saved answers)</button>      
     </div>    
-
+    <div class="small">Note: Paste only LaTeX fragment (no outer $$) OR paste full HTML with inline delimiters.</div>    
   </div>    
 
-  <div class="footer-wrapper">
-    <div class="footer-inner">© 2025 Mathematics Hub</div>
-  </div>    
+  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>    
 
   <script>      
     const ADMIN_USERNAME = "admin";      
@@ -245,7 +240,10 @@
       alert("Saved answer for question " + q);
     }
 
-    // ✅ FIXED PDF code
+    document.querySelectorAll(".btn-save").forEach(btn=>{
+      btn.addEventListener("click", (e)=>{});
+    });
+
     document.getElementById("downloadPdfBtn").addEventListener("click", async ()=>{
       const savedIndices = [];
       for(let i=1;i<=5;i++){
@@ -256,7 +254,6 @@
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF({unit:'pt',format:'a4'});
       let first = true;
-
       for(const idx of savedIndices){
         const el = document.getElementById("q"+idx);
         const clone = el.cloneNode(true);
@@ -269,9 +266,10 @@
         const ansBox = clone.querySelector("#ans"+idx);
         if(ansBox) ansBox.innerHTML = ansSaved || "";
         await MathJax.typesetPromise([clone]).catch(()=>{});
-
+        
+        // ✅ FIXED: capped scale for clear + safe images
         const canvas = await html2canvas(clone, {
-          scale: window.devicePixelRatio * 2,
+          scale: Math.min(window.devicePixelRatio, 2),
           useCORS: true,
           backgroundColor: "#ffffff"
         });
@@ -291,4 +289,4 @@
     if(isAdmin()) updateUI();
   </script>  
 </body>
-          </html>
+  </html>
