@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Class 10 — Chapter 1: Real Numbers</title>
+
+  <!-- MathJax -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}
+    body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}
+    .header-wrapper,.footer-wrapper{background:linear-gradient(135deg,var(--accent1),var(--accent2));padding:12px}
+    .header,.footer-inner{background:#ffffcc;padding:14px;text-align:center;font-weight:700;border:2px solid #333;border-radius:10px;max-width:980px;margin:auto}
+    .container{max-width:980px;margin:18px auto;padding:0 12px}
+    .login-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+    .login-row input{padding:8px;border-radius:6px;border:1px solid #999}
+    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700}
+    #adminStatus{display:none;color:#0b875b;font-weight:700;text-align:center;margin-bottom:8px}
+    .tools{display:none;text-align:center;margin-bottom:10px}
+    .tools button{margin:0 4px;padding:6px 12px;border:none;border-radius:6px;font-weight:700;cursor:pointer}
+    .btn-renderAll{background:#673ab7;color:#fff}
+    /* logout color changed to a pleasant teal/green */
+    .btn-logout{background:#0b875b;color:#fff}
+    .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
+    .question-title{font-weight:700;margin-bottom:8px}
+    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff}
+    .answer-box[contenteditable='false']{background:#f7f7f7}
+    .btns{margin-top:8px}
+    .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
+    .btn-edit{background:#2196F3}
+    .btn-save{background:#4CAF50}
+    .btn-clear{background:#f44336}
+    .btn-copy{background:#FF9800}
+    .btn-render{background:#5c6bc0}
+    .btn-preview{background:#009688}
+    .btn-savepreview{background:#ff9800;color:#000}
+    .small{font-size:13px;color:var(--muted)}
+    .rendered-view{margin-top:8px;padding:8px;border-radius:6px;background:#fcfcfc;border:1px solid #eee;min-height:36px}
+    .preview-area{margin-top:8px;padding:8px;border-radius:6px;background:#fff8e1;border:1px solid #ffd54f}
+    .admin-controls{display:none;margin-top:8px}
+    @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}
+  </style>
+</head>
+<body>
+  <div class="header-wrapper"><div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers</div></div>
+
+  <div class="container">
+    <div class="login-row">
+      <input id="loginUser" placeholder="Username" />
+      <input id="loginPass" placeholder="Password" type="password" />
+      <button id="loginBtn">Login as Admin</button>
+    </div>
+
+    <div id="adminStatus">✅ Admin login successful</div>
+
+    <!-- top tools -->
+    <div class="tools" id="adminTopTools">
+      <button class="btn btn-renderAll" id="renderAllBtn">🔄 Render All</button>
+      <button class="btn btn-logout" id="logoutBtn">🚪 Logout</button>
+    </div>
+
+    <!-- ===========================
+         Questions (kept exactly as original)
+         =========================== -->
+
+    <!-- Exercise 1.1 -->
+    <div class="question-box" id="q1">
+      <div class="question-title">Ex 1.1 — Q1. Express each number as a product of its prime factors:<br> (i) 140 &nbsp; (ii) 156 &nbsp; (iii) 3825 &nbsp; (iv) 5005 &nbsp; (v) 7429</div>
+      <div class="answer-box" id="ans1" contenteditable="false"></div>
+
+      <!-- per-question controls (edit/save/clear/copy + admin render/preview) -->
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="1">Edit</button>
+        <button class="btn btn-save" data-q="1">Save</button>
+        <button class="btn btn-clear" data-q="1">Clear</button>
+        <button class="btn btn-copy" data-q="1">Copy</button>
+
+        <!-- admin-only controls shown when logged in -->
+        <span class="admin-controls" id="adminControls1">
+          <button class="btn btn-render" data-q="1">Render</button>
+          <button class="btn btn-preview" data-q="1">Preview</button>
+        </span>
+      </div>
+
+      <!-- preview area (appears when admin clicks Preview) -->
+      <div class="preview-area" id="previewArea1" style="display:none;">
+        <div id="previewBox1"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="1" id="savePreviewBtn1">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(1)">Close Preview</button>
+        </div>
+      </div>
+
+      <!-- rendered view (what regular users will see if preview saved) -->
+      <div class="rendered-view" id="rendered1"></div>
+    </div>
+
+    <div class="question-box" id="q2">
+      <div class="question-title">Ex 1.1 — Q2. Find the HCF and LCM of the following pairs and verify that HCF × LCM = product of the numbers: (i) 26 and 91 (ii) 510 and 92 (iii) 336 and 54</div>
+      <div class="answer-box" id="ans2" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="2">Edit</button>
+        <button class="btn btn-save" data-q="2">Save</button>
+        <button class="btn btn-clear" data-q="2">Clear</button>
+        <button class="btn btn-copy" data-q="2">Copy</button>
+
+        <span class="admin-controls" id="adminControls2">
+          <button class="btn btn-render" data-q="2">Render</button>
+          <button class="btn btn-preview" data-q="2">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea2" style="display:none;">
+        <div id="previewBox2"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="2" id="savePreviewBtn2">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(2)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered2"></div>
+    </div>
+
+    <div class="question-box" id="q3">
+      <div class="question-title">Ex 1.1 — Q3. Find HCF and LCM by prime factorisation: (i) 12, 15 and 21 (ii) 17, 23 and 29 (iii) 8, 9 and 25</div>
+      <div class="answer-box" id="ans3" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="3">Edit</button>
+        <button class="btn btn-save" data-q="3">Save</button>
+        <button class="btn btn-clear" data-q="3">Clear</button>
+        <button class="btn btn-copy" data-q="3">Copy</button>
+
+        <span class="admin-controls" id="adminControls3">
+          <button class="btn btn-render" data-q="3">Render</button>
+          <button class="btn btn-preview" data-q="3">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea3" style="display:none;">
+        <div id="previewBox3"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="3" id="savePreviewBtn3">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(3)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered3"></div>
+    </div>
+
+    <div class="question-box" id="q4">
+      <div class="question-title">Ex 1.1 — Q4. Given HCF(306,657) = 9, find LCM(306,657).</div>
+      <div class="answer-box" id="ans4" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="4">Edit</button>
+        <button class="btn btn-save" data-q="4">Save</button>
+        <button class="btn btn-clear" data-q="4">Clear</button>
+        <button class="btn btn-copy" data-q="4">Copy</button>
+
+        <span class="admin-controls" id="adminControls4">
+          <button class="btn btn-render" data-q="4">Render</button>
+          <button class="btn btn-preview" data-q="4">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea4" style="display:none;">
+        <div id="previewBox4"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="4" id="savePreviewBtn4">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(4)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered4"></div>
+    </div>
+
+    <div class="question-box" id="q5">
+      <div class="question-title">Ex 1.1 — Q5. Check whether 6^n can end with digit 0 for any natural number n.</div>
+      <div class="answer-box" id="ans5" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="5">Edit</button>
+        <button class="btn btn-save" data-q="5">Save</button>
+        <button class="btn btn-clear" data-q="5">Clear</button>
+        <button class="btn btn-copy" data-q="5">Copy</button>
+
+        <span class="admin-controls" id="adminControls5">
+          <button class="btn btn-render" data-q="5">Render</button>
+          <button class="btn btn-preview" data-q="5">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea5" style="display:none;">
+        <div id="previewBox5"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="5" id="savePreviewBtn5">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(5)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered5"></div>
+    </div>
+
+    <div class="question-box" id="q6">
+      <div class="question-title">Ex 1.1 — Q6. Explain why 7×11×13 + 13 and 7×6×5×4×3×2×1 + 5 are composite numbers.</div>
+      <div class="answer-box" id="ans6" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="6">Edit</button>
+        <button class="btn btn-save" data-q="6">Save</button>
+        <button class="btn btn-clear" data-q="6">Clear</button>
+        <button class="btn btn-copy" data-q="6">Copy</button>
+
+        <span class="admin-controls" id="adminControls6">
+          <button class="btn btn-render" data-q="6">Render</button>
+          <button class="btn btn-preview" data-q="6">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea6" style="display:none;">
+        <div id="previewBox6"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="6" id="savePreviewBtn6">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(6)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered6"></div>
+    </div>
+
+    <div class="question-box" id="q7">
+      <div class="question-title">Ex 1.1 — Q7. Prove that √2, √3 and √5 are irrational numbers.</div>
+      <div class="answer-box" id="ans7" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="7">Edit</button>
+        <button class="btn btn-save" data-q="7">Save</button>
+        <button class="btn btn-clear" data-q="7">Clear</button>
+        <button class="btn btn-copy" data-q="7">Copy</button>
+
+        <span class="admin-controls" id="adminControls7">
+          <button class="btn btn-render" data-q="7">Render</button>
+          <button class="btn btn-preview" data-q="7">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea7" style="display:none;">
+        <div id="previewBox7"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="7" id="savePreviewBtn7">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(7)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered7"></div>
+    </div>
+
+    <!-- Exercise 1.2 -->
+    <div class="question-box" id="q8">
+      <div class="question-title">Ex 1.2 — Q1. Use Euclid's division lemma to show that the square of any positive integer is either of the form 3m or 3m+1.</div>
+      <div class="answer-box" id="ans8" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="8">Edit</button>
+        <button class="btn btn-save" data-q="8">Save</button>
+        <button class="btn btn-clear" data-q="8">Clear</button>
+        <button class="btn btn-copy" data-q="8">Copy</button>
+
+        <span class="admin-controls" id="adminControls8">
+          <button class="btn btn-render" data-q="8">Render</button>
+          <button class="btn btn-preview" data-q="8">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea8" style="display:none;">
+        <div id="previewBox8"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="8" id="savePreviewBtn8">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(8)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered8"></div>
+    </div>
+
+    <div class="question-box" id="q9">
+      <div class="question-title">Ex 1.2 — Q2. Use Euclid's division lemma to show that the cube of any positive integer is of the form 9m, 9m+1 or 9m+8.</div>
+      <div class="answer-box" id="ans9" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="9">Edit</button>
+        <button class="btn btn-save" data-q="9">Save</button>
+        <button class="btn btn-clear" data-q="9">Clear</button>
+        <button class="btn btn-copy" data-q="9">Copy</button>
+
+        <span class="admin-controls" id="adminControls9">
+          <button class="btn btn-render" data-q="9">Render</button>
+          <button class="btn btn-preview" data-q="9">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea9" style="display:none;">
+        <div id="previewBox9"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="9" id="savePreviewBtn9">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(9)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered9"></div>
+    </div>
+
+    <div class="question-box" id="q10">
+      <div class="question-title">Ex 1.2 — Q3. An army contingent of 616 members is to march behind an army band of 32 members in a parade. Find the maximum number of columns in which they can march.</div>
+      <div class="answer-box" id="ans10" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="10">Edit</button>
+        <button class="btn btn-save" data-q="10">Save</button>
+        <button class="btn btn-clear" data-q="10">Clear</button>
+        <button class="btn btn-copy" data-q="10">Copy</button>
+
+        <span class="admin-controls" id="adminControls10">
+          <button class="btn btn-render" data-q="10">Render</button>
+          <button class="btn btn-preview" data-q="10">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea10" style="display:none;">
+        <div id="previewBox10"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="10" id="savePreviewBtn10">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(10)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered10"></div>
+    </div>
+
+    <!-- Exercise 1.3 -->
+    <div class="question-box" id="q11">
+      <div class="question-title">Ex 1.3 — Q1. Prove that √2 is irrational. (Classical proof by contradiction)</div>
+      <div class="answer-box" id="ans11" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="11">Edit</button>
+        <button class="btn btn-save" data-q="11">Save</button>
+        <button class="btn btn-clear" data-q="11">Clear</button>
+        <button class="btn btn-copy" data-q="11">Copy</button>
+
+        <span class="admin-controls" id="adminControls11">
+          <button class="btn btn-render" data-q="11">Render</button>
+          <button class="btn btn-preview" data-q="11">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea11" style="display:none;">
+        <div id="previewBox11"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="11" id="savePreviewBtn11">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(11)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered11"></div>
+    </div>
+
+    <div class="question-box" id="q12">
+      <div class="question-title">Ex 1.3 — Q2. Prove that √3 and √5 are irrational numbers.</div>
+      <div class="answer-box" id="ans12" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="12">Edit</button>
+        <button class="btn btn-save" data-q="12">Save</button>
+        <button class="btn btn-clear" data-q="12">Clear</button>
+        <button class="btn btn-copy" data-q="12">Copy</button>
+
+        <span class="admin-controls" id="adminControls12">
+          <button class="btn btn-render" data-q="12">Render</button>
+          <button class="btn btn-preview" data-q="12">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea12" style="display:none;">
+        <div id="previewBox12"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="12" id="savePreviewBtn12">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(12)">Close Preview</button>
+        </div>
+      </div>
+      <div class="rendered-view" id="rendered12"></div>
+    </div>
+
+    <!-- Exercise 1.4 -->
+    <div class="question-box" id="q13">
+      <div class="question-title">Ex 1.4 — Q1. State and explain the Fundamental Theorem of Arithmetic. Illustrate with examples.</div>
+      <div class="answer-box" id="ans13" contenteditable="false"></div>
+      <div class="btns small">
+        <button class="btn btn-edit" data-q="13">Edit</button>
+        <button class="btn btn-save" data-q="13">Save</button>
+        <button class="btn btn-clear" data-q="13">Clear</button>
+        <button class="btn btn-copy" data-q="13">Copy</button>
+
+        <span class="admin-controls" id="adminControls13">
+          <button class="btn btn-render" data-q="13">Render</button>
+          <button class="btn btn-preview" data-q="13">Preview</button>
+        </span>
+      </div>
+      <div class="preview-area" id="previewArea13" style="display:none;">
+        <div id="previewBox13"></div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-savepreview" data-q="13" id="savePreviewBtn13">Save Preview (Make visible to users)</button>
+          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(13)">Close 
