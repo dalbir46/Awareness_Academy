@@ -4,10 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Class 10 — Chapter 1: Real Numbers</title>
-
-  <!-- MathJax -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
   <style>
     :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}
     body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}
@@ -16,30 +13,19 @@
     .container{max-width:980px;margin:18px auto;padding:0 12px}
     .login-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
     .login-row input{padding:8px;border-radius:6px;border:1px solid #999}
-    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700}
-    #adminStatus{display:none;color:#0b875b;font-weight:700;text-align:center;margin-bottom:8px}
-    .tools{display:none;text-align:center;margin-bottom:10px}
-    .tools button{margin:0 4px;padding:6px 12px;border:none;border-radius:6px;font-weight:700;cursor:pointer}
-    .btn-renderAll{background:#673ab7;color:#fff}
-    /* logout color changed to a pleasant teal/green */
-    .btn-logout{background:#0b875b;color:#fff}
+    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700;cursor:pointer}
+    #adminStatus{display:none;color:green;font-weight:700;text-align:center;margin-bottom:8px}
+    #logoutBtn{display:none;margin:auto;display:block;background:#f44336;color:#fff;font-weight:700;padding:8px 14px;border:none;border-radius:6px;cursor:pointer;margin-bottom:14px}
     .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
     .question-title{font-weight:700;margin-bottom:8px}
-    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff}
-    .answer-box[contenteditable='false']{background:#f7f7f7}
+    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff;margin-bottom:8px}
     .btns{margin-top:8px}
     .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
-    .btn-edit{background:#2196F3}
+    .btn-preview{background:#2196F3}
     .btn-save{background:#4CAF50}
-    .btn-clear{background:#f44336}
-    .btn-copy{background:#FF9800}
-    .btn-render{background:#5c6bc0}
-    .btn-preview{background:#009688}
-    .btn-savepreview{background:#ff9800;color:#000}
+    .preview-input{width:100%;min-height:50px;border:1px solid #999;border-radius:6px;padding:6px;margin-top:6px}
+    .preview-output{min-height:40px;border:1px solid #ccc;background:#fafafa;padding:8px;margin-top:6px;border-radius:6px}
     .small{font-size:13px;color:var(--muted)}
-    .rendered-view{margin-top:8px;padding:8px;border-radius:6px;background:#fcfcfc;border:1px solid #eee;min-height:36px}
-    .preview-area{margin-top:8px;padding:8px;border-radius:6px;background:#fff8e1;border:1px solid #ffd54f}
-    .admin-controls{display:none;margin-top:8px}
     @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}
   </style>
 </head>
@@ -52,68 +38,38 @@
       <input id="loginPass" placeholder="Password" type="password" />
       <button id="loginBtn">Login as Admin</button>
     </div>
-
     <div id="adminStatus">✅ Admin login successful</div>
+    <button id="logoutBtn">Logout</button>
 
-    <!-- top tools -->
-    <div class="tools" id="adminTopTools">
-      <button class="btn btn-renderAll" id="renderAllBtn">🔄 Render All</button>
-      <button class="btn btn-logout" id="logoutBtn">🚪 Logout</button>
-    </div>
-
-    <!-- ===========================
-         Questions (kept exactly as original)
-         =========================== -->
-
-    <!-- Exercise 1.1 -->
+    <!-- Question 1 -->
     <div class="question-box" id="q1">
-      <div class="question-title">Ex 1.1 — Q1. Express each number as a product of its prime factors:<br> (i) 140 &nbsp; (ii) 156 &nbsp; (iii) 3825 &nbsp; (iv) 5005 &nbsp; (v) 7429</div>
-      <div class="answer-box" id="ans1" contenteditable="false"></div>
-      <div class="btns small">
-        <button class="btn btn-edit" data-q="1">Edit</button>
+      <div class="question-title">Ex 1.1 — Q1. Express each number as a product of its prime factors:<br>(i) 140 (ii) 156 (iii) 3825 (iv) 5005 (v) 7429</div>
+      <!-- User will see this -->
+      <div class="answer-box" id="ans1"></div>
+      <!-- Admin controls -->
+      <textarea id="input1" class="preview-input" placeholder="Enter MathJax code here..."></textarea>
+      <div class="preview-output" id="preview1"></div>
+      <div class="btns">
+        <button class="btn btn-preview" data-q="1">Preview</button>
         <button class="btn btn-save" data-q="1">Save</button>
-        <button class="btn btn-clear" data-q="1">Clear</button>
-        <button class="btn btn-copy" data-q="1">Copy</button>
-        <span class="admin-controls" id="adminControls1">
-          <button class="btn btn-render" data-q="1">Render</button>
-          <button class="btn btn-preview" data-q="1">Preview</button>
-        </span>
       </div>
-      <div class="preview-area" id="previewArea1" style="display:none;">
-        <div id="previewBox1"></div>
-        <div style="margin-top:8px;">
-          <button class="btn btn-savepreview" data-q="1" id="savePreviewBtn1">Save Preview (Make visible to users)</button>
-          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(1)">Close Preview</button>
-        </div>
-      </div>
-      <div class="rendered-view" id="rendered1"></div>
     </div>
 
+    <!-- Question 2 -->
     <div class="question-box" id="q2">
-      <div class="question-title">Ex 1.1 — Q2. Find the HCF and LCM of the following pairs and verify that HCF × LCM = product of the numbers: (i) 26 and 91 (ii) 510 and 92 (iii) 336 and 54</div>
-      <div class="answer-box" id="ans2" contenteditable="false"></div>
-      <div class="btns small">
-        <button class="btn btn-edit" data-q="2">Edit</button>
+      <div class="question-title">Ex 1.1 — Q2. Find the HCF and LCM of the following pairs and verify HCF × LCM = product of the numbers:<br>(i) 26, 91 (ii) 510, 92 (iii) 336, 54</div>
+      <!-- User will see this -->
+      <div class="answer-box" id="ans2"></div>
+      <!-- Admin controls -->
+      <textarea id="input2" class="preview-input" placeholder="Enter MathJax code here..."></textarea>
+      <div class="preview-output" id="preview2"></div>
+      <div class="btns">
+        <button class="btn btn-preview" data-q="2">Preview</button>
         <button class="btn btn-save" data-q="2">Save</button>
-        <button class="btn btn-clear" data-q="2">Clear</button>
-        <button class="btn btn-copy" data-q="2">Copy</button>
-        <span class="admin-controls" id="adminControls2">
-          <button class="btn btn-render" data-q="2">Render</button>
-          <button class="btn btn-preview" data-q="2">Preview</button>
-        </span>
       </div>
-      <div class="preview-area" id="previewArea2" style="display:none;">
-        <div id="previewBox2"></div>
-        <div style="margin-top:8px;">
-          <button class="btn btn-savepreview" data-q="2" id="savePreviewBtn2">Save Preview (Make visible to users)</button>
-          <button class="btn" style="background:#9e9e9e;color:#fff;" onclick="hidePreviewArea(2)">Close Preview</button>
-        </div>
-      </div>
-      <div class="rendered-view" id="rendered2"></div>
     </div>
 
-    <div class="small">Note: I have added the canonical NCERT Chapter 1 questions (Exercises 1.1 to 1.4). Answers are intentionally left blank for admin to fill. Use Preview → Save Preview to make formatted output visible to users.</div>
-
+    <div class="small">Note: Currently implemented for Q1 and Q2 only.</div>
   </div>
 
   <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
@@ -121,9 +77,7 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
   <script>
-    // === firebase config (kept same as your original) ===
     var firebaseConfig = {
       apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
       authDomain: "mathematics-hub-7087f.firebaseapp.com",
@@ -139,31 +93,72 @@
     const ADMIN_USERNAME = "admin";
     const ADMIN_PASSWORD = "Dalbir@551";
 
-    function isAdmin(){ return sessionStorage.getItem('isAdmin')==='true'; }
-    function setAdmin(flag){ if(flag) sessionStorage.setItem('isAdmin','true'); else sessionStorage.removeItem('isAdmin'); updateUI(); }
+    function isAdmin(){ return sessionStorage.getItem("isAdmin")==="true"; }
+    function setAdmin(flag){
+      if(flag) sessionStorage.setItem("isAdmin","true");
+      else sessionStorage.removeItem("isAdmin");
+      updateUI();
+    }
 
     function updateUI(){
-      document.getElementById('adminStatus').style.display = isAdmin() ? 'block' : 'none';
-      document.getElementById('adminTopTools').style.display = isAdmin() ? 'block' : 'none';
-      for(let i=1;i<=15;i++){
-        const ac = document.getElementById('adminControls'+i);
-        if(ac) ac.style.display = isAdmin() ? 'inline-block' : 'none';
-        const ab = document.getElementById('ans'+i);
-        if(ab){
-          ab.setAttribute('contenteditable', isAdmin() ? 'true' : 'false');
-          if(!isAdmin()) ab.blur();
-        }
-      }
+      document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
+      document.getElementById("logoutBtn").style.display = isAdmin() ? "block" : "none";
+      // hide inputs from non-admin
+      document.querySelectorAll(".preview-input,.btns,.preview-output").forEach(el=>{
+        el.style.display = isAdmin() ? "block" : "none";
+      });
     }
 
-    window.onload = function(){
-      updateUI();
-    };
-
-    window.hidePreviewArea = function(q){
-      const pa = document.getElementById('previewArea'+q);
-      if(pa) pa.style.display = 'none';
+    // Load saved answers (rendered output for users)
+    function loadAnswers(){
+      ["1","2"].forEach(i=>{
+        db.ref("chapter1/ans"+i).once("value").then(snap=>{
+          if(snap.exists()){
+            document.getElementById("ans"+i).innerHTML = snap.val();
+            MathJax.typesetPromise();
+          }
+        });
+      });
     }
+
+    window.onload = ()=>{ updateUI(); loadAnswers(); }
+
+    document.getElementById("loginBtn").addEventListener("click",()=>{
+      const u=document.getElementById("loginUser").value.trim();
+      const p=document.getElementById("loginPass").value;
+      if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){ setAdmin(true); alert("Admin login successful"); }
+      else{ alert("Invalid credentials"); setAdmin(false); }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click",()=>{
+      setAdmin(false);
+      alert("Logged out");
+    });
+
+    // Preview & Save logic
+    document.querySelectorAll(".btn-preview").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        if(!isAdmin()) return alert("Admin only");
+        const q=btn.getAttribute("data-q");
+        const input=document.getElementById("input"+q).value;
+        const preview=document.getElementById("preview"+q);
+        preview.innerHTML="$$"+input+"$$";
+        MathJax.typesetPromise([preview]);
+      });
+    });
+
+    document.querySelectorAll(".btn-save").forEach(btn=>{
+      btn.addEventListener("click",()=>{
+        if(!isAdmin()) return alert("Admin only");
+        const q=btn.getAttribute("data-q");
+        const preview=document.getElementById("preview"+q).innerHTML;
+        db.ref("chapter1/ans"+q).set(preview).then(()=>{
+          document.getElementById("ans"+q).innerHTML=preview;
+          MathJax.typesetPromise();
+          alert("Saved output for Q"+q);
+        });
+      });
+    });
   </script>
 </body>
-        </html>
+</html>
