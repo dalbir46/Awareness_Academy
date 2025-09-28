@@ -40,12 +40,13 @@
       border-radius: 8px;
       min-height: 50px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      line-height: 1.6;
     }
   </style>
 </head>
 <body>
 
-  <h2>2Mathpix → MathJax Converter</h2>
+  <h2>4Mathpix → MathJax Converter</h2>
   <p>Paste Mathpix LaTeX code below:</p>
   <textarea id="inputLatex">
 Express each number as a product of its prime factors:
@@ -59,7 +60,8 @@ Express each number as a product of its prime factors:
 \hline & 1
 \end{tabular}
 
-Hence,
+Hence, $2^2 \times 5 \times 7$
+
 $$
 \begin{aligned}
 \mathbf{140} & =2 \times 2 \times 5 \times 7 \\
@@ -84,29 +86,37 @@ $$
       // Remove unnecessary \text{ } wrappers
       latex = latex.replace(/\\text\s*\{([^}]*)\}/g, "$1");
 
-      // Convert tabular → array (MathJax supported)
-      latex = latex.replace(/\\begin\{tabular\}\{[^}]*\}/g, "\\begin{array}{r|r}");
-      latex = latex.replace(/\\end\{tabular\}/g, "\\end{array}");
+      // Convert tabular → array
+      latex = latex.replace(/\\begin\{tabular\}\{[^}]*\}/g, "\\\\begin{array}{r|r}");
+      latex = latex.replace(/\\end\{tabular\}/g, "\\\\end{array}");
 
-      // Replace \hline with \hline inside array (MathJax v3 supports it)
+      // Replace \hline
       latex = latex.replace(/\\hline/g, "\\hline ");
 
-      // Extra spaces
-      latex = latex.replace(/\s+/g, " ").trim();
-
-      return latex;
+      return latex.trim();
     }
 
     function convertLatex() {
       let latex = document.getElementById("inputLatex").value;
-
-      // Auto-clean unwanted Mathpix commands
       let cleaned = cleanLatex(latex);
 
-      // Wrap in MathJax block mode
-      let formatted = "\\[" + cleaned + "\\]";
+      // Split into lines to handle normal text vs equations
+      let lines = cleaned.split("\n");
+      let htmlOutput = "";
 
-      document.getElementById("output").innerHTML = formatted;
+      lines.forEach(line => {
+        if (line.match(/\\begin\{array\}|\\end\{array\}|\\\(|\\\)|\$\$|\\begin\{aligned\}|\\end\{aligned\}/)) {
+          // Keep equation environments inside \[...\]
+          if (!line.includes("$$")) {
+            htmlOutput += "\\[" + line + "\\]";
+          }
+        } else if (line.trim() !== "") {
+          // Normal text with inline math ($...$ will be auto-rendered by MathJax)
+          htmlOutput += "<p>" + line + "</p>";
+        }
+      });
+
+      document.getElementById("output").innerHTML = htmlOutput;
       MathJax.typesetPromise([document.getElementById("output")]);
     }
   </script>
