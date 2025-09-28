@@ -14,7 +14,7 @@
     }
     textarea {
       width: 100%;
-      height: 120px;
+      height: 150px;
       font-size: 16px;
       padding: 10px;
       border-radius: 6px;
@@ -45,9 +45,28 @@
 </head>
 <body>
 
-  <h2>Mathpix → MathJax Converter</h2>
+  <h2>2Mathpix → MathJax Converter</h2>
   <p>Paste Mathpix LaTeX code below:</p>
-  <textarea id="inputLatex">\displaystyle \color{red}{\frac{a}{b}} + \sqrt{x^2 + y^2}</textarea>
+  <textarea id="inputLatex">
+Express each number as a product of its prime factors:
+(i) 140
+
+\begin{tabular}{r|r}
+2 & 140 \\
+\hline 2 & 70 \\
+\hline 5 & 35 \\
+\hline 7 & 7 \\
+\hline & 1
+\end{tabular}
+
+Hence,
+$$
+\begin{aligned}
+\mathbf{140} & =2 \times 2 \times 5 \times 7 \\
+& =2^2 \times 5 \times 7
+\end{aligned}
+$$
+  </textarea>
   <br>
   <button onclick="convertLatex()">Convert & Render</button>
 
@@ -62,10 +81,17 @@
       // Remove \color{...}{...} but keep inner part
       latex = latex.replace(/\\color\{.*?\}\{(.*?)\}/g, "$1");
 
-      // Remove unnecessary \text{ } wrappers (optional keep)
+      // Remove unnecessary \text{ } wrappers
       latex = latex.replace(/\\text\s*\{([^}]*)\}/g, "$1");
 
-      // Remove extra spaces
+      // Convert tabular → array (MathJax supported)
+      latex = latex.replace(/\\begin\{tabular\}\{[^}]*\}/g, "\\begin{array}{r|r}");
+      latex = latex.replace(/\\end\{tabular\}/g, "\\end{array}");
+
+      // Replace \hline with \hline inside array (MathJax v3 supports it)
+      latex = latex.replace(/\\hline/g, "\\hline ");
+
+      // Extra spaces
       latex = latex.replace(/\s+/g, " ").trim();
 
       return latex;
