@@ -1,200 +1,220 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Class 10 - Chapter 1 (Ex 1.1)</title>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Class 10 — Chapter 1: Real Numbers — Ex 1.1</title>
+
+  <!-- MathJax -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- jsPDF for PDF download -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background:#f9f9f9; }
-    .question { margin-bottom: 30px; padding:15px; background:#fff; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
-    .question-title { font-weight:bold; margin-bottom:10px; }
-    textarea { width:100%; height:100px; margin-bottom:10px; padding:10px; }
-    .preview { border:1px solid #ccc; padding:10px; min-height:50px; margin-bottom:10px; background:#fafafa; }
-    button { margin-right:10px; padding:8px 16px; border:none; border-radius:6px; cursor:pointer; }
-    .preview-btn { background:#007bff; color:#fff; }
-    .save-btn { background:#28a745; color:#fff; }
-    .clear-btn { background:#ffc107; color:#000; }
-    .delete-btn { background:#dc3545; color:#fff; }
-    #downloadPdfBtn { background:#6f42c1; color:#fff; margin-top:20px; padding:10px 20px; }
+    :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}
+    body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}
+    .header-wrapper,.footer-wrapper{background:linear-gradient(135deg,var(--accent1),var(--accent2));padding:12px}
+    .header,.footer-inner{background:#ffffcc;padding:14px;text-align:center;font-weight:700;border:2px solid #333;border-radius:10px;max-width:980px;margin:auto}
+    .container{max-width:980px;margin:18px auto;padding:0 12px}
+    .login-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+    .login-row input{padding:8px;border-radius:6px;border:1px solid #999}
+    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700;cursor:pointer}
+    #adminStatus{display:none;color:green;font-weight:700;text-align:center;margin-bottom:8px}
+    #logoutBtn{display:none;margin:auto;display:block;background:#f44336;color:#fff;font-weight:700;padding:8px 14px;border:none;border-radius:6px;cursor:pointer;margin-bottom:14px}
+    .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
+    .question-title{font-weight:700;margin-bottom:8px}
+    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff;margin-bottom:8px}
+    .btns{margin-top:8px}
+    .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
+    .btn-preview{background:#2196F3}
+    .btn-save{background:#4CAF50}
+    .btn-clear{background:#9E9E9E}
+    .btn-delete{background:#f44336}
+    .preview-input{width:100%;min-height:60px;border:1px solid #999;border-radius:6px;padding:6px;margin-top:6px;font-family:monospace}
+    .preview-output{min-height:40px;border:1px solid #ccc;background:#fafafa;padding:8px;margin-top:6px;border-radius:6px}
+    .download-wrap{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
+    @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}
   </style>
 </head>
 <body>
+  <div class="header-wrapper"><div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers (Ex 1.1)</div></div>
 
-  <h2>Class 10 - Chapter 1: Real Numbers (Exercise 1.1)</h2>
+  <div class="container">
+    <div class="login-row" id="loginRow">
+      <input id="loginUser" placeholder="Username" value="admin" />
+      <input id="loginPass" placeholder="Password" type="password" />
+      <button id="loginBtn">Login as Admin</button>
+    </div>
 
-  <!-- Admin login -->
-  <div id="loginSection">
-    <input type="password" id="adminPass" placeholder="Enter Admin Password">
-    <button onclick="adminLogin()">Login</button>
+    <div id="adminStatus">✅ Admin login successful</div>
+    <button id="logoutBtn">Logout</button>
+
+    <!-- Exercise 1.1 questions -->
+    <div id="ex11-wrapper">
+      <!-- Question (i) -->
+      <div class="question-box" id="q1">
+        <div class="question-title">(i) 140 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans1"></div>
+        <textarea id="input1" class="preview-input" placeholder="Enter LaTeX code here"></textarea>
+        <div class="preview-output" id="preview1"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="1">Preview</button>
+          <button class="btn btn-save" data-q="1">Save</button>
+          <button class="btn btn-clear" data-q="1">Clear</button>
+          <button class="btn btn-delete" data-q="1" style="display:none">Delete</button>
+        </div>
+      </div>
+
+      <!-- Question (ii) -->
+      <div class="question-box" id="q2">
+        <div class="question-title">(ii) 156 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans2"></div>
+        <textarea id="input2" class="preview-input"></textarea>
+        <div class="preview-output" id="preview2"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="2">Preview</button>
+          <button class="btn btn-save" data-q="2">Save</button>
+          <button class="btn btn-clear" data-q="2">Clear</button>
+          <button class="btn btn-delete" data-q="2" style="display:none">Delete</button>
+        </div>
+      </div>
+
+      <!-- Question (iii) -->
+      <div class="question-box" id="q3">
+        <div class="question-title">(iii) 3825 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans3"></div>
+        <textarea id="input3" class="preview-input"></textarea>
+        <div class="preview-output" id="preview3"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="3">Preview</button>
+          <button class="btn btn-save" data-q="3">Save</button>
+          <button class="btn btn-clear" data-q="3">Clear</button>
+          <button class="btn btn-delete" data-q="3" style="display:none">Delete</button>
+        </div>
+      </div>
+
+      <!-- Question (iv) -->
+      <div class="question-box" id="q4">
+        <div class="question-title">(iv) 5005 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans4"></div>
+        <textarea id="input4" class="preview-input"></textarea>
+        <div class="preview-output" id="preview4"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="4">Preview</button>
+          <button class="btn btn-save" data-q="4">Save</button>
+          <button class="btn btn-clear" data-q="4">Clear</button>
+          <button class="btn btn-delete" data-q="4" style="display:none">Delete</button>
+        </div>
+      </div>
+
+      <!-- Question (v) -->
+      <div class="question-box" id="q5">
+        <div class="question-title">(v) 7429 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans5"></div>
+        <textarea id="input5" class="preview-input"></textarea>
+        <div class="preview-output" id="preview5"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="5">Preview</button>
+          <button class="btn btn-save" data-q="5">Save</button>
+          <button class="btn btn-clear" data-q="5">Clear</button>
+          <button class="btn btn-delete" data-q="5" style="display:none">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="download-wrap">
+      <button id="downloadPdfBtn" class="btn" style="background:#6a11cb;color:#fff;display:none">Download Ex 1.1 PDF (saved answers)</button>
+    </div>
   </div>
 
-  <!-- Questions -->
-  <div id="questionsSection" style="display:none;">
+  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
 
-    <!-- Q1 -->
-    <div class="question" id="q1">
-      <div class="question-title">Q1: Use Euclid's division algorithm to find the HCF of 135 and 225.</div>
-      <textarea id="input1" placeholder="Enter MathJax code here..."></textarea>
-      <div class="preview" id="preview1"></div>
-      <button class="preview-btn" onclick="renderPreview(1)">Preview</button>
-      <button class="save-btn" onclick="saveAnswer(1)">Save</button>
-      <button class="clear-btn" onclick="clearInput(1)">Clear</button>
-      <button class="delete-btn" onclick="deleteAnswer(1)">Delete</button>
-    </div>
+  <script>
+    const ADMIN_USERNAME = "admin";
+    const ADMIN_PASSWORD = "Dalbir@551";
 
-    <!-- Q2 -->
-    <div class="question" id="q2">
-      <div class="question-title">Q2: Find the HCF of 196 and 38220 using Euclid's division lemma.</div>
-      <textarea id="input2" placeholder="Enter MathJax code here..."></textarea>
-      <div class="preview" id="preview2"></div>
-      <button class="preview-btn" onclick="renderPreview(2)">Preview</button>
-      <button class="save-btn" onclick="saveAnswer(2)">Save</button>
-      <button class="clear-btn" onclick="clearInput(2)">Clear</button>
-      <button class="delete-btn" onclick="deleteAnswer(2)">Delete</button>
-    </div>
+    function isAdmin(){ return localStorage.getItem("isAdmin")==="true"; }
+    function setAdmin(flag){ flag?localStorage.setItem("isAdmin","true"):localStorage.removeItem("isAdmin"); updateUI(); }
 
-    <!-- Q3 -->
-    <div class="question" id="q3">
-      <div class="question-title">Q3: A circular field has a circumference of 360 km. Find the distance covered in one round if its diameter is 360 km.</div>
-      <textarea id="input3" placeholder="Enter MathJax code here..."></textarea>
-      <div class="preview" id="preview3"></div>
-      <button class="preview-btn" onclick="renderPreview(3)">Preview</button>
-      <button class="save-btn" onclick="saveAnswer(3)">Save</button>
-      <button class="clear-btn" onclick="clearInput(3)">Clear</button>
-      <button class="delete-btn" onclick="deleteAnswer(3)">Delete</button>
-    </div>
-
-    <!-- Q4 -->
-    <div class="question" id="q4">
-      <div class="question-title">Q4: Find the largest number that divides 650 and 1170 exactly.</div>
-      <textarea id="input4" placeholder="Enter MathJax code here..."></textarea>
-      <div class="preview" id="preview4"></div>
-      <button class="preview-btn" onclick="renderPreview(4)">Preview</button>
-      <button class="save-btn" onclick="saveAnswer(4)">Save</button>
-      <button class="clear-btn" onclick="clearInput(4)">Clear</button>
-      <button class="delete-btn" onclick="deleteAnswer(4)">Delete</button>
-    </div>
-
-    <!-- Q5 -->
-    <div class="question" id="q5">
-      <div class="question-title">Q5: Find the HCF of 336 and 54 using Euclid's algorithm.</div>
-      <textarea id="input5" placeholder="Enter MathJax code here..."></textarea>
-      <div class="preview" id="preview5"></div>
-      <button class="preview-btn" onclick="renderPreview(5)">Preview</button>
-      <button class="save-btn" onclick="saveAnswer(5)">Save</button>
-      <button class="clear-btn" onclick="clearInput(5)">Clear</button>
-      <button class="delete-btn" onclick="deleteAnswer(5)">Delete</button>
-    </div>
-
-    <button id="downloadPdfBtn">Download Full Chapter PDF</button>
-  </div>
-
-<script>
-let isAdmin = false;
-
-// Admin login
-function adminLogin(){
-  const pass = document.getElementById("adminPass").value;
-  if(pass === "admin123"){ // <-- yahan apna password set karo
-    isAdmin = true;
-    document.getElementById("loginSection").style.display="none";
-    document.getElementById("questionsSection").style.display="block";
-    loadSavedAnswers();
-  } else {
-    alert("Wrong password");
-  }
-}
-
-// Render preview
-function renderPreview(i){
-  const input = document.getElementById("input"+i).value;
-  const preview = document.getElementById("preview"+i);
-  preview.innerHTML = "\\[" + input + "\\]";
-  MathJax.typesetPromise([preview]);
-}
-
-// Save answer
-function saveAnswer(i){
-  const input = document.getElementById("input"+i).value;
-  if(!input){ alert("Please enter some code"); return; }
-  const preview = document.getElementById("preview"+i);
-  localStorage.setItem("ex1_1_ans"+i, preview.innerHTML);
-  alert("Answer saved!");
-}
-
-// Load saved answers
-function loadSavedAnswers(){
-  for(let i=1;i<=5;i++){
-    const saved = localStorage.getItem("ex1_1_ans"+i);
-    if(saved){
-      const preview = document.getElementById("preview"+i);
-      preview.innerHTML = saved;
-      MathJax.typesetPromise([preview]);
+    function updateUI(){
+      document.getElementById("adminStatus").style.display = isAdmin() ? "block":"none";
+      document.getElementById("logoutBtn").style.display = isAdmin() ? "block":"none";
+      document.querySelectorAll(".preview-input,.btns").forEach(el=>el.style.display=isAdmin()?"block":"none");
+      document.querySelectorAll(".answer-box").forEach(el=>el.style.display="block");
+      document.querySelectorAll(".btn-delete").forEach(b=>b.style.display=isAdmin()?"inline-block":"none");
+      document.getElementById("downloadPdfBtn").style.display=isAdmin()?"inline-block":"none";
+      document.getElementById("loginRow").style.display=isAdmin()?"none":"flex";
     }
-  }
-}
+    updateUI();
 
-// Clear input
-function clearInput(i){
-  document.getElementById("input"+i).value="";
-  document.getElementById("preview"+i).innerHTML="";
-}
-
-// Delete answer
-function deleteAnswer(i){
-  localStorage.removeItem("ex1_1_ans"+i);
-  document.getElementById("preview"+i).innerHTML="";
-  alert("Answer deleted!");
-}
-
-// Download saved answers as PDF (vector text)
-document.getElementById("downloadPdfBtn").addEventListener("click", async ()=>{
-  const savedIndices = [];
-  for(let i=1;i<=5;i++){
-    if(localStorage.getItem("ex1_1_ans"+i)) savedIndices.push(i);
-  }
-  if(savedIndices.length===0){ alert("No saved answers to download."); return; }
-
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({unit:'pt',format:'a4'});
-
-  let y = 40;
-  pdf.setFont("times","bold");
-  pdf.setFontSize(16);
-  pdf.text("Class 10 - Chapter 1: Real Numbers (Ex 1.1)", 40, y);
-  y += 30;
-
-  for(const idx of savedIndices){
-    const qTitle = document.querySelector("#q"+idx+" .question-title").innerText;
-    const ansHtml = localStorage.getItem("ex1_1_ans"+idx);
-
-    pdf.setFont("times","bold");
-    pdf.setFontSize(13);
-    pdf.text("Q"+idx+": "+qTitle, 40, y);
-    y += 20;
-
-    pdf.setFont("times","normal");
-    pdf.setFontSize(12);
-    // Strip MathJax HTML to plain text
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = ansHtml;
-    const ansText = tempDiv.innerText || "";
-    const split = pdf.splitTextToSize(ansText, 520);
-    pdf.text(split, 60, y);
-    y += split.length * 14 + 20;
-
-    if(y > 700){
-      pdf.addPage();
-      y = 40;
+    function loadSaved(){
+      for(let i=1;i<=5;i++){
+        const saved=localStorage.getItem("ex1_1_ans"+i);
+        document.getElementById("ans"+i).innerHTML=saved||"";
+        if(saved) MathJax.typesetPromise([document.getElementById("ans"+i)]);
+      }
     }
-  }
+    loadSaved();
 
-  pdf.save("Ex1_1_Real_Numbers.pdf");
-});
-</script>
+    document.getElementById("loginBtn").onclick=()=>{
+      const u=document.getElementById("loginUser").value.trim();
+      const p=document.getElementById("loginPass").value;
+      if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){setAdmin(true);alert("Admin login successful");}
+      else alert("Invalid credentials");
+    };
+    document.getElementById("logoutBtn").onclick=()=>{setAdmin(false);alert("Logged out");};
 
+    document.addEventListener("click",(e)=>{
+      const t=e.target;if(!t.classList.contains("btn")) return;
+      const q=t.getAttribute("data-q");
+      if(t.classList.contains("btn-preview")){
+        const input=document.getElementById("input"+q).value.trim();
+        const prev=document.getElementById("preview"+q);
+        prev.innerHTML=input?("$$"+input+"$$"):"";
+        MathJax.typesetPromise([prev]);
+      }
+      else if(t.classList.contains("btn-save")){
+        const html=document.getElementById("preview"+q).innerHTML;
+        if(!html){alert("Preview first");return;}
+        localStorage.setItem("ex1_1_ans"+q,html);
+        document.getElementById("ans"+q).innerHTML=html;
+        MathJax.typesetPromise([document.getElementById("ans"+q)]);
+      }
+      else if(t.classList.contains("btn-clear")){
+        document.getElementById("input"+q).value="";
+        document.getElementById("preview"+q).innerHTML="";
+      }
+      else if(t.classList.contains("btn-delete")){
+        localStorage.removeItem("ex1_1_ans"+q);
+        document.getElementById("ans"+q).innerHTML="";
+        document.getElementById("preview"+q).innerHTML="";
+      }
+    });
+
+    // Vector text PDF export
+    document.getElementById("downloadPdfBtn").addEventListener("click",()=>{
+      const saved=[];
+      for(let i=1;i<=5;i++) if(localStorage.getItem("ex1_1_ans"+i)) saved.push(i);
+      if(!saved.length){alert("No saved answers");return;}
+      const {jsPDF}=window.jspdf;const pdf=new jsPDF({unit:'pt',format:'a4'});
+      let y=40;
+      pdf.setFont("times","bold");pdf.setFontSize(16);
+      pdf.text("Class 10 - Chapter 1: Real Numbers (Ex 1.1)",40,y);y+=30;
+      for(const idx of saved){
+        const qTitle=document.querySelector("#q"+idx+" .question-title").innerText;
+        const ansHtml=localStorage.getItem("ex1_1_ans"+idx);
+        pdf.setFont("times","bold");pdf.setFontSize(13);
+        pdf.text(qTitle,40,y);y+=20;
+        pdf.setFont("times","normal");pdf.setFontSize(12);
+        const temp=document.createElement("div");temp.innerHTML=ansHtml;
+        const ansText=temp.innerText||"";const split=pdf.splitTextToSize(ansText,520);
+        pdf.text(split,60,y);y+=split.length*14+20;
+        if(y>700){pdf.addPage();y=40;}
+      }
+      pdf.save("Ex1_1_Real_Numbers.pdf");
+    });
+
+    if(isAdmin())updateUI();
+  </script>
 </body>
-  </html>
+            </html>
