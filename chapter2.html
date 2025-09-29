@@ -1,303 +1,438 @@
 <!doctype html>
-<html lang="en">  
-<head>  
-  <meta charset="utf-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1" />  
-  <title>Class 10 — Chapter 1: Real Numbers — Ex 1.1</title>    
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Class 10 — Chapter 1: Real Numbers — Ex 1.1</title>
 
-  <!-- MathJax -->    
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>    
+  <!-- MathJax -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <!-- html2canvas + jspdf for PDF download -->    
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>    
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>    
+  <!-- html2canvas + jspdf for PDF download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <style>  
-    :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}  
-    body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}  
-    .header-wrapper,.footer-wrapper{background:linear-gradient(135deg,var(--accent1),var(--accent2));padding:12px}  
-    .header,.footer-inner{background:#ffffcc;padding:14px;text-align:center;font-weight:700;border:2px solid #333;border-radius:10px;max-width:980px;margin:auto}  
-    .container{max-width:980px;margin:18px auto;padding:0 12px}  
-    .login-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}  
-    .login-row input{padding:8px;border-radius:6px;border:1px solid #999}  
-    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700;cursor:pointer}  
-    #adminStatus{display:none;color:green;font-weight:700;text-align:center;margin-bottom:8px}  
-    #logoutBtn{display:none;margin:auto;display:block;background:#f44336;color:#fff;font-weight:700;padding:8px 14px;border:none;border-radius:6px;cursor:pointer;margin-bottom:14px}  
-    .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}  
-    .question-title{font-weight:700;margin-bottom:8px}  
-    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff;margin-bottom:8px}  
-    .btns{margin-top:8px}  
-    .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}  
-    .btn-preview{background:#2196F3}  
-    .btn-save{background:#4CAF50}  
-    .btn-clear{background:#9E9E9E}  
-    .btn-delete{background:#f44336}  
-    .preview-input{width:100%;min-height:60px;border:1px solid #999;border-radius:6px;padding:6px;margin-top:6px;font-family:monospace}  
-    .preview-output{min-height:40px;border:1px solid #ccc;background:#fafafa;padding:8px;margin-top:6px;border-radius:6px}  
-    .small{font-size:13px;color:var(--muted)}  
-    .download-wrap{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}  
-    @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}  
-  </style>  
-</head>  
+  <style>
+    :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}
+    body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}
+    .header-wrapper,.footer-wrapper{background:linear-gradient(135deg,var(--accent1),var(--accent2));padding:12px}
+    .header,.footer-inner{background:#ffffcc;padding:14px;text-align:center;font-weight:700;border:2px solid #333;border-radius:10px;max-width:980px;margin:auto}
+    .container{max-width:980px;margin:18px auto;padding:0 12px}
+    .login-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+    .login-row input{padding:8px;border-radius:6px;border:1px solid #999}
+    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700;cursor:pointer}
+    #adminStatus{display:none;color:green;font-weight:700;text-align:center;margin-bottom:8px}
+    #logoutBtn{display:none;margin:auto;display:block;background:#f44336;color:#fff;font-weight:700;padding:8px 14px;border:none;border-radius:6px;cursor:pointer;margin-bottom:14px}
+    .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
+    .question-title{font-weight:700;margin-bottom:8px}
+    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff;margin-bottom:8px}
+    .btns{margin-top:8px}
+    .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
+    .btn-preview{background:#2196F3}
+    .btn-save{background:#4CAF50}
+    .btn-clear{background:#9E9E9E}
+    .btn-delete{background:#f44336}
+    .preview-input{width:100%;min-height:60px;border:1px solid #999;border-radius:6px;padding:6px;margin-top:6px;font-family:monospace}
+    .preview-output{min-height:40px;border:1px solid #ccc;background:#fafafa;padding:8px;margin-top:6px;border-radius:6px}
+    .small{font-size:13px;color:var(--muted)}
+    .download-wrap{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
+    @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}
+  </style>
+</head>
 
-<body>  
-  <div class="header-wrapper"><div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers (Ex 1.1)</div></div>    
+<body>
+  <div class="header-wrapper"><div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers (Ex 1.1)</div></div>
 
-  <div class="container">  
-    <div class="login-row" id="loginRow">  
-      <input id="loginUser" placeholder="Username" value="admin" />  
-      <input id="loginPass" placeholder="Password" type="password" />  
-      <button id="loginBtn">Login as Admin</button>  
-    </div>  
+  <div class="container">
+    <div class="login-row" id="loginRow">
+      <input id="loginUser" placeholder="Username" value="admin" />
+      <input id="loginPass" placeholder="Password" type="password" />
+      <button id="loginBtn">Login as Admin</button>
+    </div>
 
-    <div id="adminStatus">✅ Admin login successful</div>  
-    <button id="logoutBtn">Logout</button>  
+    <div id="adminStatus">✅ Admin login successful</div>
+    <button id="logoutBtn">Logout</button>
 
-    <!-- Exercise 1.1 wrapper (questions auto-generated here) -->  
-    <div id="ex11-wrapper"></div>  
+    <!-- Exercise 1.1 wrapper (auto-populated into 15 sub-questions) -->
+    <div id="ex11-wrapper">
+      <!-- Keep the first five placeholders exactly as before (so styles remain identical) -->
+      <div class="question-box" id="q1">
+        <div class="question-title">(i) 140 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans1"></div>
+        <textarea id="input1" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here (do not include outer $$ unless desired)"></textarea>
+        <div class="preview-output" id="preview1"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="1">Preview</button>
+          <button class="btn btn-save" data-q="1">Save</button>
+          <button class="btn btn-clear" data-q="1">Clear</button>
+          <button class="btn btn-delete" data-q="1" style="display:none">Delete</button>
+        </div>
+      </div>
 
-    <div class="download-wrap">  
-      <button id="downloadPdfBtn" class="btn" style="background:#6a11cb;color:#fff;display:none">Download Ex 1.1 PDF (saved answers)</button>  
-      <button id="nextExBtn" class="btn" style="background:#2575fc;color:#fff;display:none">Go to Exercise 1.2 &raquo;</button>  
-    </div>  
+      <div class="question-box" id="q2">
+        <div class="question-title">(ii) 156 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans2"></div>
+        <textarea id="input2" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
+        <div class="preview-output" id="preview2"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="2">Preview</button>
+          <button class="btn btn-save" data-q="2">Save</button>
+          <button class="btn btn-clear" data-q="2">Clear</button>
+          <button class="btn btn-delete" data-q="2" style="display:none">Delete</button>
+        </div>
+      </div>
+
+      <div class="question-box" id="q3">
+        <div class="question-title">(iii) 3825 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans3"></div>
+        <textarea id="input3" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
+        <div class="preview-output" id="preview3"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="3">Preview</button>
+          <button class="btn btn-save" data-q="3">Save</button>
+          <button class="btn btn-clear" data-q="3">Clear</button>
+          <button class="btn btn-delete" data-q="3" style="display:none">Delete</button>
+        </div>
+      </div>
+
+      <div class="question-box" id="q4">
+        <div class="question-title">(iv) 5005 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans4"></div>
+        <textarea id="input4" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
+        <div class="preview-output" id="preview4"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="4">Preview</button>
+          <button class="btn btn-save" data-q="4">Save</button>
+          <button class="btn btn-clear" data-q="4">Clear</button>
+          <button class="btn btn-delete" data-q="4" style="display:none">Delete</button>
+        </div>
+      </div>
+
+      <div class="question-box" id="q5">
+        <div class="question-title">(v) 7429 — Express as product of prime factors</div>
+        <div class="answer-box" id="ans5"></div>
+        <textarea id="input5" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
+        <div class="preview-output" id="preview5"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="5">Preview</button>
+          <button class="btn btn-save" data-q="5">Save</button>
+          <button class="btn btn-clear" data-q="5">Clear</button>
+          <button class="btn btn-delete" data-q="5" style="display:none">Delete</button>
+        </div>
+      </div>
+
+      <!-- Additional placeholders (q6..q15) will be created automatically by script -->
+    </div> <!-- end ex11-wrapper -->
+
+    <div class="download-wrap">
+      <button id="downloadPdfBtn" class="btn" style="background:#6a11cb;color:#fff;display:none">Download Ex 1.1 PDF (saved answers)</button>
+      <!-- Exercise 1.2 button (pop-down) - hidden until Ex 1.1 complete -->
+      <button id="gotoEx12Btn" class="btn" style="background:#2575fc;color:#fff;display:none">Go to Exercise 1.2</button>
+    </div>
 
     <div class="small">Note: Paste only LaTeX fragment (no outer $$) OR paste full HTML with inline `\( ... \)` or `$$ ... $$` if you prefer. Preview will auto-detect and avoid double-wrapping.</div>
-  </div>    
+  </div>
 
-  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>    
+  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
 
-  <script>  
-    const ADMIN_USERNAME = "admin";  
-    const ADMIN_PASSWORD = "Dalbir@551"; // same as you provided  
+<script>
+/* ========= NCERT Exercise 1.1 (broken into 15 sub-questions) =========
+   Using the exact subparts you provided: first question has 5 parts,
+   second has 3 parts, third has 3 parts, and questions 4-7 are single parts.
+*/
+const NCERT_EX11_QUESTIONS = [
+  "(i) 140 — Express as product of prime factors",
+  "(ii) 156 — Express as product of prime factors",
+  "(iii) 3825 — Express as product of prime factors",
+  "(iv) 5005 — Express as product of prime factors",
+  "(v) 7429 — Express as product of prime factors",
+  "(2)(i) 26 and 91 — Find the LCM and HCF; verify that LCM × HCF = product of the two numbers.",
+  "(2)(ii) 510 and 92 — Find the LCM and HCF; verify that LCM × HCF = product of the two numbers.",
+  "(2)(iii) 336 and 54 — Find the LCM and HCF; verify that LCM × HCF = product of the two numbers.",
+  "(3)(i) 12, 15 and 21 — Find the LCM and HCF by applying the prime factorisation method.",
+  "(3)(ii) 17, 23 and 29 — Find the LCM and HCF by applying the prime factorisation method.",
+  "(3)(iii) 8, 9 and 25 — Find the LCM and HCF by applying the prime factorisation method.",
+  "4. Given that HCF (306, 657) = 9, find LCM (306, 657).",
+  "5. Check whether 6^n can end with the digit 0 for any natural number n.",
+  "6. Explain why 7 × 11 × 13 + 13 and 7 × 6 × 5 × 4 × 3 × 2 × 1 + 5 are composite numbers.",
+  "7. There is a circular path around a sports field. Sonia takes 18 minutes to drive one round of the field, while Ravi takes 12 minutes for the same. Suppose they both start at the same point and at the same time, and go in the same direction. After how many minutes will they meet again at the starting point?"
+];
 
-    // -------------------------
-    // 1. Questions auto-add
-    // -------------------------
-    const ex1_1_questions = [
-      "(i) 140 — Express as product of prime factors",
-      "(ii) 156 — Express as product of prime factors",
-      "(iii) 3825 — Express as product of prime factors",
-      "(iv) 5005 — Express as product of prime factors",
-      "(v) 7429 — Express as product of prime factors"
-      // यहाँ पर आप 2025-26 की official NCERT Ex 1.1 questions डाल सकते हो
-    ];
+/* ============ existing code (kept logic & variables) ============ */
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "Dalbir@551"; // unchanged
 
-    function buildExercise1_1() {
-      const wrapper = document.getElementById("ex11-wrapper");
-      wrapper.innerHTML = "";
-      ex1_1_questions.forEach((qtext, idx) => {
-        const qnum = idx + 1;
-        const qb = document.createElement("div");
-        qb.className = "question-box";
-        qb.id = "q" + qnum;
+function isAdmin(){ return localStorage.getItem("isAdmin")==="true"; }
 
-        const qt = document.createElement("div");
-        qt.className = "question-title";
-        qt.innerText = qtext;
-        qb.appendChild(qt);
+function setAdmin(flag){
+  if(flag) localStorage.setItem("isAdmin","true");
+  else localStorage.removeItem("isAdmin");
+  updateUI();
+}
 
-        const ab = document.createElement("div");
-        ab.className = "answer-box";
-        ab.id = "ans" + qnum;
-        qb.appendChild(ab);
+function updateUI(){
+  document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
+  document.getElementById("logoutBtn").style.display = isAdmin() ? "block" : "none";
+  // show admin controls only if admin
+  document.querySelectorAll(".preview-input,.btns").forEach(el=>{
+    el.style.display = isAdmin() ? "block" : "none";
+  });
+  // show saved answers (always visible to users)
+  document.querySelectorAll(".answer-box").forEach(el=>{
+    el.style.display = "block";
+  });
+  // show delete + download when admin
+  document.querySelectorAll(".btn-delete").forEach(b=>{
+    b.style.display = isAdmin() ? "inline-block" : "none";
+  });
+  document.getElementById("downloadPdfBtn").style.display = isAdmin() ? "inline-block" : "none";
+  // hide login row when admin
+  document.getElementById("loginRow").style.display = isAdmin() ? "none" : "flex";
+}
 
-        const ta = document.createElement("textarea");
-        ta.id = "input" + qnum;
-        ta.className = "preview-input";
-        ta.placeholder = "Enter LaTeX / HTML+MathJax here";
-        qb.appendChild(ta);
+// initial UI
+updateUI();
 
-        const po = document.createElement("div");
-        po.id = "preview" + qnum;
-        po.className = "preview-output";
-        qb.appendChild(po);
-
-        const btnDiv = document.createElement("div");
-        btnDiv.className = "btns";
-        ["preview","save","clear","delete"].forEach(action => {
-          const b = document.createElement("button");
-          b.className = "btn btn-" + action;
-          b.setAttribute("data-q", qnum);
-          b.innerText = action.charAt(0).toUpperCase() + action.slice(1);
-          if(action === "delete") b.style.display = "none";
-          btnDiv.appendChild(b);
-        });
-        qb.appendChild(btnDiv);
-
-        wrapper.appendChild(qb);
+/* ---- Populate Exercise 1.1 from NCERT_EX11_QUESTIONS ----
+   - Updates existing q1..q5 question titles
+   - Creates additional question boxes (q6 .. q15) if needed
+   - Keeps markup / classes identical so styles remain the same
+*/
+function populateEx11FromNCERT(){
+  const wrapper = document.getElementById("ex11-wrapper");
+  for(let i=0;i<NCERT_EX11_QUESTIONS.length;i++){
+    const idx = i+1;
+    const existing = document.getElementById("q"+idx);
+    if(existing){
+      // replace question title
+      const titleEl = existing.querySelector(".question-title");
+      if(titleEl) titleEl.innerHTML = NCERT_EX11_QUESTIONS[i];
+      // ensure answer box id exists
+      const ab = existing.querySelector(".answer-box");
+      if(ab) ab.id = "ans"+idx;
+      // ensure input/preview ids match
+      const input = existing.querySelector(".preview-input");
+      if(input) input.id = "input"+idx;
+      const preview = existing.querySelector(".preview-output");
+      if(preview) preview.id = "preview"+idx;
+      // update buttons' data-q attributes
+      existing.querySelectorAll(".btn-preview,.btn-save,.btn-clear,.btn-delete").forEach(b=>{
+        b.setAttribute("data-q", String(idx));
       });
+    } else {
+      // clone q1 template structure to keep exact layout
+      const template = document.getElementById("q1");
+      if(!template) continue;
+      const clone = template.cloneNode(true);
+      // change ids inside clone to the new index
+      clone.id = "q"+idx;
+      const titleEl = clone.querySelector(".question-title");
+      if(titleEl) titleEl.innerHTML = NCERT_EX11_QUESTIONS[i];
+      const abox = clone.querySelector(".answer-box");
+      if(abox) abox.id = "ans"+idx;
+      const txt = clone.querySelector(".preview-input");
+      if(txt){
+        txt.id = "input"+idx;
+        txt.value = "";
+      }
+      const prev = clone.querySelector(".preview-output");
+      if(prev) prev.id = "preview"+idx;
+      // buttons
+      clone.querySelectorAll(".btn-preview").forEach(b=>{ b.setAttribute("data-q", String(idx)); });
+      clone.querySelectorAll(".btn-save").forEach(b=>{ b.setAttribute("data-q", String(idx)); });
+      clone.querySelectorAll(".btn-clear").forEach(b=>{ b.setAttribute("data-q", String(idx)); });
+      clone.querySelectorAll(".btn-delete").forEach(b=>{ b.setAttribute("data-q", String(idx)); b.style.display = isAdmin() ? "inline-block" : "none"; });
+      wrapper.appendChild(clone);
     }
-    buildExercise1_1();
+  }
+}
+populateEx11FromNCERT();
 
-    // -------------------------
-    // Admin logic
-    // -------------------------
-    function isAdmin(){ return localStorage.getItem("isAdmin")==="true"; }  
-    function setAdmin(flag){  
-      if(flag) localStorage.setItem("isAdmin","true");  
-      else localStorage.removeItem("isAdmin");  
-      updateUI();  
-    }  
+/* ---- loadSaved, uses dynamic NCERT_EX11_QUESTIONS length ---- */
+function loadSaved(){
+  for(let i=1;i<=NCERT_EX11_QUESTIONS.length;i++){
+    const saved = localStorage.getItem("ex1_1_ans"+i);
+    const ansEl = document.getElementById("ans"+i);
+    if(saved && ansEl){
+      ansEl.innerHTML = saved;
+      // typeset that ans area
+      MathJax.typesetPromise([ansEl]).catch(()=>{});
+    } else if(ansEl){
+      ansEl.innerHTML = "";
+    }
+  }
+  // update the "complete" button visibility after loading
+  checkEx11Complete();
+}
+loadSaved();
 
-    function updateUI(){  
-      document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";  
-      document.getElementById("logoutBtn").style.display = isAdmin() ? "block" : "none";  
-      document.querySelectorAll(".preview-input,.btns").forEach(el=>{  
-        el.style.display = isAdmin() ? "block" : "none";  
-      });  
-      document.querySelectorAll(".answer-box").forEach(el=>{  
-        el.style.display = "block";  
-      });  
-      document.querySelectorAll(".btn-delete").forEach(b=>{  
-        b.style.display = isAdmin() ? "inline-block" : "none";  
-      });  
-      document.getElementById("downloadPdfBtn").style.display = isAdmin() ? "inline-block" : "none";  
-      document.getElementById("loginRow").style.display = isAdmin() ? "none" : "flex";  
-      document.getElementById("nextExBtn").style.display = "inline-block";  
-    }  
-    updateUI();  
+/* ---- login/logout ---- */
+document.getElementById("loginBtn").addEventListener("click", ()=>{
+  const u = document.getElementById("loginUser").value.trim();
+  const p = document.getElementById("loginPass").value;
+  if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){
+    setAdmin(true);
+    alert("Admin login successful");
+  } else {
+    alert("Invalid credentials");
+  }
+});
 
-    // -------------------------
-    // Load saved answers
-    // -------------------------
-    function loadSaved(){  
-      for(let i=1;i<=ex1_1_questions.length;i++){  
-        const saved = localStorage.getItem("ex1_1_ans"+i);  
-        if(saved){  
-          document.getElementById("ans"+i).innerHTML = saved;  
-          MathJax.typesetPromise([document.getElementById("ans"+i)]);  
-        } else {  
-          document.getElementById("ans"+i).innerHTML = "";   
-        }  
-      }  
-    }  
-    loadSaved();  
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+  setAdmin(false);
+  alert("Logged out");
+});
 
-    // login  
-    document.getElementById("loginBtn").addEventListener("click", ()=>{  
-      const u = document.getElementById("loginUser").value.trim();  
-      const p = document.getElementById("loginPass").value;  
-      if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){  
-        setAdmin(true);  
-        alert("Admin login successful");  
-      } else {  
-        alert("Invalid credentials");  
-      }  
-    });  
+/* ---- delegated click handler (preview/save/clear/delete) ---- */
+document.addEventListener("click", (e)=>{
+  const t = e.target;
+  if(t.classList.contains("btn-preview")){
+    if(!isAdmin()) return alert("Admin only");
+    const q = t.getAttribute("data-q");
+    doPreview(q);
+  } else if(t.classList.contains("btn-save")){
+    if(!isAdmin()) return alert("Admin only");
+    const q = t.getAttribute("data-q");
+    doSave(q);
+  } else if(t.classList.contains("btn-clear")){
+    if(!isAdmin()) return alert("Admin only");
+    const q = t.getAttribute("data-q");
+    const inp = document.getElementById("input"+q);
+    const prev = document.getElementById("preview"+q);
+    if(inp) inp.value = "";
+    if(prev) prev.innerHTML = "";
+  } else if(t.classList.contains("btn-delete")){
+    if(!isAdmin()) return alert("Admin only");
+    const q = t.getAttribute("data-q");
+    if(confirm("Delete saved answer for question "+q+"?")){
+      localStorage.removeItem("ex1_1_ans"+q);
+      const ansEl = document.getElementById("ans"+q);
+      if(ansEl) ansEl.innerHTML = "";
+      const prev = document.getElementById("preview"+q);
+      if(prev) prev.innerHTML = "";
+      checkEx11Complete();
+    }
+  }
+});
 
-    // logout  
-    document.getElementById("logoutBtn").addEventListener("click", ()=>{  
-      setAdmin(false);  
-      alert("Logged out");  
-    });  
+/* ---- preview logic ---- */
+function doPreview(q){
+  const inputEl = document.getElementById("input"+q);
+  const input = inputEl ? inputEl.value.trim() : "";
+  const preview = document.getElementById("preview"+q);
+  if(!input){
+    if(preview) preview.innerHTML = "";
+    return;
+  }
+  const startsWithDelim = input.startsWith("$$") || input.startsWith("\\[") || input.startsWith("<div") || input.startsWith("<p") || input.startsWith("<span");
+  const containsInline = input.includes("\\(") || input.includes("\\[") || input.includes("$$");
+  if(startsWithDelim || containsInline){
+    preview.innerHTML = input;
+  } else {
+    preview.innerHTML = "$$" + input + "$$";
+  }
+  MathJax.typesetPromise([preview]).catch(function(err){ console.log("MathJax error:",err); });
+}
 
-    // -------------------------
-    // Event delegation (preview/save/clear/delete)
-    // -------------------------
-    document.addEventListener("click", (e)=>{  
-      const t = e.target;  
-      if(t.classList.contains("btn-preview")){  
-        if(!isAdmin()) return alert("Admin only");  
-        const q = t.getAttribute("data-q");  
-        doPreview(q);  
-      } else if(t.classList.contains("btn-save")){  
-        if(!isAdmin()) return alert("Admin only");  
-        const q = t.getAttribute("data-q");  
-        doSave(q);  
-      } else if(t.classList.contains("btn-clear")){  
-        if(!isAdmin()) return alert("Admin only");  
-        const q = t.getAttribute("data-q");  
-        document.getElementById("input"+q).value = "";  
-        document.getElementById("preview"+q).innerHTML = "";  
-      } else if(t.classList.contains("btn-delete")){  
-        if(!isAdmin()) return alert("Admin only");  
-        const q = t.getAttribute("data-q");  
-        if(confirm("Delete saved answer for question "+q+"?")){  
-          localStorage.removeItem("ex1_1_ans"+q);  
-          document.getElementById("ans"+q).innerHTML = "";  
-          document.getElementById("preview"+q).innerHTML = "";  
-        }  
-      }  
-    });  
+/* ---- save logic ---- */
+function doSave(q){
+  const previewHtmlEl = document.getElementById("preview"+q);
+  const previewHtml = previewHtmlEl ? previewHtmlEl.innerHTML : "";
+  if(!previewHtml){
+    alert("Nothing to save. Preview first.");
+    return;
+  }
+  localStorage.setItem("ex1_1_ans"+q, previewHtml);
+  const ansBox = document.getElementById("ans"+q);
+  if(ansBox){
+    ansBox.innerHTML = previewHtml;
+    MathJax.typesetPromise([ansBox]).catch(()=>{});
+  }
+  alert("Saved answer for question " + q);
+  checkEx11Complete();
+}
 
-    // -------------------------
-    // Preview & Save functions
-    // -------------------------
-    function doPreview(q){  
-      const input = document.getElementById("input"+q).value.trim();  
-      const preview = document.getElementById("preview"+q);  
-      if(!input){  
-        preview.innerHTML = "";  
-        return;  
-      }  
-      const startsWithDelim = input.startsWith("$$") || input.startsWith("\\[") || input.startsWith("<div") || input.startsWith("<p") || input.startsWith("<span");  
-      const containsInline = input.includes("\\(") || input.includes("\\[") || input.includes("$$");  
-      if(startsWithDelim || containsInline){  
-        preview.innerHTML = input;  
-      } else {  
-        preview.innerHTML = "$$" + input + "$$";  
-      }  
-      MathJax.typesetPromise([preview]).catch(function(err){ console.log("MathJax error:",err); });  
-    }  
+/* ---- Download saved answers as PDF (images) - dynamic count ---- */
+document.getElementById("downloadPdfBtn").addEventListener("click", async ()=>{
+  const savedIndices = [];
+  for(let i=1;i<=NCERT_EX11_QUESTIONS.length;i++){
+    if(localStorage.getItem("ex1_1_ans"+i)) savedIndices.push(i);
+  }
+  if(savedIndices.length===0){ alert("No saved answers to download."); return; }
 
-    function doSave(q){  
-      const previewHtml = document.getElementById("preview"+q).innerHTML;  
-      if(!previewHtml){  
-        alert("Nothing to save. Preview first.");  
-        return;  
-      }  
-      localStorage.setItem("ex1_1_ans"+q, previewHtml);  
-      document.getElementById("ans"+q).innerHTML = previewHtml;  
-      MathJax.typesetPromise([document.getElementById("ans"+q)]);  
-      alert("Saved answer for question " + q);  
-    }  
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({unit:'pt',format:'a4'});
+  let first = true;
+  for(const idx of savedIndices){
+    const el = document.getElementById("q"+idx);
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll(".preview-input,.btns,.preview-output").forEach(n=>n.remove());
+    clone.style.position = "fixed";
+    clone.style.left = "-2000px";
+    clone.style.top = "0";
+    document.body.appendChild(clone);
+    const ansSaved = localStorage.getItem("ex1_1_ans"+idx);
+    const ansBox = clone.querySelector("#ans"+idx);
+    if(ansBox) ansBox.innerHTML = ansSaved || "";
+    await MathJax.typesetPromise([clone]).catch(()=>{});
+    const canvas = await html2canvas(clone, {scale:2});
+    const imgData = canvas.toDataURL("image/png");
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth() - 40;
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    if(!first) pdf.addPage();
+    pdf.addImage(imgData, "PNG", 20, 20, pdfWidth, pdfHeight);
+    first = false;
+    document.body.removeChild(clone);
+  }
+  pdf.save("Ex1_1_Real_Numbers.pdf");
+});
 
-    // -------------------------
-    // PDF download
-    // -------------------------
-    document.getElementById("downloadPdfBtn").addEventListener("click", async ()=>{  
-      const savedIndices = [];  
-      for(let i=1;i<=ex1_1_questions.length;i++){  
-        if(localStorage.getItem("ex1_1_ans"+i)) savedIndices.push(i);  
-      }  
-      if(savedIndices.length===0){ alert("No saved answers to download."); return; }  
+/* ---- check completion: show Exercise 1.2 button when all questions have saved answers ---- */
+function checkEx11Complete(){
+  let allSaved = true;
+  for(let i=1;i<=NCERT_EX11_QUESTIONS.length;i++){
+    if(!localStorage.getItem("ex1_1_ans"+i)){
+      allSaved = false;
+      break;
+    }
+  }
+  const gotoBtn = document.getElementById("gotoEx12Btn");
+  if(gotoBtn){
+    gotoBtn.style.display = allSaved ? "inline-block" : "none";
+  }
+  // also toggle download button visibility (keeps original behavior of showing when admin)
+  const downloadBtn = document.getElementById("downloadPdfBtn");
+  if(downloadBtn){
+    downloadBtn.style.display = (isAdmin() && anySaved()) ? "inline-block" : (isAdmin() ? "inline-block" : "none");
+  }
+}
 
-      const { jsPDF } = window.jspdf;  
-      const pdf = new jsPDF({unit:'pt',format:'a4'});  
-      let first = true;  
-      for(const idx of savedIndices){  
-        const el = document.getElementById("q"+idx);  
-        const clone = el.cloneNode(true);  
-        clone.querySelectorAll(".preview-input,.btns,.preview-output").forEach(n=>n.remove());  
-        clone.style.position = "fixed";  
-        clone.style.left = "-2000px";  
-        clone.style.top = "0";  
-        document.body.appendChild(clone);  
-        const ansSaved = localStorage.getItem("ex1_1_ans"+idx);  
-        const ansBox = clone.querySelector("#ans"+idx);  
-        if(ansBox) ansBox.innerHTML = ansSaved || "";  
-        await MathJax.typesetPromise([clone]).catch(()=>{});  
-        const canvas = await html2canvas(clone, {scale:2});  
-        const imgData = canvas.toDataURL("image/png");  
-        const imgProps = pdf.getImageProperties(imgData);  
-        const pdfWidth = pdf.internal.pageSize.getWidth() - 40;  
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;  
-        if(!first) pdf.addPage();  
-        pdf.addImage(imgData, "PNG", 20, 20, pdfWidth, pdfHeight);  
-        first = false;  
-        document.body.removeChild(clone);  
-      }  
-      pdf.save("Ex1_1_Real_Numbers.pdf");  
-    });  
+// helper
+function anySaved(){
+  for(let i=1;i<=NCERT_EX11_QUESTIONS.length;i++) if(localStorage.getItem("ex1_1_ans"+i)) return true;
+  return false;
+}
 
-    // -------------------------
-    // 2. Next Exercise button
-    // -------------------------
-    document.getElementById("nextExBtn").addEventListener("click", ()=> {  
-      window.location.href = "ex1.2.html";  
-    });  
+/* ---- gotoEx12Btn (placeholder) ---- */
+const gotoBtnEl = document.getElementById("gotoEx12Btn");
+if(gotoBtnEl){
+  gotoBtnEl.addEventListener("click", ()=>{
+    // When you provide the ex1_2 HTML file or path, replace "ex1_2.html" with correct path.
+    window.location.href = "ex1_2.html";
+  });
+}
 
-    if(isAdmin()) updateUI();  
-  </script>  
-</body>  
+/* ---- sync UI if admin persisted ---- */
+if(isAdmin()) updateUI();
+
+/* ---- keep UI in sync if storage changes elsewhere ---- */
+window.addEventListener("storage", function(e){
+  if(e.key && e.key.startsWith("ex1_1_ans")){
+    loadSaved();
+  }
+});
+
+</script>
+</body>
 </html>
