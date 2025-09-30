@@ -24,9 +24,6 @@
     #logoutBtn{display:none;margin:auto;display:block;background:#f44336;color:#fff;font-weight:700;padding:8px 14px;border:none;border-radius:6px;cursor:pointer;margin-bottom:14px}
     .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
     .question-title{font-weight:700;margin-bottom:8px}
-    .question-edit{display:none;margin-bottom:8px}
-    .question-edit textarea{width:100%;min-height:40px;border:1px solid #999;border-radius:6px;padding:6px}
-    .question-edit button{margin-top:4px;padding:4px 8px;border:none;border-radius:6px;background:#4CAF50;color:#fff;font-weight:700;cursor:pointer}
     .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff;margin-bottom:8px}
     .btns{margin-top:8px}
     .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
@@ -54,18 +51,17 @@
     <div id="adminStatus">✅ Admin login successful</div>
     <button id="logoutBtn">Logout</button>
 
-    <!-- Exercise 1.1 questions -->
+    <!-- Exercise 1.1 questions (NCERT exercise 1.1 - sample items) -->
+    <!-- You can replace the question text with exact NCERT wording if needed -->
     <div id="ex11-wrapper">
-
-      <!-- Q1 -->
+      <!-- Question (i) 140 -->
       <div class="question-box" id="q1">
-        <div class="question-title" id="qt1">(i) 140 — Express as product of prime factors</div>
-        <div class="question-edit" id="qe1">
-          <textarea id="qInput1"></textarea>
-          <button onclick="saveQuestion(1)">Save Question</button>
-        </div>
+        <div class="question-title">(i) 140 — Express as product of prime factors</div>
+        <!-- user-visible saved answer -->
         <div class="answer-box" id="ans1"></div>
-        <textarea id="input1" class="preview-input"></textarea>
+
+        <!-- admin controls -->
+        <textarea id="input1" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here (do not include outer $$ unless desired)"></textarea>
         <div class="preview-output" id="preview1"></div>
         <div class="btns">
           <button class="btn btn-preview" data-q="1">Preview</button>
@@ -75,15 +71,12 @@
         </div>
       </div>
 
-      <!-- Q2 -->
+      <!-- Question (ii) 156 -->
       <div class="question-box" id="q2">
-        <div class="question-title" id="qt2">(ii) 156 — Express as product of prime factors</div>
-        <div class="question-edit" id="qe2">
-          <textarea id="qInput2"></textarea>
-          <button onclick="saveQuestion(2)">Save Question</button>
-        </div>
+        <div class="question-title">(ii) 156 — Express as product of prime factors</div>
         <div class="answer-box" id="ans2"></div>
-        <textarea id="input2" class="preview-input"></textarea>
+
+        <textarea id="input2" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
         <div class="preview-output" id="preview2"></div>
         <div class="btns">
           <button class="btn btn-preview" data-q="2">Preview</button>
@@ -93,15 +86,12 @@
         </div>
       </div>
 
-      <!-- Q3 -->
+      <!-- Question (iii) 3825 -->
       <div class="question-box" id="q3">
-        <div class="question-title" id="qt3">(iii) 3825 — Express as product of prime factors</div>
-        <div class="question-edit" id="qe3">
-          <textarea id="qInput3"></textarea>
-          <button onclick="saveQuestion(3)">Save Question</button>
-        </div>
+        <div class="question-title">(iii) 3825 — Express as product of prime factors</div>
         <div class="answer-box" id="ans3"></div>
-        <textarea id="input3" class="preview-input"></textarea>
+
+        <textarea id="input3" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
         <div class="preview-output" id="preview3"></div>
         <div class="btns">
           <button class="btn btn-preview" data-q="3">Preview</button>
@@ -111,15 +101,12 @@
         </div>
       </div>
 
-      <!-- Q4 -->
+      <!-- Question (iv) 5005 -->
       <div class="question-box" id="q4">
-        <div class="question-title" id="qt4">(iv) 5005 — Express as product of prime factors</div>
-        <div class="question-edit" id="qe4">
-          <textarea id="qInput4"></textarea>
-          <button onclick="saveQuestion(4)">Save Question</button>
-        </div>
+        <div class="question-title">(iv) 5005 — Express as product of prime factors</div>
         <div class="answer-box" id="ans4"></div>
-        <textarea id="input4" class="preview-input"></textarea>
+
+        <textarea id="input4" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
         <div class="preview-output" id="preview4"></div>
         <div class="btns">
           <button class="btn btn-preview" data-q="4">Preview</button>
@@ -129,15 +116,12 @@
         </div>
       </div>
 
-      <!-- Q5 -->
+      <!-- Question (v) 7429 -->
       <div class="question-box" id="q5">
-        <div class="question-title" id="qt5">(v) 7429 — Express as product of prime factors</div>
-        <div class="question-edit" id="qe5">
-          <textarea id="qInput5"></textarea>
-          <button onclick="saveQuestion(5)">Save Question</button>
-        </div>
+        <div class="question-title">(v) 7429 — Express as product of prime factors</div>
         <div class="answer-box" id="ans5"></div>
-        <textarea id="input5" class="preview-input"></textarea>
+
+        <textarea id="input5" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
         <div class="preview-output" id="preview5"></div>
         <div class="btns">
           <button class="btn btn-preview" data-q="5">Preview</button>
@@ -147,12 +131,53 @@
         </div>
       </div>
 
+      <!-- Added Question (vi) - LCM & HCF pairs (kept subparts together) -->
+      <div class="question-box" id="q6">
+        <div class="question-title">(vi) Find the LCM and HCF of the following pairs of integers and verify that LCM × HCF = product of the two numbers.
+        <br/>(i) 26 and 91 &nbsp;&nbsp; (ii) 510 and 92 &nbsp;&nbsp; (iii) 336 and 54</div>
+        <div class="answer-box" id="ans6"></div>
+
+        <textarea id="input6" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here (eg. write LCM/HCF steps)"></textarea>
+        <div class="preview-output" id="preview6"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="6">Preview</button>
+          <button class="btn btn-save" data-q="6">Save</button>
+          <button class="btn btn-clear" data-q="6">Clear</button>
+          <button class="btn btn-delete" data-q="6" style="display:none">Delete</button>
+        </div>
+      </div>
+
+      <!-- Added Question (vii) - LCM & HCF of three integers (kept subparts together) -->
+      <div class="question-box" id="q7">
+        <div class="question-title">(vii) Find the LCM and HCF of the following integers by applying the prime factorisation method.
+        <br/>(i) 12, 15 and 21 &nbsp;&nbsp; (ii) 17, 23 and 29 &nbsp;&nbsp; (iii) 8, 9 and 25</div>
+        <div class="answer-box" id="ans7"></div>
+
+        <textarea id="input7" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
+        <div class="preview-output" id="preview7"></div>
+        <div class="btns">
+          <button class="btn btn-preview" data-q="7">Preview</button>
+          <button class="btn btn-save" data-q="7">Save</button>
+          <button class="btn btn-clear" data-q="7">Clear</button>
+          <button class="btn btn-delete" data-q="7" style="display:none">Delete</button>
+        </div>
+      </div>
+
     </div>
+
+    <div class="download-wrap">
+      <button id="downloadPdfBtn" class="btn" style="background:#6a11cb;color:#fff;display:none">Download Ex 1.1 PDF (saved answers)</button>
+    </div>
+
+    <div class="small">Note: Paste only LaTeX fragment (no outer $$) OR paste full HTML with inline `\( ... \)` or `$$ ... $$` if you prefer. Preview will auto-detect and avoid double-wrapping.</div>
+
   </div>
+
+  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
 
   <script>
     const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "Dalbir@551";
+    const ADMIN_PASSWORD = "Dalbir@551"; // same as you provided
 
     function isAdmin(){ return localStorage.getItem("isAdmin")==="true"; }
     function setAdmin(flag){
@@ -164,44 +189,173 @@
     function updateUI(){
       document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
       document.getElementById("logoutBtn").style.display = isAdmin() ? "block" : "none";
-      document.querySelectorAll(".preview-input,.btns,.question-edit").forEach(el=>{
+      // show admin controls only if admin
+      document.querySelectorAll(".preview-input,.btns").forEach(el=>{
         el.style.display = isAdmin() ? "block" : "none";
       });
+      // show saved answers (always visible to users)
+      document.querySelectorAll(".answer-box").forEach(el=>{
+        el.style.display = "block";
+      });
+      // show delete + download when admin
+      document.querySelectorAll(".btn-delete").forEach(b=>{
+        b.style.display = isAdmin() ? "inline-block" : "none";
+      });
+      document.getElementById("downloadPdfBtn").style.display = isAdmin() ? "inline-block" : "none";
+      // hide login row when admin
       document.getElementById("loginRow").style.display = isAdmin() ? "none" : "flex";
     }
 
-    function loadQuestions(){
-      for(let i=1;i<=5;i++){
-        const savedQ = localStorage.getItem("ex1_1_q"+i);
-        if(savedQ){
-          document.getElementById("qt"+i).innerText = savedQ;
+    // initial UI
+    updateUI();
+
+    // load saved answers from localStorage
+    function loadSaved(){
+      for(let i=1;i<=7;i++){
+        const saved = localStorage.getItem("ex1_1_ans"+i);
+        if(saved){
+          document.getElementById("ans"+i).innerHTML = saved;
+          // typeset that ans area
+          MathJax.typesetPromise([document.getElementById("ans"+i)]);
+        } else {
+          document.getElementById("ans"+i).innerHTML = ""; 
         }
       }
     }
-
-    function saveQuestion(i){
-      const val = document.getElementById("qInput"+i).value.trim();
-      if(!val) return alert("Enter question text!");
-      localStorage.setItem("ex1_1_q"+i,val);
-      document.getElementById("qt"+i).innerText = val;
-      alert("Question "+i+" updated");
-    }
-
-    // init
-    updateUI();
-    loadQuestions();
+    loadSaved();
 
     // login
     document.getElementById("loginBtn").addEventListener("click", ()=>{
-      const u=document.getElementById("loginUser").value.trim();
-      const p=document.getElementById("loginPass").value;
+      const u = document.getElementById("loginUser").value.trim();
+      const p = document.getElementById("loginPass").value;
       if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){
         setAdmin(true);
         alert("Admin login successful");
-      } else alert("Invalid credentials");
+      } else {
+        alert("Invalid credentials");
+      }
     });
 
-    document.getElementById("logoutBtn").addEventListener("click", ()=>{ setAdmin(false); });
+    // logout
+    document.getElementById("logoutBtn").addEventListener("click", ()=>{
+      setAdmin(false);
+      alert("Logged out");
+    });
+
+    // event delegation for preview/save/clear/delete
+    document.addEventListener("click", (e)=>{
+      const t = e.target;
+      if(t.classList.contains("btn-preview")){
+        if(!isAdmin()) return alert("Admin only");
+        const q = t.getAttribute("data-q");
+        doPreview(q);
+      } else if(t.classList.contains("btn-save")){
+        if(!isAdmin()) return alert("Admin only");
+        const q = t.getAttribute("data-q");
+        doSave(q);
+      } else if(t.classList.contains("btn-clear")){
+        if(!isAdmin()) return alert("Admin only");
+        const q = t.getAttribute("data-q");
+        document.getElementById("input"+q).value = "";
+        document.getElementById("preview"+q).innerHTML = "";
+      } else if(t.classList.contains("btn-delete")){
+        if(!isAdmin()) return alert("Admin only");
+        const q = t.getAttribute("data-q");
+        if(confirm("Delete saved answer for question "+q+"?")){
+          localStorage.removeItem("ex1_1_ans"+q);
+          document.getElementById("ans"+q).innerHTML = "";
+          document.getElementById("preview"+q).innerHTML = "";
+        }
+      }
+    });
+
+    // preview logic: wrap only if needed
+    function doPreview(q){
+      const input = document.getElementById("input"+q).value.trim();
+      const preview = document.getElementById("preview"+q);
+      if(!input){
+        preview.innerHTML = "";
+        return;
+      }
+      // if input already seems to be full HTML or already has delimiters, don't auto-wrap
+      const startsWithDelim = input.startsWith("$$") || input.startsWith("\\[") || input.startsWith("<div") || input.startsWith("<p") || input.startsWith("<span");
+      const containsInline = input.includes("\\(") || input.includes("\\[") || input.includes("$$");
+      if(startsWithDelim || containsInline){
+        preview.innerHTML = input;
+      } else {
+        // wrap in display math
+        preview.innerHTML = "$$" + input + "$$";
+      }
+      // typeset preview only
+      MathJax.typesetPromise([preview]).catch(function(err){ console.log("MathJax error:",err); });
+    }
+
+    // save preview output into localStorage and show in ans box
+    function doSave(q){
+      const previewHtml = document.getElementById("preview"+q).innerHTML;
+      if(!previewHtml){
+        alert("Nothing to save. Preview first.");
+        return;
+      }
+      localStorage.setItem("ex1_1_ans"+q, previewHtml);
+      document.getElementById("ans"+q).innerHTML = previewHtml;
+      MathJax.typesetPromise([document.getElementById("ans"+q)]);
+      alert("Saved answer for question " + q);
+    }
+
+    // allow Save buttons if present (create them)
+    // (we included Save in markup but left action to be connected)
+    document.querySelectorAll(".btn-save").forEach(btn=>{
+      btn.addEventListener("click", (e)=>{
+        // handled by delegated listener above (keeps behavior uniform)
+      });
+    });
+
+    // Download saved answers as PDF (images)
+    document.getElementById("downloadPdfBtn").addEventListener("click", async ()=>{
+      const savedIndices = [];
+      for(let i=1;i<=7;i++){
+        if(localStorage.getItem("ex1_1_ans"+i)) savedIndices.push(i);
+      }
+      if(savedIndices.length===0){ alert("No saved answers to download."); return; }
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({unit:'pt',format:'a4'});
+      let first = true;
+      for(const idx of savedIndices){
+        // capture the question box (question title + answer box)
+        const el = document.getElementById("q"+idx);
+        // temporarily show the saved answer if not visible
+        // create clone to ensure consistent rendering
+        const clone = el.cloneNode(true);
+        // remove admin inputs from clone (so PDF shows only question + saved answer)
+        clone.querySelectorAll(".preview-input,.btns,.preview-output").forEach(n=>n.remove());
+        // place clone off-screen to render
+        clone.style.position = "fixed";
+        clone.style.left = "-2000px";
+        clone.style.top = "0";
+        document.body.appendChild(clone);
+        // ensure MathJax processed inside clone (set inner from saved)
+        const ansSaved = localStorage.getItem("ex1_1_ans"+idx);
+        const ansBox = clone.querySelector("#ans"+idx);
+        if(ansBox) ansBox.innerHTML = ansSaved || "";
+        await MathJax.typesetPromise([clone]).catch(()=>{});
+        const canvas = await html2canvas(clone, {scale:2});
+        const imgData = canvas.toDataURL("image/png");
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth() - 40; // margins
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        if(!first) pdf.addPage();
+        pdf.addImage(imgData, "PNG", 20, 20, pdfWidth, pdfHeight);
+        first = false;
+        document.body.removeChild(clone);
+      }
+      pdf.save("Ex1_1_Real_Numbers.pdf");
+    });
+
+    // if admin persisted, show controls
+    if(isAdmin()) updateUI();
+
   </script>
 </body>
-</html>
+          </html>
