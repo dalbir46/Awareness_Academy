@@ -173,6 +173,15 @@
 
     <div class="small">Note: Paste only LaTeX fragment (no outer $$) OR paste full HTML with inline `\( ... \)` or `$$ ... $$` if you prefer. Preview will auto-detect and avoid double-wrapping.</div>
 
+    <!-- Exercise selector (visible to ALL users) - placed ABOVE footer, below the small note -->
+    <div class="download-wrap" style="justify-content:flex-start;gap:10px;margin-top:12px">
+      <select id="exerciseSelect" style="padding:8px 12px;border-radius:6px;border:1px solid #999;font-weight:700;cursor:pointer">
+        <option value="ex1.1" selected>Ex 1.1</option>
+        <option value="ex1.2">Ex 1.2</option>
+      </select>
+      <button id="goExerciseBtn" class="btn" style="background:#6a11cb;color:#fff">Go</button>
+    </div>
+
   </div>
 
   <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
@@ -188,6 +197,30 @@
       updateUI();
     }
 
+    // populate saved answers into the visible answer-boxes (only when admin)
+    function populateSavedAnswers(){
+      for(let i=1;i<=7;i++){
+        const saved = localStorage.getItem("ex1_1_ans"+i);
+        const ansEl = document.getElementById("ans"+i);
+        if(ansEl){
+          if(saved){
+            ansEl.innerHTML = saved;
+            MathJax.typesetPromise([ansEl]).catch(()=>{});
+          } else {
+            ansEl.innerHTML = "";
+          }
+        }
+      }
+    }
+
+    // clear displayed answers from DOM (keep localStorage intact)
+    function clearDisplayedAnswers(){
+      for(let i=1;i<=7;i++){
+        const ansEl = document.getElementById("ans"+i);
+        if(ansEl) ansEl.innerHTML = "";
+      }
+    }
+
     function updateUI(){
       document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
       document.getElementById("logoutBtn").style.display = isAdmin() ? "block" : "none";
@@ -195,9 +228,9 @@
       document.querySelectorAll(".preview-input,.btns").forEach(el=>{
         el.style.display = isAdmin() ? "block" : "none";
       });
-      // show saved answers (always visible to users)
+      // show saved answers ONLY to admin (hidden for normal users)
       document.querySelectorAll(".answer-box").forEach(el=>{
-        el.style.display = "block";
+        el.style.display = isAdmin() ? "block" : "none";
       });
       // show delete + download when admin
       document.querySelectorAll(".btn-delete").forEach(b=>{
@@ -206,25 +239,17 @@
       document.getElementById("downloadPdfBtn").style.display = isAdmin() ? "inline-block" : "none";
       // hide login row when admin
       document.getElementById("loginRow").style.display = isAdmin() ? "none" : "flex";
+
+      // populate/clear displayed answers depending on admin state
+      if(isAdmin()){
+        populateSavedAnswers();
+      } else {
+        clearDisplayedAnswers();
+      }
     }
 
     // initial UI
     updateUI();
-
-    // load saved answers from localStorage
-    function loadSaved(){
-      for(let i=1;i<=7;i++){
-        const saved = localStorage.getItem("ex1_1_ans"+i);
-        if(saved){
-          document.getElementById("ans"+i).innerHTML = saved;
-          // typeset that ans area
-          MathJax.typesetPromise([document.getElementById("ans"+i)]);
-        } else {
-          document.getElementById("ans"+i).innerHTML = ""; 
-        }
-      }
-    }
-    loadSaved();
 
     // login
     document.getElementById("loginBtn").addEventListener("click", ()=>{
@@ -327,7 +352,6 @@
       for(const idx of savedIndices){
         // capture the question box (question title + answer box)
         const el = document.getElementById("q"+idx);
-        // temporarily show the saved answer if not visible
         // create clone to ensure consistent rendering
         const clone = el.cloneNode(true);
         // remove admin inputs from clone (so PDF shows only question + saved answer)
@@ -355,9 +379,20 @@
       pdf.save("Ex1_1_Real_Numbers.pdf");
     });
 
+    // Exercise selector logic (visible to all users)
+    document.getElementById("goExerciseBtn").addEventListener("click", ()=>{
+      const ex = document.getElementById("exerciseSelect").value;
+      if(ex === "ex1.1"){
+        location.reload(); // reload same page
+      } else if(ex === "ex1.2"){
+        alert("Ex 1.2 will be live soon!");
+        // later you can use: window.location.href = "ex1_2.html";
+      }
+    });
+
     // if admin persisted, show controls
     if(isAdmin()) updateUI();
 
   </script>
 </body>
-</html>
+  </html>
