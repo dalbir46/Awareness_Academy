@@ -201,14 +201,10 @@
     function populateSavedAnswers(){
       for(let i=1;i<=7;i++){
         const saved = localStorage.getItem("ex1_1_ans"+i);
-        const ansEl = document.getElementById("ans"+i);
-        if(ansEl){
-          if(saved){
-            ansEl.innerHTML = saved;
-            MathJax.typesetPromise([ansEl]).catch(()=>{});
-          } else {
-            ansEl.innerHTML = "";
-          }
+        document.getElementById("ans"+i).innerHTML = saved || "";
+        if(saved){
+          // typeset saved answer area
+          MathJax.typesetPromise([document.getElementById("ans"+i)]).catch(()=>{});
         }
       }
     }
@@ -216,31 +212,34 @@
     // clear displayed answers from DOM (keep localStorage intact)
     function clearDisplayedAnswers(){
       for(let i=1;i<=7;i++){
-        const ansEl = document.getElementById("ans"+i);
-        if(ansEl) ansEl.innerHTML = "";
+        document.getElementById("ans"+i).innerHTML = "";
       }
     }
 
     function updateUI(){
       document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
       document.getElementById("logoutBtn").style.display = isAdmin() ? "block" : "none";
-      // show admin controls only if admin
+
+      // show admin-only controls (preview inputs + buttons) only to admin
       document.querySelectorAll(".preview-input,.btns").forEach(el=>{
         el.style.display = isAdmin() ? "block" : "none";
       });
-      // show saved answers ONLY to admin (hidden for normal users)
+
+      // always keep the answer-box container visible, but populate content only for admin
       document.querySelectorAll(".answer-box").forEach(el=>{
-        el.style.display = isAdmin() ? "block" : "none";
+        el.style.display = "block";
       });
-      // show delete + download when admin
+
+      // show/hide delete + download when admin
       document.querySelectorAll(".btn-delete").forEach(b=>{
         b.style.display = isAdmin() ? "inline-block" : "none";
       });
       document.getElementById("downloadPdfBtn").style.display = isAdmin() ? "inline-block" : "none";
+
       // hide login row when admin
       document.getElementById("loginRow").style.display = isAdmin() ? "none" : "flex";
 
-      // populate/clear displayed answers depending on admin state
+      // populate or clear displayed answers depending on admin state
       if(isAdmin()){
         populateSavedAnswers();
       } else {
@@ -317,26 +316,20 @@
       MathJax.typesetPromise([preview]).catch(function(err){ console.log("MathJax error:",err); });
     }
 
-    // save preview output into localStorage and show in ans box
+    // save preview output into localStorage and show in ans box (visible only if admin)
     function doSave(q){
       const previewHtml = document.getElementById("preview"+q).innerHTML;
       if(!previewHtml){
         alert("Nothing to save. Preview first.");
         return;
       }
+      // store
       localStorage.setItem("ex1_1_ans"+q, previewHtml);
+      // show in DOM only if admin (should be, since Save is admin-only)
       document.getElementById("ans"+q).innerHTML = previewHtml;
       MathJax.typesetPromise([document.getElementById("ans"+q)]);
       alert("Saved answer for question " + q);
     }
-
-    // allow Save buttons if present (create them)
-    // (we included Save in markup but left action to be connected)
-    document.querySelectorAll(".btn-save").forEach(btn=>{
-      btn.addEventListener("click", (e)=>{
-        // handled by delegated listener above (keeps behavior uniform)
-      });
-    });
 
     // Download saved answers as PDF (images)
     document.getElementById("downloadPdfBtn").addEventListener("click", async ()=>{
@@ -390,9 +383,9 @@
       }
     });
 
-    // if admin persisted, show controls
+    // Ensure UI reflects persisted admin status on page load
     if(isAdmin()) updateUI();
 
   </script>
 </body>
-  </html>
+</html>
