@@ -24,7 +24,18 @@
     #logoutBtn{display:none;margin:auto;display:block;background:#f44336;color:#fff;font-weight:700;padding:8px 14px;border:none;border-radius:6px;cursor:pointer;margin-bottom:14px}
     .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
     .question-title{font-weight:700;margin-bottom:8px}
-    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff;margin-bottom:8px}
+
+    /* === CHANGED: make saved answer box look exactly like preview output === */
+    .answer-box{
+      min-height:40px;
+      border:1px solid #ccc;
+      background:#fafafa;
+      padding:8px;
+      margin-top:6px;
+      margin-bottom:8px;
+      border-radius:6px;
+    }
+
     .btns{margin-top:8px}
     .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
     .btn-preview{background:#2196F3}
@@ -201,7 +212,8 @@
       document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
       document.getElementById("logoutBtn").style.display = isAdmin() ? "block" : "none";
       // show admin controls only if admin
-      document.querySelectorAll(".preview-input,.btns").forEach(el=>{
+      // === CHANGED: also toggle preview-output visibility so preview box is admin-only ===
+      document.querySelectorAll(".preview-input,.btns,.preview-output").forEach(el=>{
         el.style.display = isAdmin() ? "block" : "none";
       });
       // show saved answers (always visible to users)
@@ -380,4 +392,4 @@
 
   </script>
 </body>
-</html>
+            </html>
