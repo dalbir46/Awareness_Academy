@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -21,31 +22,58 @@
   .header, .footer-inner { background: var(--panel-bg); padding: 15px; text-align: center; font-size: 20px; font-weight: bold; border: 2px solid #333; border-radius: 10px; text-shadow: 2px 2px 4px #888888; max-width: 920px; margin: auto; }
   .header small { display:block; font-size:12px; font-weight:normal; margin-top:6px; color:#333; }.wrap{max-width:920px;margin:18px auto;padding:12px}
 
-/* Language dropdown */ .controls { display:flex; gap:12px; justify-content:center; align-items:center; margin-bottom:14px; flex-wrap:wrap; } select.lang-select, select.exercise-select { padding:8px 10px; border-radius:6px; border:1px solid #ccc; font-weight:700; }
+/* Language dropdown */ 
+.controls { display:flex; gap:12px; justify-content:center; align-items:center; margin-bottom:14px; flex-wrap:wrap; } 
+select.lang-select, select.exercise-select { padding:8px 10px; border-radius:6px; border:1px solid #ccc; font-weight:700; }
 
-/* Card (use homepage-like box styling) */ .card { background: var(--box-bg); border: 1px solid var(--box-border); border-radius:10px; padding:14px; margin-bottom:16px; box-shadow:none; } .card .qtitle { color:var(--blue); font-weight:800; margin-bottom:8px; font-size:16px; } .card .sub-q { font-weight:700; color:#0b3b66; margin:8px 0; } .solution-dashed { padding:12px; border-radius:6px; background: var(--box-bg); border:1px solid #ccc; font-weight:700; white-space:pre-wrap; font-family:inherit; font-size:15px; } .solution-plain { padding:10px; background: var(--box-bg); border-radius:6px; margin-top:8px; white-space:pre-wrap; font-family:inherit; font-size:15px; border:1px solid #ccc; font-weight:700; } .boxed-sub { background: var(--box-bg); border:1px solid #ccc; padding:10px; border-radius:6px; margin-bottom:10px; } .small { font-size:13px; color:var(--muted) } .footer-note { text-align:center; margin-top:12px; color:var(--muted); font-size:13px; }
+/* New: align each label+select pair */
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-@media(max-width:560px){ .wrap{padding:12px} .qtitle{font-size:15px} } </style>
+/* Card (use homepage-like box styling) */ 
+.card { background: var(--box-bg); border: 1px solid var(--box-border); border-radius:10px; padding:14px; margin-bottom:16px; box-shadow:none; } 
+.card .qtitle { color:var(--blue); font-weight:800; margin-bottom:8px; font-size:16px; } 
+.card .sub-q { font-weight:700; color:#0b3b66; margin:8px 0; } 
+.solution-dashed { padding:12px; border-radius:6px; background: var(--box-bg); border:1px solid #ccc; font-weight:700; white-space:pre-wrap; font-family:inherit; font-size:15px; } 
+.solution-plain { padding:10px; background: var(--box-bg); border-radius:6px; margin-top:8px; white-space:pre-wrap; font-family:inherit; font-size:15px; border:1px solid #ccc; font-weight:700; } 
+.boxed-sub { background: var(--box-bg); border:1px solid #ccc; padding:10px; border-radius:6px; margin-bottom:10px; } 
+.small { font-size:13px; color:var(--muted) } 
+.footer-note { text-align:center; margin-top:12px; color:var(--muted); font-size:13px; }
+
+@media(max-width:560px){ .wrap{padding:12px} .qtitle{font-size:15px} } 
+</style>
 
 </head>
-<body>  <!-- Header (index style) -->  <div class="header-wrapper">
+<body>  
+  <!-- Header (index style) -->  
+  <div class="header-wrapper">
     <div class="header">
       Mathematics Hub — Class 10 | Chapter 1: Real Numbers (Ex 1.1)
       <small>NCERT Exercise 1.1 — step-by-step solutions (Hindi & English)</small>
     </div>
-  </div>  <div class="wrap"><!-- Controls: language dropdown + exercise dropdown -->
-<div class="controls">
-  <label class="small" for="langSelect"><b>Language:</b></label>
-  <select id="langSelect" class="lang-select" onchange="showLang(this.value)">
-    <option value="hindi" selected>हिंदी Medium</option>
-    <option value="english">English Medium</option>
-  </select>
+  </div>  
 
-      <label class="small" for="exerciseSelect"><b>Go to:</b></label>
-      <select id="exerciseSelect" class="exercise-select" onchange="gotoEx(this.value)">
-        <option value="class10ex1_1.html" selected>Exercise 1.1</option>
-        <option value="class10ex1_2.html">Exercise 1.2</option>
-      </select>
+  <div class="wrap">
+    <!-- Controls: language dropdown + exercise dropdown -->
+    <div class="controls">
+      <div class="control-group">
+        <label class="small" for="langSelect"><b>Language:</b></label>
+        <select id="langSelect" class="lang-select" onchange="showLang(this.value)">
+          <option value="hindi" selected>हिंदी Medium</option>
+          <option value="english">English Medium</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label class="small" for="exerciseSelect"><b>Go to:</b></label>
+        <select id="exerciseSelect" class="exercise-select" onchange="gotoEx(this.value)">
+          <option value="class10ex1_1.html" selected>Exercise 1.1</option>
+          <option value="class10ex1_2.html">Exercise 1.2</option>
+        </select>
+      </div>
     </div>
 
 
@@ -198,7 +226,7 @@ LCM = (306 × 657) ÷ 9.
 
 <!-- Q6 -->
   <div class="card">
-    <div class="qtitle">Q6. बताइए कि निम्नанк क्यों समिश्र (composite) हैं</div>
+    <div class="qtitle">Q6. बताइए कि निम्नांक क्यों समिश्र (composite) हैं</div>
 
     <div class="boxed-sub">
       <div class="sub-q">(a) 7 × 11 × 13 + 13</div>
@@ -383,9 +411,14 @@ LCM(18,12) = 36 minutes. </div> </div>
 
 <div class="footer-note">© 2025 Mathematics Hub — Exercise 1.1 </div>
 
-  </div> <!-- wrap -->  <!-- Footer (index style) -->  <div class="footer-wrapper">
+  </div> <!-- wrap -->  
+
+  <!-- Footer (index style) -->  
+  <div class="footer-wrapper">
     <div class="footer-inner">© 2025 Mathematics Hub</div>
-  </div><script>
+  </div>
+
+<script>
   function showLang(val){
     if(val === 'hindi'){
       document.getElementById('hindi').style.display = 'block';
@@ -407,5 +440,6 @@ LCM(18,12) = 36 minutes. </div> </div>
       location.href = v;
     }
   }
-</script></body>
-</html>
+</script>
+</body>
+        </html>
