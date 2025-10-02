@@ -1,383 +1,410 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Class 10 — Chapter 1: Real Numbers — Ex 1.1</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Class 10 — Exercise 1.1 </title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --grad1:#6a11cb;
+    --grad2:#2575fc;
+    --panel-bg:#FFFFCC;
+    --blue:#2575fc;
+    --muted:#666;
+    --page-bg:#f4f8fc;
+    --box-bg:#F9F9F9;
+    --box-border:#999;
+  }
+  /* Header & Footer (match your index page style) */
+  body{font-family: Arial, sans-serif; background:var(--page-bg); margin:0; color:#111; line-height:1.5}
+  .header-wrapper, .footer-wrapper { background: linear-gradient(135deg, var(--grad1), var(--grad2)); padding: 12px; }
+  .header, .footer-inner { background: var(--panel-bg); padding: 15px; text-align: center; font-size: 20px; font-weight: bold; border: 2px solid #333; border-radius: 10px; text-shadow: 2px 2px 4px #888888; max-width: 920px; margin: auto; }
+  .header small { display:block; font-size:12px; font-weight:normal; margin-top:6px; color:#333; }.wrap{max-width:920px;margin:18px auto;padding:12px}
 
-  <!-- MathJax -->
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <!-- html2canvas + jspdf for PDF download -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+/* Language dropdown */ .controls { display:flex; gap:12px; justify-content:center; align-items:center; margin-bottom:14px; flex-wrap:wrap; } select.lang-select, select.exercise-select { padding:8px 10px; border-radius:6px; border:1px solid #ccc; font-weight:700; }
 
-  <style>
-    :root{--accent1:#6a11cb;--accent2:#2575fc;--card:#fff;--muted:#666}
-    body{font-family:Arial,Helvetica,sans-serif;background:#f0f8ff;margin:0;color:#000}
-    .header-wrapper,.footer-wrapper{background:linear-gradient(135deg,var(--accent1),var(--accent2));padding:12px}
-    .header,.footer-inner{background:#ffffcc;padding:14px;text-align:center;font-weight:700;border:2px solid #333;border-radius:10px;max-width:980px;margin:auto}
-    .container{max-width:980px;margin:18px auto;padding:0 12px}
-    .login-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
-    .login-row input{padding:8px;border-radius:6px;border:1px solid #999}
-    .login-row button{padding:8px 12px;border-radius:6px;border:none;background:#0b62ff;color:#fff;font-weight:700;cursor:pointer}
-    #adminStatus{display:none;color:green;font-weight:700;text-align:center;margin-bottom:8px}
-    #logoutBtn{display:none;margin:auto;display:block;background:#f44336;color:#fff;font-weight:700;padding:8px 14px;border:none;border-radius:6px;cursor:pointer;margin-bottom:14px}
-    .question-box{background:var(--card);border:1px solid #ddd;border-radius:8px;padding:12px;margin:10px 0}
-    .question-title{font-weight:700;margin-bottom:8px}
-    .answer-box{min-height:56px;border:1px dashed #bbb;padding:10px;border-radius:6px;background:#fff;margin-bottom:8px}
-    .btns{margin-top:8px}
-    .btn{padding:6px 10px;border-radius:6px;border:none;margin-right:6px;cursor:pointer;color:#fff;font-weight:700}
-    .btn-preview{background:#2196F3}
-    .btn-save{background:#4CAF50}
-    .btn-clear{background:#9E9E9E}
-    .btn-delete{background:#f44336}
-    .preview-input{width:100%;min-height:60px;border:1px solid #999;border-radius:6px;padding:6px;margin-top:6px;font-family:monospace}
-    .preview-output{min-height:40px;border:1px solid #ccc;background:#fafafa;padding:8px;margin-top:6px;border-radius:6px}
-    .small{font-size:13px;color:var(--muted)}
-    .download-wrap{display:flex;justify-content:flex-end;gap:10px;margin-top:8px}
-    @media(max-width:700px){.login-row{flex-direction:column;align-items:center}}
-  </style>
+/* Card (use homepage-like box styling) */ .card { background: var(--box-bg); border: 1px solid var(--box-border); border-radius:10px; padding:14px; margin-bottom:16px; box-shadow:none; } .card .qtitle { color:var(--blue); font-weight:800; margin-bottom:8px; font-size:16px; } .card .sub-q { font-weight:700; color:#0b3b66; margin:8px 0; } .solution-dashed { padding:12px; border-radius:6px; background: var(--box-bg); border:1px solid #ccc; font-weight:700; white-space:pre-wrap; font-family:inherit; font-size:15px; } .solution-plain { padding:10px; background: var(--box-bg); border-radius:6px; margin-top:8px; white-space:pre-wrap; font-family:inherit; font-size:15px; border:1px solid #ccc; font-weight:700; } .boxed-sub { background: var(--box-bg); border:1px solid #ccc; padding:10px; border-radius:6px; margin-bottom:10px; } .small { font-size:13px; color:var(--muted) } .footer-note { text-align:center; margin-top:12px; color:var(--muted); font-size:13px; }
+
+@media(max-width:560px){ .wrap{padding:12px} .qtitle{font-size:15px} } </style>
+
 </head>
-<body>
-  <div class="header-wrapper"><div class="header">Mathematics Hub — Class 10 &nbsp;|&nbsp; Chapter 1: Real Numbers (Ex 1.1)</div></div>
-
-  <div class="container">
-    <div class="login-row" id="loginRow">
-      <input id="loginUser" placeholder="Username" value="admin" />
-      <input id="loginPass" placeholder="Password" type="password" />
-      <button id="loginBtn">Login as Admin</button>
+<body>  <!-- Header (index style) -->  <div class="header-wrapper">
+    <div class="header">
+      Mathematics Hub — Class 10 | Chapter 1: Real Numbers (Ex 1.1)
+      <small>NCERT Exercise 1.1 — step-by-step solutions (Hindi & English)</small>
     </div>
+  </div>  <div class="wrap"><!-- Controls: language dropdown + exercise dropdown -->
+<div class="controls">
+  <label class="small" for="langSelect"><b>Language:</b></label>
+  <select id="langSelect" class="lang-select" onchange="showLang(this.value)">
+    <option value="hindi" selected>हिंदी Medium</option>
+    <option value="english">English Medium</option>
+  </select>
 
-    <div id="adminStatus">✅ Admin login successful</div>
-    <button id="logoutBtn">Logout</button>
+  <label class="small" for="exerciseSelect"><b>Go to:</b></label>
+  <select id="exerciseSelect" class="exercise-select" onchange="gotoEx(this.value)">
+    <option value="exercise1_1_final.html" selected>Exercise 1.1</option>
+    <option value="exercise1_2.html">Exercise 1.2 (placeholder)</option>
+  </select>
+</div>
 
-    <!-- Exercise 1.1 questions (grouped exactly like screenshots) -->
-    <div id="ex11-wrapper">
+<!-- CONTENT: HINDI -->
+<div id="hindi" style="display:block;">
 
-      <!-- Question 1: all prime-factor subparts together -->
-      <div class="question-box" id="q1">
-        <div class="question-title">1. Express each number as a product of its prime factors:
-          <br/>(i) 140 &nbsp;&nbsp; (ii) 156 &nbsp;&nbsp; (iii) 3825 &nbsp;&nbsp; (iv) 5005 &nbsp;&nbsp; (v) 7429
-        </div>
-        <div class="answer-box" id="ans1"></div>
+  <!-- Q1 block -->
+  <div class="card">
+    <div class="qtitle">Q1. निम्नलिखित संख्याओं को उनके अभाज्य गुणनखंडों के रूप में लिखिए</div>
 
-        <textarea id="input1" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here (do not include outer $$ unless desired)"></textarea>
-        <div class="preview-output" id="preview1"></div>
-        <div class="btns">
-          <button class="btn btn-preview" data-q="1">Preview</button>
-          <button class="btn btn-save" data-q="1">Save</button>
-          <button class="btn btn-clear" data-q="1">Clear</button>
-          <button class="btn btn-delete" data-q="1" style="display:none">Delete</button>
-        </div>
-      </div>
+    <div class="boxed-sub">
+      <div class="sub-q">(i) 140</div>
+      <div class="solution-dashed">
 
-      <!-- Question 2: LCM & HCF pairs (subparts together) -->
-      <div class="question-box" id="q2">
-        <div class="question-title">2. Find the LCM and HCF of the following pairs of integers and verify that LCM × HCF = product of the two numbers.
-          <br/>(i) 26 and 91 &nbsp;&nbsp; (ii) 510 and 92 &nbsp;&nbsp; (iii) 336 and 54
-        </div>
-        <div class="answer-box" id="ans2"></div>
+140 ÷ 2 = 70 70 ÷ 2 = 35 35 ÷ 5 = 7 7 ÷ 7 = 1
 
-        <textarea id="input2" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
-        <div class="preview-output" id="preview2"></div>
-        <div class="btns">
-          <button class="btn btn-preview" data-q="2">Preview</button>
-          <button class="btn btn-save" data-q="2">Save</button>
-          <button class="btn btn-clear" data-q="2">Clear</button>
-          <button class="btn btn-delete" data-q="2" style="display:none">Delete</button>
-        </div>
-      </div>
+तो, 140 = 2 × 2 × 5 × 7 = 2² × 5 × 7. </div> </div>
 
-      <!-- Question 3: LCM & HCF of three integers (subparts together) -->
-      <div class="question-box" id="q3">
-        <div class="question-title">3. Find the LCM and HCF of the following integers by applying the prime factorisation method.
-          <br/>(i) 12, 15 and 21 &nbsp;&nbsp; (ii) 17, 23 and 29 &nbsp;&nbsp; (iii) 8, 9 and 25
-        </div>
-        <div class="answer-box" id="ans3"></div>
+<div class="boxed-sub">
+      <div class="sub-q">(ii) 156</div>
+      <div class="solution-dashed">
 
-        <textarea id="input3" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
-        <div class="preview-output" id="preview3"></div>
-        <div class="btns">
-          <button class="btn btn-preview" data-q="3">Preview</button>
-          <button class="btn btn-save" data-q="3">Save</button>
-          <button class="btn btn-clear" data-q="3">Clear</button>
-          <button class="btn btn-delete" data-q="3" style="display:none">Delete</button>
-        </div>
-      </div>
+156 ÷ 2 = 78 78 ÷ 2 = 39 39 ÷ 3 = 13 13 ÷ 13 = 1
 
-      <!-- Question 4 -->
-      <div class="question-box" id="q4">
-        <div class="question-title">4. Given that HCF (306, 657) = 9, find LCM (306, 657).</div>
-        <div class="answer-box" id="ans4"></div>
+तो, 156 = 2 × 2 × 3 × 13 = 2² × 3 × 13. </div> </div>
 
-        <textarea id="input4" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
-        <div class="preview-output" id="preview4"></div>
-        <div class="btns">
-          <button class="btn btn-preview" data-q="4">Preview</button>
-          <button class="btn btn-save" data-q="4">Save</button>
-          <button class="btn btn-clear" data-q="4">Clear</button>
-          <button class="btn btn-delete" data-q="4" style="display:none">Delete</button>
-        </div>
-      </div>
+<div class="boxed-sub">
+      <div class="sub-q">(iii) 3825</div>
+      <div class="solution-dashed">
 
-      <!-- Question 5 -->
-      <div class="question-box" id="q5">
-        <div class="question-title">5. Check whether 6<sup>n</sup> can end with the digit 0 for any natural number n.</div>
-        <div class="answer-box" id="ans5"></div>
+3825 ÷ 5 = 765 765 ÷ 5 = 153 153 ÷ 3 = 51 51 ÷ 3 = 17 17 ÷ 17 = 1
 
-        <textarea id="input5" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
-        <div class="preview-output" id="preview5"></div>
-        <div class="btns">
-          <button class="btn btn-preview" data-q="5">Preview</button>
-          <button class="btn btn-save" data-q="5">Save</button>
-          <button class="btn btn-clear" data-q="5">Clear</button>
-          <button class="btn btn-delete" data-q="5" style="display:none">Delete</button>
-        </div>
-      </div>
+तो, 3825 = 5 × 5 × 3 × 3 × 17 = 3² × 5² × 17. </div> </div>
 
-      <!-- Question 6 -->
-      <div class="question-box" id="q6">
-        <div class="question-title">6. Explain why 7 × 11 × 13 + 13 and 7 × 6 × 5 × 4 × 3 × 2 × 1 + 5 are composite numbers.</div>
-        <div class="answer-box" id="ans6"></div>
+<div class="boxed-sub">
+      <div class="sub-q">(iv) 5005</div>
+      <div class="solution-dashed">
 
-        <textarea id="input6" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
-        <div class="preview-output" id="preview6"></div>
-        <div class="btns">
-          <button class="btn btn-preview" data-q="6">Preview</button>
-          <button class="btn btn-save" data-q="6">Save</button>
-          <button class="btn btn-clear" data-q="6">Clear</button>
-          <button class="btn btn-delete" data-q="6" style="display:none">Delete</button>
-        </div>
-      </div>
+5005 ÷ 5 = 1001 1001 ÷ 7 = 143 143 ÷ 11 = 13 13 ÷ 13 = 1
 
-      <!-- Question 7 -->
-      <div class="question-box" id="q7">
-        <div class="question-title">7. There is a circular path around a sports field. Sonia takes 18 minutes to drive one round of the field, while Ravi takes 12 minutes for the same. Suppose they both start at the same point and at the same time, and go in the same direction. After how many minutes will they meet again at the starting point?</div>
-        <div class="answer-box" id="ans7"></div>
+तो, 5005 = 5 × 7 × 11 × 13. </div> </div>
 
-        <textarea id="input7" class="preview-input" placeholder="Enter LaTeX / HTML+MathJax here"></textarea>
-        <div class="preview-output" id="preview7"></div>
-        <div class="btns">
-          <button class="btn btn-preview" data-q="7">Preview</button>
-          <button class="btn btn-save" data-q="7">Save</button>
-          <button class="btn btn-clear" data-q="7">Clear</button>
-          <button class="btn btn-delete" data-q="7" style="display:none">Delete</button>
-        </div>
-      </div>
+<div class="boxed-sub">
+      <div class="sub-q">(v) 7429</div>
+      <div class="solution-dashed">
 
-    </div>
+7429 ÷ 17 = 437  (क्योंकि 17 × 437 = 7429) 437 ÷ 19 = 23 23 ÷ 23 = 1
 
-    <div class="download-wrap">
-      <button id="downloadPdfBtn" class="btn" style="background:#6a11cb;color:#fff;display:none">Download Ex 1.1 PDF (saved answers)</button>
-    </div>
+तो, 7429 = 17 × 19 × 23. </div> </div>
 
-    <div class="small">Note: Paste only LaTeX fragment (no outer $$) OR paste full HTML with inline `\( ... \)` or `$$ ... $$` if you prefer. Preview will auto-detect and avoid double-wrapping.</div>
+</div> <!-- Q1 end -->
 
-    <!-- Exercise selector (visible to ALL users) - placed ABOVE footer, below the small note -->
-    <div class="download-wrap" style="justify-content:flex-start;gap:10px;margin-top:12px">
-      <select id="exerciseSelect" style="padding:8px 12px;border-radius:6px;border:1px solid #999;font-weight:700;cursor:pointer">
-        <option value="ex1.1" selected>Ex 1.1</option>
-        <option value="ex1.2">Ex 1.2</option>
-      </select>
-      <button id="goExerciseBtn" class="btn" style="background:#6a11cb;color:#fff">Go</button>
-    </div>
+  <!-- Q2 block -->
+  <div class="card">
+    <div class="qtitle">Q2. निम्नलिखित युग्मों का HCF (महत्तम समापवर्तक) और LCM (लघुत्तम समापवर्त्य) ज्ञात करें तथा सत्यापित कीजिए कि LCM × HCF = संख्याओं का गुणनफल</div>
 
-  </div>
+    <div class="boxed-sub">
+      <div class="sub-q">(i) 26 और 91</div>
+      <div class="solution-plain">
 
-  <div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
+अभाज्य गुणनखंड: 26 = 2 × 13 91 = 7 × 13
 
-  <script>
-    const ADMIN_USERNAME = "admin";
-    const ADMIN_PASSWORD = "Dalbir@551"; // same as you provided
+HCF = साझा अभाज्य का न्यूनतम घात = 13. LCM = सभी अभाज्य का अधिकतम घात लेकर (2 × 7 × 13) = 182.
 
-    function isAdmin(){ return localStorage.getItem("isAdmin")==="true"; }
-    function setAdmin(flag){
-      if(flag) localStorage.setItem("isAdmin","true");
-      else localStorage.removeItem("isAdmin");
-      updateUI();
+सत्यापन: LCM × HCF = 182 × 13 = 2366. उत्पाद: 26 × 91 = 2366. ⇒ सत्य। </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(ii) 510 और 92</div>
+      <div class="solution-plain">
+
+अभाज्य गुणनखंड: 510 = 2 × 3 × 5 × 17 92  = 2² × 23
+
+HCF = साझा अभाज्य न्यूनतम घात = 2. LCM = 2² × 3 × 5 × 17 × 23.
+
+गणना: 2² = 4 → 4×3 = 12 → 12×5 = 60 → 60×17 = 1020 → 1020×23 = 23460.
+
+LCM = 23460, HCF = 2.
+
+सत्यापन: 23460 × 2 = 46920 = 510 × 92. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(iii) 336 और 54</div>
+      <div class="solution-plain">
+
+अभाज्य गुणनखंड: 336 = 2⁴ × 3 × 7  (क्योंकि 336 = 16 × 21) 54  = 2 × 3³
+
+HCF = 2^{min(4,1)} × 3^{min(1,3)} = 2 × 3 = 6. LCM = 2⁴ × 3³ × 7.
+
+गणना: 2⁴ =16, 3³ =27 ⇒ 16×27 = 432 ⇒ 432×7 = 3024.
+
+LCM = 3024, HCF = 6.
+
+सत्यापन: 3024 × 6 = 18144 = 336 × 54. </div> </div>
+
+</div> <!-- Q2 end -->
+
+  <!-- Q3 block -->
+  <div class="card">
+    <div class="qtitle">Q3. प्राइम-फैक्टराइज़ेशन द्वारा तीन संख्याओं का LCM तथा HCF ज्ञात कीजिए</div>
+
+    <div class="boxed-sub">
+      <div class="sub-q">(i) 12, 15 तथा 21</div>
+      <div class="solution-plain">
+
+12 = 2² × 3 15 = 3 × 5 21 = 3 × 7
+
+HCF = साझा prime (न्यूनतम घात) = 3. LCM = 2² × 3 × 5 × 7 = 420. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(ii) 17, 23 तथा 29</div>
+      <div class="solution-plain">
+
+ये तीनों अभाज्य (prime) हैं ⇒ HCF = 1. LCM = 17 × 23 × 29 = 11339. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(iii) 8, 9 तथा 25</div>
+      <div class="solution-plain">
+
+8 = 2³, 9 = 3², 25 = 5².
+
+कोई साझा अभाज्य नहीं ⇒ HCF = 1. LCM = 2³ × 3² × 5² = 1800. </div> </div>
+
+</div> <!-- Q3 end -->
+
+  <!-- Q4 -->
+  <div class="card">
+    <div class="qtitle">Q4. दिया गया है HCF(306, 657) = 9, तो LCM(306, 657) क्या होगा?</div>
+    <div class="solution-dashed">
+
+सूत्र: HCF × LCM = संख्याओं का गुणनफल।
+
+LCM = (306 × 657) ÷ 9.
+
+306 ÷ 9 = 34 ⇒ LCM = 34 × 657 = 22338.
+
+अतः LCM(306,657) = 22338. </div> </div>
+
+<!-- Q5 -->
+  <div class="card">
+    <div class="qtitle">Q5. क्या 6ⁿ कभी अंक 0 पर समाप्त हो सकता है (किसी प्राकृतिक n के लिए)?</div>
+    <div class="solution-dashed">
+
+किसी संख्या के 0 पर समाप्त होने के लिए वह 10 से विभाज्य होनी चाहिए ⇒ उसमें कम-से-कम एक गुणा 2 और एक गुणा 5 मौजूद होना चाहिए।
+
+6ⁿ = 2ⁿ × 3ⁿ — इसमें कभी भी 5 का गुणांक नहीं आता।
+
+इसलिए 6ⁿ किसी भी प्राकृतिक n के लिए 0 पर समाप्त नहीं होगा।
+
+उत्तर: नहीं। </div> </div>
+
+<!-- Q6 -->
+  <div class="card">
+    <div class="qtitle">Q6. बताइए कि निम्नанк क्यों समिश्र (composite) हैं</div>
+
+    <div class="boxed-sub">
+      <div class="sub-q">(a) 7 × 11 × 13 + 13</div>
+      <div class="solution-plain">
+
+13 को बाहर निकालें: 7 × 11 × 13 + 13 = 13(7 × 11 + 1) = 13(77 + 1) = 13 × 78.
+
+यह स्पष्ट रूप से दो बड़े धनात्मक पूर्णांकों का गुणन है ⇒ समिश्र (composite). </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(b) 7! + 5</div>
+      <div class="solution-plain">
+
+स्पष्ट और संख्यात्मक विधि:
+
+7! = 5040. अतः 7! + 5 = 5040 + 5 = 5045.
+
+5045 5 से विभाज्य है (क्योंकि अंतिम अंक 5 है): 5045 ÷ 5 = 1009.
+
+इस प्रकार 5045 = 5 × 1009 और 1009 > 1 ⇒ 5045 समिश्र है।
+
+(यदि परीक्षण करें तो 1009 एक अभाज्य है, अतः पूर्ण गुणन 5 × 1009 है।) </div> </div>
+
+</div> <!-- Q6 end -->
+
+  <!-- Q7 -->
+  <div class="card">
+    <div class="qtitle">Q7. Sonia (18 मिनट/राउंड) और Ravi (12 मिनट/राउंड) — वे कितने मिनट के बाद फिर से starting point पर साथ मिलेंगे?</div>
+    <div class="solution-dashed">
+
+आवश्यक समय = LCM(18, 12).
+
+18 = 2 × 3² 12 = 2² × 3
+
+LCM = 2^{max(1,2)} × 3^{max(2,1)} = 2² × 3² = 4 × 9 = 36.
+
+अतः वे 36 मिनट बाद starting point पर फिर साथ मिलेंगे। </div> </div>
+
+</div> <!-- end hindi -->
+
+<!-- CONTENT: ENGLISH -->
+<div id="english" style="display:none;">
+
+  <div class="card">
+    <div class="qtitle">Q1. Express each number as a product of its prime factors</div>
+
+    <div class="boxed-sub">
+      <div class="sub-q">(i) 140</div>
+      <div class="solution-dashed">
+
+140 ÷ 2 = 70 70 ÷ 2 = 35 35 ÷ 5 = 7 7 ÷ 7 = 1
+
+So, 140 = 2 × 2 × 5 × 7 = 2² × 5 × 7. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(ii) 156</div>
+      <div class="solution-dashed">
+
+156 ÷ 2 = 78 78 ÷ 2 = 39 39 ÷ 3 = 13 13 ÷ 13 = 1
+
+So, 156 = 2² × 3 × 13. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(iii) 3825</div>
+      <div class="solution-dashed">
+
+3825 ÷ 5 = 765 765 ÷ 5 = 153 153 ÷ 3 = 51 51 ÷ 3 = 17 17 ÷ 17 = 1
+
+So, 3825 = 3² × 5² × 17. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(iv) 5005</div>
+      <div class="solution-dashed">
+
+5005 ÷ 5 = 1001 1001 ÷ 7 = 143 143 ÷ 11 = 13 13 ÷ 13 = 1
+
+So, 5005 = 5 × 7 × 11 × 13. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(v) 7429</div>
+      <div class="solution-dashed">
+
+7429 ÷ 17 = 437 (since 17×437 = 7429) 437 ÷ 19 = 23 23 ÷ 23 = 1
+
+So, 7429 = 17 × 19 × 23. </div> </div>
+
+</div> <!-- Q1 EN -->
+
+  <div class="card">
+    <div class="qtitle">Q2. Find HCF and LCM of the pairs and verify that LCM × HCF = product of the two numbers</div>
+
+    <div class="boxed-sub">
+      <div class="sub-q">(i) 26 and 91</div>
+      <div class="solution-plain">
+
+Prime factors: 26 = 2 × 13 91 = 7 × 13
+
+HCF = 13, LCM = 182.
+
+Verification: 182 × 13 = 2366 = 26 × 91. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(ii) 510 and 92</div>
+      <div class="solution-plain">
+
+Prime factors: 510 = 2 × 3 × 5 × 17 92  = 2² × 23
+
+HCF = 2, LCM = 23460.
+
+Verification: 23460 × 2 = 46920 = 510 × 92. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(iii) 336 and 54</div>
+      <div class="solution-plain">
+
+Prime factors: 336 = 2⁴ × 3 × 7 54  = 2 × 3³
+
+HCF = 6, LCM = 3024.
+
+Verification: 3024 × 6 = 18144 = 336 × 54. </div> </div>
+
+</div> <!-- Q2 EN -->
+
+  <div class="card">
+    <div class="qtitle">Q3. LCM and HCF of three integers (by prime factorisation)</div>
+
+    <div class="boxed-sub">
+      <div class="sub-q">(i) 12, 15 and 21</div>
+      <div class="solution-plain">
+
+12 = 2² × 3 15 = 3 × 5 21 = 3 × 7
+
+HCF = 3, LCM = 420. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(ii) 17, 23 and 29</div>
+      <div class="solution-plain">
+
+All three are prime ⇒ HCF = 1, LCM = 17 × 23 × 29 = 11339. </div> </div>
+
+<div class="boxed-sub">
+      <div class="sub-q">(iii) 8, 9 and 25</div>
+      <div class="solution-plain">
+
+8 = 2³, 9 = 3², 25 = 5²
+
+HCF = 1, LCM = 2³ × 3² × 5² = 1800. </div> </div>
+
+</div> <!-- Q3 EN -->
+
+  <div class="card">
+    <div class="qtitle">Q4. Given HCF(306, 657) = 9, find LCM(306, 657)</div>
+    <div class="solution-dashed">
+
+HCF × LCM = product.
+
+LCM = (306 × 657) / 9 = 22338. </div> </div>
+
+<div class="card">
+    <div class="qtitle">Q5. Can 6ⁿ end with digit 0 for any natural n?</div>
+    <div class="solution-dashed">
+
+6ⁿ = 2ⁿ × 3ⁿ. Since there is no factor 5, 6ⁿ can never end with digit 0.
+
+Answer: No. </div> </div>
+
+<div class="card">
+    <div class="qtitle">Q6. Why are these numbers composite?</div>
+    <div class="solution-plain">
+
+(a) 7 × 11 × 13 + 13 = 13 × 78 ⇒ composite.
+
+(b) 7! + 5 = 5045 = 5 × 1009 ⇒ composite. </div> </div>
+
+<div class="card">
+    <div class="qtitle">Q7. Sonia (18 min/round) and Ravi (12 min/round) — when will they meet again at the starting point?</div>
+    <div class="solution-dashed">
+
+LCM(18,12) = 36 minutes. </div> </div>
+
+</div> <!-- end english -->
+
+<div class="footer-note">© 2025 Mathematics Hub — Exercise 1.1 </div>
+
+  </div> <!-- wrap -->  <!-- Footer (index style) -->  <div class="footer-wrapper">
+    <div class="footer-inner">© 2025 Mathematics Hub</div>
+  </div><script>
+  function showLang(val){
+    if(val === 'hindi'){
+      document.getElementById('hindi').style.display = 'block';
+      document.getElementById('english').style.display = 'none';
+    } else {
+      document.getElementById('hindi').style.display = 'none';
+      document.getElementById('english').style.display = 'block';
     }
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 
-    function updateUI(){
-      document.getElementById("adminStatus").style.display = isAdmin() ? "block" : "none";
-      document.getElementById("logoutBtn").style.display = isAdmin() ? "block" : "none";
-      // show admin controls only if admin
-      document.querySelectorAll(".preview-input,.btns").forEach(el=>{
-        el.style.display = isAdmin() ? "block" : "none";
-      });
-      // show saved answers (always visible to users)
-      document.querySelectorAll(".answer-box").forEach(el=>{
-        el.style.display = "block";
-      });
-      // show delete + download when admin
-      document.querySelectorAll(".btn-delete").forEach(b=>{
-        b.style.display = isAdmin() ? "inline-block" : "none";
-      });
-      document.getElementById("downloadPdfBtn").style.display = isAdmin() ? "inline-block" : "none";
-      // hide login row when admin
-      document.getElementById("loginRow").style.display = isAdmin() ? "none" : "flex";
+  function gotoEx(v){
+    if(!v) return;
+    if(v.indexOf('exercise1_2')>-1){
+      alert('Exercise 1.2 placeholder — upload or create the file.');
+      return;
     }
-
-    // initial UI
-    updateUI();
-
-    // load saved answers from localStorage
-    function loadSaved(){
-      for(let i=1;i<=7;i++){
-        const saved = localStorage.getItem("ex1_1_ans"+i);
-        if(saved){
-          document.getElementById("ans"+i).innerHTML = saved;
-          // typeset that ans area
-          MathJax.typesetPromise([document.getElementById("ans"+i)]);
-        } else {
-          document.getElementById("ans"+i).innerHTML = ""; 
-        }
-      }
+    if(v !== location.pathname.split('/').pop()){
+      location.href = v;
     }
-    loadSaved();
-
-    // login
-    document.getElementById("loginBtn").addEventListener("click", ()=>{
-      const u = document.getElementById("loginUser").value.trim();
-      const p = document.getElementById("loginPass").value;
-      if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){
-        setAdmin(true);
-        alert("Admin login successful");
-      } else {
-        alert("Invalid credentials");
-      }
-    });
-
-    // logout
-    document.getElementById("logoutBtn").addEventListener("click", ()=>{
-      setAdmin(false);
-      alert("Logged out");
-    });
-
-    // event delegation for preview/save/clear/delete
-    document.addEventListener("click", (e)=>{
-      const t = e.target;
-      if(t.classList.contains("btn-preview")){
-        if(!isAdmin()) return alert("Admin only");
-        const q = t.getAttribute("data-q");
-        doPreview(q);
-      } else if(t.classList.contains("btn-save")){
-        if(!isAdmin()) return alert("Admin only");
-        const q = t.getAttribute("data-q");
-        doSave(q);
-      } else if(t.classList.contains("btn-clear")){
-        if(!isAdmin()) return alert("Admin only");
-        const q = t.getAttribute("data-q");
-        document.getElementById("input"+q).value = "";
-        document.getElementById("preview"+q).innerHTML = "";
-      } else if(t.classList.contains("btn-delete")){
-        if(!isAdmin()) return alert("Admin only");
-        const q = t.getAttribute("data-q");
-        if(confirm("Delete saved answer for question "+q+"?")){
-          localStorage.removeItem("ex1_1_ans"+q);
-          document.getElementById("ans"+q).innerHTML = "";
-          document.getElementById("preview"+q).innerHTML = "";
-        }
-      }
-    });
-
-    // preview logic: wrap only if needed
-    function doPreview(q){
-      const input = document.getElementById("input"+q).value.trim();
-      const preview = document.getElementById("preview"+q);
-      if(!input){
-        preview.innerHTML = "";
-        return;
-      }
-      // if input already seems to be full HTML or already has delimiters, don't auto-wrap
-      const startsWithDelim = input.startsWith("$$") || input.startsWith("\\[") || input.startsWith("<div") || input.startsWith("<p") || input.startsWith("<span");
-      const containsInline = input.includes("\\(") || input.includes("\\[") || input.includes("$$");
-      if(startsWithDelim || containsInline){
-        preview.innerHTML = input;
-      } else {
-        // wrap in display math
-        preview.innerHTML = "$$" + input + "$$";
-      }
-      // typeset preview only
-      MathJax.typesetPromise([preview]).catch(function(err){ console.log("MathJax error:",err); });
-    }
-
-    // save preview output into localStorage and show in ans box
-    function doSave(q){
-      const previewHtml = document.getElementById("preview"+q).innerHTML;
-      if(!previewHtml){
-        alert("Nothing to save. Preview first.");
-        return;
-      }
-      localStorage.setItem("ex1_1_ans"+q, previewHtml);
-      document.getElementById("ans"+q).innerHTML = previewHtml;
-      MathJax.typesetPromise([document.getElementById("ans"+q)]);
-      alert("Saved answer for question " + q);
-    }
-
-    // allow Save buttons if present (create them)
-    // (we included Save in markup but left action to be connected)
-    document.querySelectorAll(".btn-save").forEach(btn=>{
-      btn.addEventListener("click", (e)=>{
-        // handled by delegated listener above (keeps behavior uniform)
-      });
-    });
-
-    // Download saved answers as PDF (images)
-    document.getElementById("downloadPdfBtn").addEventListener("click", async ()=>{
-      const savedIndices = [];
-      for(let i=1;i<=7;i++){
-        if(localStorage.getItem("ex1_1_ans"+i)) savedIndices.push(i);
-      }
-      if(savedIndices.length===0){ alert("No saved answers to download."); return; }
-
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({unit:'pt',format:'a4'});
-      let first = true;
-      for(const idx of savedIndices){
-        // capture the question box (question title + answer box)
-        const el = document.getElementById("q"+idx);
-        // temporarily show the saved answer if not visible
-        // create clone to ensure consistent rendering
-        const clone = el.cloneNode(true);
-        // remove admin inputs from clone (so PDF shows only question + saved answer)
-        clone.querySelectorAll(".preview-input,.btns,.preview-output").forEach(n=>n.remove());
-        // place clone off-screen to render
-        clone.style.position = "fixed";
-        clone.style.left = "-2000px";
-        clone.style.top = "0";
-        document.body.appendChild(clone);
-        // ensure MathJax processed inside clone (set inner from saved)
-        const ansSaved = localStorage.getItem("ex1_1_ans"+idx);
-        const ansBox = clone.querySelector("#ans"+idx);
-        if(ansBox) ansBox.innerHTML = ansSaved || "";
-        await MathJax.typesetPromise([clone]).catch(()=>{});
-        const canvas = await html2canvas(clone, {scale:2});
-        const imgData = canvas.toDataURL("image/png");
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth() - 40; // margins
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        if(!first) pdf.addPage();
-        pdf.addImage(imgData, "PNG", 20, 20, pdfWidth, pdfHeight);
-        first = false;
-        document.body.removeChild(clone);
-      }
-      pdf.save("Ex1_1_Real_Numbers.pdf");
-    });
-
-    // Exercise selector logic (visible to all users)
-    document.getElementById("goExerciseBtn").addEventListener("click", ()=>{
-      const ex = document.getElementById("exerciseSelect").value;
-      if(ex === "ex1.1"){
-        location.reload(); // reload same page
-      } else if(ex === "ex1.2"){
-        alert("Ex 1.2 will be live soon!");
-        // later you can use: window.location.href = "ex1_2.html";
-      }
-    });
-
-    // if admin persisted, show controls
-    if(isAdmin()) updateUI();
-
-  </script>
-</body>
-  </html>
+  }
+</script></body>
+</html>
