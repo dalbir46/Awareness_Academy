@@ -44,6 +44,26 @@ select.lang-select, select.exercise-select { padding:8px 10px; border-radius:6px
 .footer-note { text-align:center; margin-top:12px; color:var(--muted); font-size:13px; }
 
 @media(max-width:560px){ .wrap{padding:12px} .qtitle{font-size:15px} } 
+<style>
+  .controls {
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+  }
+
+  select.lang-select, 
+  select.exercise-select {
+    padding:8px 10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-weight:700;
+    min-width:180px; /* ✅ dono ka ek hi width */
+    text-align:center; /* ✅ text centre me */
+  }
+</style>w
 </style>
 
 </head>
