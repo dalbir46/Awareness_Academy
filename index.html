@@ -119,20 +119,30 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .pinned { border-left:4px solid gold; padding-left:8px; }
 .highlight-admin { background: #fffbe6; border:1px solid #ffe58f; }
 
+/* Theme button style: same look as logoutBtn (visible to everyone) */
+#themeBtn {
+  background-color: #555;
+  color: #fff;
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: auto;
+  height: auto;
+  display: inline-block;
+}
+#themeBtn:hover { filter: brightness(0.85); }
+
 /* Dark mode */
 body.dark { background:#0f1724; color:#d1d5db; }
 body.dark .box, body.dark .box-welcome, body.dark .header, body.dark .footer-inner { background:#0b1220; color:#d1d5db; border-color:#223247; }
 body.dark .msg .bubble { background:#07203a; color:#d1d5db; border-color:#12324a; }
-.theme-toggle { position: fixed; bottom: 12px; right: 12px; z-index:999; padding:8px 10px; border-radius:8px; background:#333; color:#fff; font-size:14px; cursor:pointer; }
 
 /* Search bar */
 #searchBox { width:100%; padding:6px; margin-bottom:6px; border-radius:4px; border:1px solid #ccc; }
 
 /* Typing indicator */
 #typingIndicator { font-size:12px; color:#666; margin-bottom:6px; }
-
-/* Leaderboard */
-#leaderboard { margin-top:8px; border:1px dashed #ccc; padding:6px; border-radius:6px; background:#fff; }
 
 /* Unread count badge */
 #unreadBadge { background:#e53935; color:#fff; padding:3px 7px; border-radius:12px; margin-left:6px; font-size:12px; display:none; }
@@ -178,7 +188,7 @@ body.dark .msg .bubble { background:#07203a; color:#d1d5db; border-color:#12324a
   <div style="display:flex;gap:8px;margin-bottom:6px;">
     <input type="text" id="tagFilter" placeholder="Filter by tag e.g. #doubt" style="flex:1;padding:6px;border:1px solid #ffa500;border-radius:4px;">
     <button class="small-btn" id="clearFilters" title="Clear filters">Clear</button>
-    <button class="small-btn" id="toggleTheme" title="Toggle dark/light">Theme</button>
+    <button id="themeBtn" title="Toggle dark/light">Theme</button>
   </div>
 
   <div id="typingIndicator"></div>
@@ -207,9 +217,6 @@ body.dark .msg .bubble { background:#07203a; color:#d1d5db; border-color:#12324a
 
   <div class="send-wrapper">
     <button id="sendBtn">Send</button>
-    <button id="copyAllBtn" class="small-btn" title="Copy all messages">Copy All</button>
-    <button id="soundToggle" class="small-btn" title="Toggle sound">🔔</button>
-    <button id="leaderboardBtn" class="small-btn" title="Show Leaderboard">🏆</button>
   </div>
 
   <div class="send-wrapper">
@@ -300,12 +307,10 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db=firebase.database();
 
-/* Constants */
+/* Constants & State */
 const ADMIN_PASSWORD="Dalbir@551";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
-
-/* State */
-let slowModeSeconds = 0; // admin adjustable
+let slowModeSeconds = 0;
 let lastSentAt = {};
 let blockedNames = JSON.parse(localStorage.getItem("blockedNames")||"[]");
 let unreadCount = 0;
@@ -313,13 +318,11 @@ let soundEnabled = true;
 let currentUserName = localStorage.getItem("lastName") || "";
 document.getElementById("username").value = currentUserName;
 
-/* simple profanity list (expand as needed) */
+/* Profanity & Math */
 const profanityList = ["badword1","badword2","arse"];
-
-/* allowed chars for safe math-eval */
 const MATH_ALLOWED = /^[0-9+\-*/().\s%^]*$/;
 
-/* Utility functions */
+/* Utilities */
 function escapeHtml(str){ if(str===undefined || str===null) return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
 function isAdminAuthenticated(){ return sessionStorage.getItem("isAdmin")==="true"; }
 function setAdminAuthenticated(flag){ if(flag) sessionStorage.setItem("isAdmin","true"); else sessionStorage.removeItem("isAdmin"); updateAdminUI(); }
@@ -331,8 +334,6 @@ function updateAdminUI(){
   document.getElementById("pinBtn").style.display=isAdminAuthenticated()?"inline-block":"none";
   updateCheckboxes();
 }
-
-/* timestamp formatting */
 function formatDateTime(ts){
   const d = new Date(ts);
   const diff = Date.now()-ts;
@@ -344,8 +345,6 @@ function formatDateTime(ts){
   hrs=hrs%12||12;
   return `${day}/${month}/${year} ${hrs}:${mins} ${ampm}`;
 }
-
-/* profanity filter */
 function filterProfanity(text){
   let out = text;
   profanityList.forEach(w => {
@@ -354,43 +353,30 @@ function filterProfanity(text){
   });
   return out;
 }
-
-/* markdown -> use marked.js, but sanitize a bit */
 function renderMarkdown(text){
   if(!text) return "";
   let md = marked.parse(text);
-  // minimal sanitization: allow <a>, <strong>, <em>, <code>, <pre>, <p>, <br>, <ul>, <ol>, <li>, <img>
-  // marked already returns safe HTML for our purposes; we still escape user inputs earlier.
   return md;
 }
-
-/* linkify: convert https/http/www to clickable links and open new tab */
 function linkify(text){
   if(!text) return "";
-  // add http if starts with www.
   text = text.replace(/\bwww\.[^\s]+/gi, (m)=>"http://"+m);
-  // wrap urls with anchors
   return text.replace(/(https?:\/\/[^\s<]+)/gi, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#3366CC;">$1</a>');
 }
-
-/* safe math eval for solver */
 function safeEvalMath(expr){
   expr = expr.replace(/\^/g,'**');
   if(!MATH_ALLOWED.test(expr)) return null;
   try{
-    // eslint-disable-next-line no-eval
     let val = eval(expr);
     if(typeof val === "number" && isFinite(val)) return val;
   }catch(e){ return null; }
   return null;
 }
-
-/* play sound */
 const ping = new Audio();
 ping.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
 function playPing(){ if(soundEnabled) ping.play().catch(()=>{}); }
 
-/* imgbb upload */
+/* Imgbb upload */
 async function uploadToImgbb(file){
   return new Promise((resolve,reject)=>{
     const reader=new FileReader();
@@ -408,7 +394,7 @@ async function uploadToImgbb(file){
   });
 }
 
-/* ---------- MESSAGE RENDERING & INTERACTION ---------- */
+/* ---------- MESSAGE RENDERING ---------- */
 async function addMessageToDOM(key,data){
   if(blockedNames.includes(data.name)) return;
 
@@ -429,23 +415,21 @@ async function addMessageToDOM(key,data){
   const bubble = document.createElement("div");
   bubble.className = "bubble user-bubble";
 
-  // checkbox for admin
   let checkboxHtml="";
   if(isAdminAuthenticated()){
     checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;
   }
 
-  // username with admin badge
   const unameSpan = `<span class="username ${data.admin?"admin":""}">${escapeHtml(data.name||"Guest")}${data.admin?" ✅":""}</span>`;
 
-  // markdown + profanity + linkify + mentions highlight
-  let bodyTextRaw = data.message || "";
-  let filtered = filterProfanity(bodyTextRaw);
-  let md = renderMarkdown(filtered);
-  md = linkify(md); // ensure links clickable
-  md = md.replace(/@([A-Za-z0-9_-]+)/g, '<span class="mention">@$1</span>');
+  // message body: profanity -> markdown -> linkify -> mentions
+  let bodyText = data.message || "";
+  bodyText = filterProfanity(bodyText);
+  bodyText = renderMarkdown(bodyText);
+  bodyText = linkify(bodyText);
+  bodyText = bodyText.replace(/@([A-Za-z0-9_-]+)/g, '<span class="mention">@$1</span>');
 
-  // reply info
+  // reply
   let replyHtml = "";
   if(data.replyToName){
     replyHtml = `<div style="font-size:13px;color:#666;margin-bottom:6px;">Reply to <strong>${escapeHtml(data.replyToName)}</strong>: ${escapeHtml(truncate(data.replyToText||"",80))}</div>`;
@@ -463,8 +447,8 @@ async function addMessageToDOM(key,data){
     }
   }
 
-  // reactions summary
-  const likes = data.likes || 0;
+  // reactions & likes
+    const likes = data.likes || 0;
   const reactions = data.reactions || {};
   let reactionsHtml = `<div class="reactions">`;
   for(const r in reactions){
@@ -472,114 +456,51 @@ async function addMessageToDOM(key,data){
   }
   reactionsHtml += `</div>`;
 
-  const meta = `<div class="meta">${formatDateTime(data.time)} ${data.location?("<span class='loc'>"+escapeHtml(data.location)+"</span>"):""}` +
-               `${(data.seenBy && data.seenBy.admin) ? " • Seen by admin" : ""}</div>`;
+  const meta = `<div class="meta">${formatDateTime(data.time)} ${data.location?("<span class='loc'>"+escapeHtml(data.location)+"</span>"):""}${(data.seenBy && data.seenBy.admin) ? " • Seen by admin" : ""}</div>`;
 
-  bubble.innerHTML = `${checkboxHtml}${unameSpan} ${replyHtml}<div class="msg-content">${md}</div>${mediaHtml}${reactionsHtml}${meta}`;
+  bubble.innerHTML = `${checkboxHtml}${unameSpan} ${replyHtml}<div class="msg-content">${bodyText}</div>${mediaHtml}${reactionsHtml}${meta}`;
 
   // controls
   const ctrl = document.createElement("div");
   ctrl.className = "controls";
 
-  const likeBtn = document.createElement("button");
-  likeBtn.className = "small-btn";
-  likeBtn.innerHTML = `❤️ <span class="like-count">${likes}</span>`;
-  likeBtn.title = "Like";
-  likeBtn.onclick = ()=> { likeMessage(key); };
-
-  const reactBtn = document.createElement("button");
-  reactBtn.className = "small-btn";
-  reactBtn.innerHTML = "🙂";
-  reactBtn.title = "React";
-  reactBtn.onclick = ()=> { showReactPrompt(key); };
-
-  const copyBtn = document.createElement("button");
-  copyBtn.className = "small-btn";
-  copyBtn.innerHTML = "📋";
-  copyBtn.title = "Copy message";
-  copyBtn.onclick = ()=> {
-    navigator.clipboard.writeText(data.message || "").then(()=>{ alert("Copied"); });
-  };
-
-  const replyBtn = document.createElement("button");
-  replyBtn.className = "small-btn";
-  replyBtn.innerHTML = "↩";
-  replyBtn.title = "Reply";
-  replyBtn.onclick = ()=> {
+  const likeBtn = document.createElement("button"); likeBtn.className="small-btn"; likeBtn.innerHTML=`❤️ <span class="like-count">${likes}</span>`;
+  likeBtn.title="Like"; likeBtn.onclick = ()=> { db.ref("shoutbox/"+key+"/likes").transaction(curr=> (curr||0)+1); };
+  const reactBtn = document.createElement("button"); reactBtn.className="small-btn"; reactBtn.innerHTML="🙂"; reactBtn.title="React"; reactBtn.onclick = ()=> { showReactPrompt(key); };
+  const copyBtn = document.createElement("button"); copyBtn.className="small-btn"; copyBtn.innerHTML="📋"; copyBtn.title="Copy"; copyBtn.onclick = ()=> { navigator.clipboard.writeText(data.message||"").then(()=>alert("Copied")); };
+  const replyBtn = document.createElement("button"); replyBtn.className="small-btn"; replyBtn.innerHTML="↩"; replyBtn.title="Reply"; replyBtn.onclick = ()=> {
     document.getElementById("message").value = `@${data.name} `;
     document.getElementById("message").focus();
     document.getElementById("message").dataset.replyToKey = key;
     document.getElementById("message").dataset.replyToName = data.name;
     document.getElementById("message").dataset.replyToText = data.message;
   };
-
-  const delBtn = document.createElement("button");
-  delBtn.className = "small-btn";
-  delBtn.innerHTML = "🗑";
-  delBtn.title = "Delete (if your message)";
-  delBtn.onclick = ()=> {
+  const delBtn = document.createElement("button"); delBtn.className="small-btn"; delBtn.innerHTML="🗑"; delBtn.title="Delete (if your message)"; delBtn.onclick = ()=> {
     const myName = (document.getElementById("username").value||"").trim();
-    if(myName && myName === data.name){
-      if(confirm("Delete your message?")) { db.ref("shoutbox/"+key).remove(); const el = document.querySelector(".msg[data-key='"+key+"']"); if(el) el.remove(); }
-    } else alert("You can only delete your own messages (same name).");
+    if(myName && myName === data.name){ if(confirm("Delete your message?")){ db.ref("shoutbox/"+key).remove(); const el=document.querySelector(".msg[data-key='"+key+"']"); if(el) el.remove(); } } else alert("You can only delete your own messages (same name).");
   };
-
-  const reportBtn = document.createElement("button");
-  reportBtn.className = "small-btn";
-  reportBtn.innerHTML = "⚠";
-  reportBtn.title = "Report message";
-  reportBtn.onclick = ()=> {
-    if(confirm("Report this message to admin?")){
-      db.ref("reports").push({ key, reportedAt: Date.now(), by: document.getElementById("username").value||"Guest", message: data.message||"" });
-      alert("Reported. Admin will review.");
-    }
+  const reportBtn = document.createElement("button"); reportBtn.className="small-btn"; reportBtn.innerHTML="⚠"; reportBtn.title="Report"; reportBtn.onclick = ()=> {
+    if(confirm("Report this message to admin?")){ db.ref("reports").push({ key, reportedAt: Date.now(), by: document.getElementById("username").value||"Guest", message: data.message||"" }); alert("Reported. Admin will review."); }
   };
-
-  const blockBtn = document.createElement("button");
-  blockBtn.className = "small-btn";
-  blockBtn.innerHTML = "🚫";
-  blockBtn.title = "Block user locally";
-  blockBtn.onclick = ()=> {
-    if(confirm("Block "+data.name+" locally?")){
-      blockedNames.push(data.name);
-      localStorage.setItem("blockedNames", JSON.stringify(blockedNames));
-      document.querySelectorAll(".msg").forEach(m=>{ if(m.querySelector(".username") && m.querySelector(".username").textContent.trim().startsWith(data.name)) m.remove(); });
-    }
+  const blockBtn = document.createElement("button"); blockBtn.className="small-btn"; blockBtn.innerHTML="🚫"; blockBtn.title="Block"; blockBtn.onclick = ()=> {
+    if(confirm("Block "+data.name+" locally?")){ blockedNames.push(data.name); localStorage.setItem("blockedNames", JSON.stringify(blockedNames)); document.querySelectorAll(".msg").forEach(m=>{ if(m.querySelector(".username") && m.querySelector(".username").textContent.trim().startsWith(data.name)) m.remove(); }); }
   };
+  const pinBtn = document.createElement("button"); pinBtn.className="small-btn"; pinBtn.innerHTML="📌"; pinBtn.title="Pin (admin)"; pinBtn.style.display=isAdminAuthenticated()?"inline-block":"none"; pinBtn.onclick = async ()=> { if(!isAdminAuthenticated()) return alert("Admin only"); const snap = await db.ref("shoutbox/"+key).once("value"); const cur = snap.val()||{}; await db.ref("shoutbox/"+key).update({ pinned: !cur.pinned }); };
 
-  const pinBtn = document.createElement("button");
-  pinBtn.className = "small-btn";
-  pinBtn.innerHTML = "📌";
-  pinBtn.title = "Pin (admin)";
-  pinBtn.style.display = isAdminAuthenticated()?"inline-block":"none";
-  pinBtn.onclick = async ()=> {
-    if(!isAdminAuthenticated()) return alert("Admin only");
-    const cur = !!data.pinned;
-    await db.ref("shoutbox/"+key).update({ pinned: !cur });
-  };
-
-  ctrl.appendChild(likeBtn);
-  ctrl.appendChild(reactBtn);
-  ctrl.appendChild(copyBtn);
-  ctrl.appendChild(replyBtn);
-  ctrl.appendChild(delBtn);
-  ctrl.appendChild(reportBtn);
-  ctrl.appendChild(blockBtn);
-  ctrl.appendChild(pinBtn);
+  ctrl.appendChild(likeBtn); ctrl.appendChild(reactBtn); ctrl.appendChild(copyBtn); ctrl.appendChild(replyBtn);
+  ctrl.appendChild(delBtn); ctrl.appendChild(reportBtn); ctrl.appendChild(blockBtn); ctrl.appendChild(pinBtn);
 
   bubble.appendChild(ctrl);
   div.appendChild(bubble);
 
   document.getElementById("messages").prepend(div);
 
-  // render math (MathJax)
   if(window.MathJax) MathJax.typesetPromise && MathJax.typesetPromise();
 
   // unread & notifications
-  if(document.hidden){ unreadCount++; showUnreadBadge(); if(soundEnabled) playPing(); showBrowserNotification(data); }
-  else { playPing(); }
+  if(document.hidden){ unreadCount++; showUnreadBadge(); if(soundEnabled) playPing(); showBrowserNotification(data); } else playPing();
 
-  // attach reaction click handlers (delegated)
+  // reaction click
   div.querySelectorAll(".reaction").forEach(rEl=>{
     rEl.onclick = ()=> {
       const react = rEl.getAttribute("data-reaction");
@@ -588,52 +509,17 @@ async function addMessageToDOM(key,data){
   });
 }
 
-/* helper functions */
+/* helpers */
 function truncate(s,n){ if(!s) return ""; return s.length>n?s.slice(0,n)+"...":s; }
-function stringToColor(str){
-  let hash=0; for(let i=0;i<str.length;i++) hash = str.charCodeAt(i) + ((hash<<5)-hash);
-  const c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
-  return "#"+("00000".substring(0,6-c.length)+c);
-}
-function updateCheckboxes(){
-  document.querySelectorAll(".msg").forEach(msg=>{
-    let chk=msg.querySelector(".msgCheck");
-    if(isAdminAuthenticated()){
-      if(!chk){ const key=msg.getAttribute("data-key"); const input=document.createElement("input"); input.type="checkbox"; input.className="msgCheck"; input.setAttribute("data-key",key); msg.querySelector(".bubble").prepend(input); }
-    } else{ if(chk) chk.remove(); }
-  });
-}
-function showUnreadBadge(){
-  const b = document.getElementById("unreadBadge");
-  if(unreadCount>0){ b.style.display="inline-block"; b.textContent = unreadCount; }
-  else b.style.display="none";
-}
-function showBrowserNotification(data){
-  if(!("Notification" in window)) return;
-  if(Notification.permission === "default") Notification.requestPermission();
-  if(Notification.permission === "granted"){
-    const title = (data.name||"User") + ": " + ((data.message||"").slice(0,120));
-    const n = new Notification("Mathematics Hub — New message", { body: title, icon: null });
-    setTimeout(()=>n.close(),4000);
-  }
-}
-function showReactPrompt(key){
-  const opts = ["👍","😂","❤️","🤔"];
-  const r = prompt("React with one of: "+opts.join(" "), opts[0]);
-  if(!r) return;
-  db.ref("shoutbox/"+key+"/reactions/"+r).transaction(curr => (curr||0)+1);
-}
-function likeMessage(key){
-  db.ref("shoutbox/"+key+"/likes").transaction(curr => (curr||0)+1);
-}
+function stringToColor(str){ let hash=0; for(let i=0;i<str.length;i++) hash = str.charCodeAt(i) + ((hash<<5)-hash); const c = (hash & 0x00FFFFFF).toString(16).toUpperCase(); return "#"+("00000".substring(0,6-c.length)+c); }
+function updateCheckboxes(){ document.querySelectorAll(".msg").forEach(msg=>{ let chk=msg.querySelector(".msgCheck"); if(isAdminAuthenticated()){ if(!chk){ const key=msg.getAttribute("data-key"); const input=document.createElement("input"); input.type="checkbox"; input.className="msgCheck"; input.setAttribute("data-key",key); msg.querySelector(".bubble").prepend(input); } } else{ if(chk) chk.remove(); } }); }
+function showUnreadBadge(){ const b=document.getElementById("unreadBadge"); if(unreadCount>0){ b.style.display="inline-block"; b.textContent=unreadCount; } else b.style.display="none"; }
+function showBrowserNotification(data){ if(!("Notification" in window)) return; if(Notification.permission === "default") Notification.requestPermission(); if(Notification.permission === "granted"){ const title = (data.name||"User") + ": " + ((data.message||"").slice(0,120)); const n = new Notification("Mathematics Hub — New message", { body: title, icon: null }); setTimeout(()=>n.close(),4000); } }
+function showReactPrompt(key){ const opts = ["👍","😂","❤️","🤔"]; const r = prompt("React with one of: "+opts.join(" "), opts[0]); if(!r) return; db.ref("shoutbox/"+key+"/reactions/"+r).transaction(curr => (curr||0)+1); }
 
-/* copy all messages */
-document.getElementById("copyAllBtn").addEventListener("click", ()=>{
-  const texts = Array.from(document.querySelectorAll(".msg .msg-content")).map(n=>n.innerText).join("\n\n");
-  navigator.clipboard.writeText(texts).then(()=>alert("All messages copied"));
-});
+/* copyAll removed by request - UI buttons removed */
 
-/* typing indicator */
+/* typing */
 let typingTimeout;
 document.getElementById("message").addEventListener("input", ()=>{
   const name = (document.getElementById("username").value||"Guest").trim();
@@ -650,7 +536,7 @@ db.ref("typing").on("value", snap=>{
   document.getElementById("typingIndicator").textContent = others.length ? (others.join(", ") + " typing...") : "";
 });
 
-/* leaderboard points */
+/* leaderboard functions remain but no UI button (kept for future) */
 function updateLeaderboardUI(){
   db.ref("users").orderByChild("points").limitToLast(10).once("value").then(s=>{
     const html = [];
@@ -658,55 +544,36 @@ function updateLeaderboardUI(){
     document.getElementById("leaderboard").innerHTML = "<strong>Leaderboard</strong><br>"+html.reverse().join("<br>");
   });
 }
-document.getElementById("leaderboardBtn").addEventListener("click", ()=>{
-  const lb = document.getElementById("leaderboard");
-  if(lb.style.display === "none" || !lb.style.display) { updateLeaderboardUI(); lb.style.display = "block"; }
-  else lb.style.display = "none";
-});
 
-/* tag filter */
+/* tag filter & search */
 document.getElementById("tagFilter").addEventListener("input", ()=>{
   const tag = document.getElementById("tagFilter").value.trim().toLowerCase();
-  if(!tag) { document.querySelectorAll(".msg").forEach(m=>m.style.display="flex"); return; }
+  if(!tag){ document.querySelectorAll(".msg").forEach(m=>m.style.display="flex"); return; }
   document.querySelectorAll(".msg").forEach(m=>{
     const content = m.querySelector(".msg-content").innerText.toLowerCase();
     m.style.display = content.includes(tag.replace("#","").toLowerCase()) ? "flex" : "none";
   });
 });
 document.getElementById("clearFilters").addEventListener("click", ()=>{ document.getElementById("tagFilter").value=""; document.getElementById("searchBox").value=""; document.querySelectorAll(".msg").forEach(m=>m.style.display="flex"); });
-
-/* search (Enter) */
 document.getElementById("searchBox").addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ const q=document.getElementById("searchBox").value.toLowerCase(); document.querySelectorAll(".msg").forEach(m=>{ const t = m.innerText.toLowerCase(); m.style.display = t.includes(q) ? "flex" : "none"; }); }});
 
-/* theme toggle (make visible & styled) */
-document.getElementById("toggleTheme").addEventListener("click", ()=>{
+/* theme button (visible & styled like logout) */
+const themeBtn = document.getElementById("themeBtn");
+const savedTheme = localStorage.getItem("theme") || "light";
+if(savedTheme === "dark") document.body.classList.add("dark");
+themeBtn.addEventListener("click", ()=>{
   document.body.classList.toggle("dark");
-  // small visual feedback
-  document.getElementById("toggleTheme").textContent = document.body.classList.contains("dark") ? "Theme: Dark" : "Theme: Light";
-});
-/* ensure toggle looks good initially */
-document.getElementById("toggleTheme").style.padding = "6px 10px";
-document.getElementById("toggleTheme").style.border = "1px solid #ccc";
-document.getElementById("toggleTheme").style.borderRadius = "6px";
-
-/* sound toggle */
-document.getElementById("soundToggle").addEventListener("click", ()=>{
-  soundEnabled = !soundEnabled;
-  document.getElementById("soundToggle").textContent = soundEnabled ? "🔔" : "🔕";
+  localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
 });
 
-/* translate: open google translate */
+/* translate & emoji */
 document.getElementById("translateBtn").addEventListener("click", ()=>{
   const text = document.getElementById("message").value;
   if(!text) return alert("Type message to translate.");
   const url = "https://translate.google.com/?sl=auto&tl=en&text="+encodeURIComponent(text);
   window.open(url,"_blank");
 });
-
-/* emoji picker */
-document.getElementById("emojiPicker").addEventListener("change", (e)=>{
-  if(e.target.value){ document.getElementById("message").value += " " + e.target.value; e.target.value = ""; document.getElementById("message").focus(); }
-});
+document.getElementById("emojiPicker").addEventListener("change", (e)=>{ if(e.target.value){ document.getElementById("message").value += " " + e.target.value; e.target.value = ""; document.getElementById("message").focus(); } });
 
 /* set slow mode (admin) */
 document.getElementById("setSlowModeBtn").addEventListener("click", ()=>{
@@ -714,7 +581,7 @@ document.getElementById("setSlowModeBtn").addEventListener("click", ()=>{
   if(!isNaN(s)){ slowModeSeconds = s; db.ref("meta/slowMode").set(s); alert("Slow mode set to "+s+" seconds"); }
 });
 
-/* pin button action (admin) */
+/* pin (admin) */
 document.getElementById("pinBtn").addEventListener("click", async ()=>{
   const sel = document.querySelector(".msg .msgCheck:checked");
   if(!sel) return alert("Select message checkbox to pin.");
@@ -724,28 +591,25 @@ document.getElementById("pinBtn").addEventListener("click", async ()=>{
   await db.ref("shoutbox/"+key).update({ pinned: !cur.pinned });
 });
 
-/* clear & delete selected */
+/* clear, delete selected, logout */
 document.getElementById("clearBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; } else { alert("Admin only"); } });
 document.getElementById("deleteSelectedBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key=chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); const el = document.querySelector(".msg[data-key='"+key+"']"); if(el) el.remove(); }); } else alert("Admin only"); });
 document.getElementById("logoutBtn").addEventListener("click", ()=>{ setAdminAuthenticated(false); });
 
-/* update admin UI initially */
 updateAdminUI();
 
-/* ---------- SENDING MESSAGES (with spam & slow mode & points) ---------- */
+/* ---------- SENDING MESSAGES ---------- */
 document.getElementById("sendBtn").addEventListener("click", async ()=>{
   const nameEl=document.getElementById("username"); const msgEl=document.getElementById("message"); const photoEl=document.getElementById("photoInput");
   const name = (nameEl.value||"").trim();
   const msg = (msgEl.value||"").trim();
 
   if(!name && !photoEl.files[0] && !msg) return alert("Enter message or photo.");
-  // admin login
   if(name.toLowerCase()==="admin" && !isAdminAuthenticated()){
     const pwd = prompt("Enter admin password:");
     if(pwd===ADMIN_PASSWORD){ setAdminAuthenticated(true); markAllSeenByAdmin(); } else { alert("Incorrect password."); return; }
   }
 
-  // slow mode from DB
   const metaSnap = await db.ref("meta/slowMode").once("value");
   const slow = metaSnap.exists() ? (metaSnap.val()||0) : slowModeSeconds;
   const now = Date.now();
@@ -754,12 +618,10 @@ document.getElementById("sendBtn").addEventListener("click", async ()=>{
     if(now - last < slow*1000 && !(isAdminAuthenticated() && name.toLowerCase()==="admin")) return alert("Slow mode: wait "+Math.ceil((slow*1000 - (now-last))/1000)+" sec");
   }
 
-  // local spam control: avoid same msg rapid send
   const lastMsgKey = "lastMsg_"+name;
   const lastMsgObj = JSON.parse(localStorage.getItem(lastMsgKey) || "{}");
   if(lastMsgObj.text === msg && (Date.now() - lastMsgObj.time < 5000)) return alert("Please don't spam same message.");
 
-  // upload
   let photoURL = "";
   if(photoEl.files && photoEl.files[0]){
     const f = photoEl.files[0];
@@ -767,13 +629,11 @@ document.getElementById("sendBtn").addEventListener("click", async ()=>{
     try{ photoURL = await uploadToImgbb(f); photoEl.value = ""; } catch(e){ alert("Upload failed: "+e); return; }
   }
 
-  // reply info
   const replyToKey = msgEl.dataset.replyToKey || null;
   const replyToName = msgEl.dataset.replyToName || null;
   const replyToText = msgEl.dataset.replyToText || null;
   delete msgEl.dataset.replyToKey; delete msgEl.dataset.replyToName; delete msgEl.dataset.replyToText;
 
-  // compose data
   const data = {
     name: name || "Guest",
     message: msg || "",
@@ -788,39 +648,32 @@ document.getElementById("sendBtn").addEventListener("click", async ()=>{
     seenBy: {}
   };
 
-  // increment points
   db.ref("users/"+(data.name||"Guest")).transaction(curr=> {
     if(curr && curr.points) { curr.points = curr.points + 1; return curr; }
     return { points: 1 };
   });
 
-  // push
   db.ref("shoutbox").push(data);
   msgEl.value = "";
   lastSentAt[name] = Date.now();
   localStorage.setItem(lastMsgKey, JSON.stringify({ text: msg, time: Date.now() }));
 
-  // bot responses / suggestions
   autoBotResponses(data);
-
-  // save last name
   localStorage.setItem("lastName", name);
 });
 
-/* ---------- BOT / MATH ASSISTANT / SUGGESTIONS ---------- */
+/* ---------- BOT / MATH ASSISTANT ---------- */
 function autoBotResponses(userMsg){
   const txt = (userMsg.message||"").toLowerCase();
   const suggestionsEl = document.getElementById("botSuggestions");
   suggestionsEl.textContent = "";
 
-  // welcome for new user (first message)
   db.ref("users/"+userMsg.name).once("value").then(s=>{
     if(!s.exists() || (s.val() && s.val().points <= 1)){
       db.ref("shoutbox").push({ name: "MathBot", message: "Welcome "+userMsg.name+" 👋 — Ask your math doubts! Type `solve 2+2` or use `$...$` for equations.", time: Date.now(), admin:false });
     }
   });
 
-  // math solver
   if(txt.startsWith("solve ")){
     const expr = userMsg.message.slice(6).trim();
     const safe = expr.replace(/[^0-9+\-*/().\s%^]/g,"");
@@ -830,18 +683,16 @@ function autoBotResponses(userMsg){
     return;
   }
 
-  // smart suggestions on keywords
   if(/formula|integral|derivative|limit|matrix|solve|question|proof/.test(txt)){
     suggestionsEl.innerHTML = "Tip: Use `$...$` for LaTeX (example: `$\\int x^2 dx$`). Try `solve 45/5`.";
   }
 
-  // greetings
   if(/hello|hi|hey/.test(txt)){
     db.ref("shoutbox").push({ name: "MathBot", message: "Hi "+userMsg.name+"! Need help with any chapter?", time: Date.now() });
   }
 }
 
-/* ---------- LISTENERS: DB -> DOM ---------- */
+/* ---------- DB LISTENERS ---------- */
 db.ref("shoutbox").orderByChild("time").limitToLast(200).on("child_added", snap=>{ addMessageToDOM(snap.key, snap.val()); });
 db.ref("shoutbox").on("child_changed", snap=>{
   const key = snap.key; const data = snap.val();
@@ -855,7 +706,7 @@ db.ref("shoutbox").on("child_removed", snap=>{
   if(el) el.remove();
 });
 
-/* mark all messages as seen by admin when admin logs in (read receipts) */
+/* mark all messages seen by admin */
 async function markAllSeenByAdmin(){
   if(!isAdminAuthenticated()) return;
   const snap = await db.ref("shoutbox").once("value");
@@ -865,9 +716,7 @@ async function markAllSeenByAdmin(){
   });
 }
 
-/* fetch typing/presence handled above in typing listeners */
-
-/* adminStatus click to show IP (optional) */
+/* adminStatus click to show IP info */
 document.getElementById("adminStatus").addEventListener("click", async ()=>{
   if(!isAdminAuthenticated()) return;
   try{
@@ -877,17 +726,16 @@ document.getElementById("adminStatus").addEventListener("click", async ()=>{
   }catch(e){ alert("Could not fetch IP info"); }
 });
 
-/* visibility change reset unread */
+/* unread reset on visibility */
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden){ unreadCount = 0; showUnreadBadge(); } });
 
-/* request notification permission on load */
+/* request notifications permission */
 if("Notification" in window && Notification.permission === "default") Notification.requestPermission();
 
-/* initial setup */
+/* initial */
 updateLeaderboardUI();
 showUnreadBadge();
 
-/* End of script */
 </script>
 </body>
 </html>
