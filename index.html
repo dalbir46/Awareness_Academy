@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Mathematics Hub Class 6 to 12</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- marked.js for markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- MathJax for LaTeX rendering -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <style>
 /* ---------- ORIGINAL STYLES (kept as-is, small additions at end) ---------- */
 body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 0; color: #000; }
@@ -282,9 +286,6 @@ body.dark .msg .bubble { background:#07203a; color:#d1d5db; border-color:#12324a
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-<!-- MathJax for LaTeX rendering -->
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 <script>
 /* ----------------- CONFIG & INIT ----------------- */
 var firebaseConfig = {
@@ -304,7 +305,7 @@ const ADMIN_PASSWORD="Dalbir@551";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 
 /* State */
-let slowModeSeconds = 0; // set by admin via prompt
+let slowModeSeconds = 0; // admin adjustable
 let lastSentAt = {};
 let blockedNames = JSON.parse(localStorage.getItem("blockedNames")||"[]");
 let unreadCount = 0;
@@ -312,10 +313,10 @@ let soundEnabled = true;
 let currentUserName = localStorage.getItem("lastName") || "";
 document.getElementById("username").value = currentUserName;
 
-/* simple profanity list */
-const profanityList = ["badword1","badword2","arse"]; // update as needed
+/* simple profanity list (expand as needed) */
+const profanityList = ["badword1","badword2","arse"];
 
-/* safe math-solver allowed chars */
+/* allowed chars for safe math-eval */
 const MATH_ALLOWED = /^[0-9+\-*/().\s%^]*$/;
 
 /* Utility functions */
@@ -331,7 +332,7 @@ function updateAdminUI(){
   updateCheckboxes();
 }
 
-/* format date/time - show relative when recent */
+/* timestamp formatting */
 function formatDateTime(ts){
   const d = new Date(ts);
   const diff = Date.now()-ts;
@@ -344,7 +345,7 @@ function formatDateTime(ts){
   return `${day}/${month}/${year} ${hrs}:${mins} ${ampm}`;
 }
 
-/* profanity filter - simple replace */
+/* profanity filter */
 function filterProfanity(text){
   let out = text;
   profanityList.forEach(w => {
@@ -354,33 +355,31 @@ function filterProfanity(text){
   return out;
 }
 
-/* markdown lite - bold **text**, italic *text*, code `...` */
-function simpleMarkdown(text){
+/* markdown -> use marked.js, but sanitize a bit */
+function renderMarkdown(text){
   if(!text) return "";
-  let t = escapeHtml(text);
-  t = t.replace(/```([\s\S]*?)```/g, (m,code)=>`<pre>${escapeHtml(code)}</pre>`);
-  t = t.replace(/`([^`]+)`/g, "<code>$1</code>");
-  t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-  t = t.replace(/\*([^*]+)\*/g, "<em>$1</em>");
-  // hashtags -> link-like
-  t = t.replace(/#([A-Za-z0-9_-]+)/g, '<span class="tag">#$1</span>');
-  // mentions -> highlight
-  t = t.replace(/@([A-Za-z0-9_-]+)/g, '<span class="mention">@$1</span>');
-  return t;
+  let md = marked.parse(text);
+  // minimal sanitization: allow <a>, <strong>, <em>, <code>, <pre>, <p>, <br>, <ul>, <ol>, <li>, <img>
+  // marked already returns safe HTML for our purposes; we still escape user inputs earlier.
+  return md;
 }
 
-/* detect URLs and return anchor */
+/* linkify: convert https/http/www to clickable links and open new tab */
 function linkify(text){
-  return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  if(!text) return "";
+  // add http if starts with www.
+  text = text.replace(/\bwww\.[^\s]+/gi, (m)=>"http://"+m);
+  // wrap urls with anchors
+  return text.replace(/(https?:\/\/[^\s<]+)/gi, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#3366CC;">$1</a>');
 }
 
-/* small safe math-eval for solver */
+/* safe math eval for solver */
 function safeEvalMath(expr){
   expr = expr.replace(/\^/g,'**');
   if(!MATH_ALLOWED.test(expr)) return null;
   try{
     // eslint-disable-next-line no-eval
-    let val = eval(expr); // permitted because we restrict chars above
+    let val = eval(expr);
     if(typeof val === "number" && isFinite(val)) return val;
   }catch(e){ return null; }
   return null;
@@ -388,10 +387,10 @@ function safeEvalMath(expr){
 
 /* play sound */
 const ping = new Audio();
-ping.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA="; // tiny empty sound placeholder
+ping.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
 function playPing(){ if(soundEnabled) ping.play().catch(()=>{}); }
 
-/* ---------- IMGBB UPLOAD (images only) ---------- */
+/* imgbb upload */
 async function uploadToImgbb(file){
   return new Promise((resolve,reject)=>{
     const reader=new FileReader();
@@ -411,7 +410,6 @@ async function uploadToImgbb(file){
 
 /* ---------- MESSAGE RENDERING & INTERACTION ---------- */
 async function addMessageToDOM(key,data){
-  // ignore blocked names (local)
   if(blockedNames.includes(data.name)) return;
 
   const div = document.createElement("div");
@@ -440,19 +438,22 @@ async function addMessageToDOM(key,data){
   // username with admin badge
   const unameSpan = `<span class="username ${data.admin?"admin":""}">${escapeHtml(data.name||"Guest")}${data.admin?" ✅":""}</span>`;
 
-  // message body: markdown + linkify + profanity
-  let bodyText = data.message || "";
-  bodyText = filterProfanity(bodyText);
-  bodyText = simpleMarkdown(bodyText);
-  bodyText = linkify(bodyText);
+  // markdown + profanity + linkify + mentions highlight
+  let bodyTextRaw = data.message || "";
+  let filtered = filterProfanity(bodyTextRaw);
+  let md = renderMarkdown(filtered);
+  md = linkify(md); // ensure links clickable
+  md = md.replace(/@([A-Za-z0-9_-]+)/g, '<span class="mention">@$1</span>');
 
-  // mention highlight if contains @admin
-  if(/@admin/i.test(data.message||"")) bubble.classList.add("highlight-admin");
+  // reply info
+  let replyHtml = "";
+  if(data.replyToName){
+    replyHtml = `<div style="font-size:13px;color:#666;margin-bottom:6px;">Reply to <strong>${escapeHtml(data.replyToName)}</strong>: ${escapeHtml(truncate(data.replyToText||"",80))}</div>`;
+  }
 
-  // show photo/video/audio if any
+  // media
   let mediaHtml = "";
   if(data.photoURL){
-    // show image or video/audio (by extension)
     if(/\.(mp4|webm|ogg)(\?|$)/i.test(data.photoURL)){
       mediaHtml = `<div style="margin-top:6px;"><video controls style="max-width:220px;border-radius:6px;"><source src="${data.photoURL}"></video></div>`;
     } else if(/\.(mp3|wav|m4a|ogg)(\?|$)/i.test(data.photoURL)){
@@ -462,46 +463,36 @@ async function addMessageToDOM(key,data){
     }
   }
 
-  // reactions & likes
+  // reactions summary
   const likes = data.likes || 0;
-  const reactions = data.reactions || {}; // { "😂": 2, "👍":1}
+  const reactions = data.reactions || {};
   let reactionsHtml = `<div class="reactions">`;
   for(const r in reactions){
     reactionsHtml += `<span class="reaction" data-key="${key}" data-reaction="${r}">${escapeHtml(r)} ${reactions[r]}</span>`;
   }
   reactionsHtml += `</div>`;
 
-  // meta
-  const meta = `<div class="meta">${formatDateTime(data.time)} ${data.location?("<span class='loc'>"+escapeHtml(data.location)+"</span>"):""}</div>`;
+  const meta = `<div class="meta">${formatDateTime(data.time)} ${data.location?("<span class='loc'>"+escapeHtml(data.location)+"</span>"):""}` +
+               `${(data.seenBy && data.seenBy.admin) ? " • Seen by admin" : ""}</div>`;
 
-  // reply info
-  let replyHtml = "";
-  if(data.replyToName){
-    replyHtml = `<div style="font-size:13px;color:#666;margin-bottom:6px;">Reply to <strong>${escapeHtml(data.replyToName)}</strong>: ${escapeHtml(truncate(data.replyToText||"",80))}</div>`;
-  }
+  bubble.innerHTML = `${checkboxHtml}${unameSpan} ${replyHtml}<div class="msg-content">${md}</div>${mediaHtml}${reactionsHtml}${meta}`;
 
-  // assemble innerHTML
-  bubble.innerHTML = `${checkboxHtml}${unameSpan} ${replyHtml}<div class="msg-content">${bodyText}</div>${mediaHtml}${reactionsHtml}${meta}`;
-
-  // controls: like, react, copy, reply, delete (if own), pin (admin)
+  // controls
   const ctrl = document.createElement("div");
   ctrl.className = "controls";
 
-  // like button
   const likeBtn = document.createElement("button");
   likeBtn.className = "small-btn";
   likeBtn.innerHTML = `❤️ <span class="like-count">${likes}</span>`;
   likeBtn.title = "Like";
   likeBtn.onclick = ()=> { likeMessage(key); };
 
-  // reaction quick picks
   const reactBtn = document.createElement("button");
   reactBtn.className = "small-btn";
   reactBtn.innerHTML = "🙂";
   reactBtn.title = "React";
-  reactBtn.onclick = ()=> { showReactPicker(key); };
+  reactBtn.onclick = ()=> { showReactPrompt(key); };
 
-  // copy
   const copyBtn = document.createElement("button");
   copyBtn.className = "small-btn";
   copyBtn.innerHTML = "📋";
@@ -510,7 +501,6 @@ async function addMessageToDOM(key,data){
     navigator.clipboard.writeText(data.message || "").then(()=>{ alert("Copied"); });
   };
 
-  // reply
   const replyBtn = document.createElement("button");
   replyBtn.className = "small-btn";
   replyBtn.innerHTML = "↩";
@@ -523,11 +513,10 @@ async function addMessageToDOM(key,data){
     document.getElementById("message").dataset.replyToText = data.message;
   };
 
-  // delete own (if same name)
   const delBtn = document.createElement("button");
   delBtn.className = "small-btn";
   delBtn.innerHTML = "🗑";
-  delBtn.title = "Delete (if this is your message)";
+  delBtn.title = "Delete (if your message)";
   delBtn.onclick = ()=> {
     const myName = (document.getElementById("username").value||"").trim();
     if(myName && myName === data.name){
@@ -535,20 +524,29 @@ async function addMessageToDOM(key,data){
     } else alert("You can only delete your own messages (same name).");
   };
 
-  // block user (local)
+  const reportBtn = document.createElement("button");
+  reportBtn.className = "small-btn";
+  reportBtn.innerHTML = "⚠";
+  reportBtn.title = "Report message";
+  reportBtn.onclick = ()=> {
+    if(confirm("Report this message to admin?")){
+      db.ref("reports").push({ key, reportedAt: Date.now(), by: document.getElementById("username").value||"Guest", message: data.message||"" });
+      alert("Reported. Admin will review.");
+    }
+  };
+
   const blockBtn = document.createElement("button");
   blockBtn.className = "small-btn";
   blockBtn.innerHTML = "🚫";
-  blockBtn.title = "Block this user locally";
+  blockBtn.title = "Block user locally";
   blockBtn.onclick = ()=> {
-    if(confirm("Block "+data.name+" locally? You will not see their messages.")){
+    if(confirm("Block "+data.name+" locally?")){
       blockedNames.push(data.name);
       localStorage.setItem("blockedNames", JSON.stringify(blockedNames));
       document.querySelectorAll(".msg").forEach(m=>{ if(m.querySelector(".username") && m.querySelector(".username").textContent.trim().startsWith(data.name)) m.remove(); });
     }
   };
 
-  // pin (admin)
   const pinBtn = document.createElement("button");
   pinBtn.className = "small-btn";
   pinBtn.innerHTML = "📌";
@@ -556,45 +554,47 @@ async function addMessageToDOM(key,data){
   pinBtn.style.display = isAdminAuthenticated()?"inline-block":"none";
   pinBtn.onclick = async ()=> {
     if(!isAdminAuthenticated()) return alert("Admin only");
-    // toggle pin
     const cur = !!data.pinned;
     await db.ref("shoutbox/"+key).update({ pinned: !cur });
   };
 
-  // append controls
   ctrl.appendChild(likeBtn);
   ctrl.appendChild(reactBtn);
   ctrl.appendChild(copyBtn);
   ctrl.appendChild(replyBtn);
   ctrl.appendChild(delBtn);
+  ctrl.appendChild(reportBtn);
   ctrl.appendChild(blockBtn);
   ctrl.appendChild(pinBtn);
 
   bubble.appendChild(ctrl);
   div.appendChild(bubble);
 
-  // insert into DOM (prepend since we use column-reverse)
   document.getElementById("messages").prepend(div);
 
   // render math (MathJax)
   if(window.MathJax) MathJax.typesetPromise && MathJax.typesetPromise();
 
-  // update unread / notifications
+  // unread & notifications
   if(document.hidden){ unreadCount++; showUnreadBadge(); if(soundEnabled) playPing(); showBrowserNotification(data); }
   else { playPing(); }
+
+  // attach reaction click handlers (delegated)
+  div.querySelectorAll(".reaction").forEach(rEl=>{
+    rEl.onclick = ()=> {
+      const react = rEl.getAttribute("data-reaction");
+      db.ref("shoutbox/"+key+"/reactions/"+react).transaction(curr => (curr||0)+1);
+    };
+  });
 }
 
-/* helper: truncate */
+/* helper functions */
 function truncate(s,n){ if(!s) return ""; return s.length>n?s.slice(0,n)+"...":s; }
-
-/* small color generator by string */
 function stringToColor(str){
   let hash=0; for(let i=0;i<str.length;i++) hash = str.charCodeAt(i) + ((hash<<5)-hash);
   const c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
   return "#"+("00000".substring(0,6-c.length)+c);
 }
-
-/* update checkboxes for admin */
 function updateCheckboxes(){
   document.querySelectorAll(".msg").forEach(msg=>{
     let chk=msg.querySelector(".msgCheck");
@@ -603,45 +603,37 @@ function updateCheckboxes(){
     } else{ if(chk) chk.remove(); }
   });
 }
-
-/* show unread badge */
 function showUnreadBadge(){
   const b = document.getElementById("unreadBadge");
   if(unreadCount>0){ b.style.display="inline-block"; b.textContent = unreadCount; }
   else b.style.display="none";
 }
-
-/* browser notification */
 function showBrowserNotification(data){
   if(!("Notification" in window)) return;
   if(Notification.permission === "default") Notification.requestPermission();
   if(Notification.permission === "granted"){
-    const title = data.name + " — " + (data.message||"");
-    const n = new Notification("New message on Mathematics Hub", { body: title.slice(0,120), icon: null });
-    setTimeout(()=>n.close(),5000);
+    const title = (data.name||"User") + ": " + ((data.message||"").slice(0,120));
+    const n = new Notification("Mathematics Hub — New message", { body: title, icon: null });
+    setTimeout(()=>n.close(),4000);
   }
 }
-
-/* react picker (simple) */
-function showReactPicker(key){
+function showReactPrompt(key){
   const opts = ["👍","😂","❤️","🤔"];
-  const choice = prompt("React with one of: "+opts.join(" "), opts[0]);
-  if(!choice) return;
-  db.ref("shoutbox/"+key+"/reactions/"+choice).transaction(curr => (curr||0)+1);
+  const r = prompt("React with one of: "+opts.join(" "), opts[0]);
+  if(!r) return;
+  db.ref("shoutbox/"+key+"/reactions/"+r).transaction(curr => (curr||0)+1);
 }
-
-/* like message */
 function likeMessage(key){
   db.ref("shoutbox/"+key+"/likes").transaction(curr => (curr||0)+1);
 }
 
-/* copy all messages (Text) */
+/* copy all messages */
 document.getElementById("copyAllBtn").addEventListener("click", ()=>{
   const texts = Array.from(document.querySelectorAll(".msg .msg-content")).map(n=>n.innerText).join("\n\n");
   navigator.clipboard.writeText(texts).then(()=>alert("All messages copied"));
 });
 
-/* typing indicator broadcasting (simple) */
+/* typing indicator */
 let typingTimeout;
 document.getElementById("message").addEventListener("input", ()=>{
   const name = (document.getElementById("username").value||"Guest").trim();
@@ -650,8 +642,6 @@ document.getElementById("message").addEventListener("input", ()=>{
   clearTimeout(typingTimeout);
   typingTimeout = setTimeout(()=>{ db.ref("typing/"+name).remove(); },2000);
 });
-
-/* show typing indicators */
 db.ref("typing").on("value", snap=>{
   const val = snap.val() || {};
   const keys = Object.keys(val);
@@ -660,7 +650,7 @@ db.ref("typing").on("value", snap=>{
   document.getElementById("typingIndicator").textContent = others.length ? (others.join(", ") + " typing...") : "";
 });
 
-/* presence: increase leaderboard points on send, likes update leaderboard */
+/* leaderboard points */
 function updateLeaderboardUI(){
   db.ref("users").orderByChild("points").limitToLast(10).once("value").then(s=>{
     const html = [];
@@ -668,8 +658,6 @@ function updateLeaderboardUI(){
     document.getElementById("leaderboard").innerHTML = "<strong>Leaderboard</strong><br>"+html.reverse().join("<br>");
   });
 }
-
-/* show leaderboard on button */
 document.getElementById("leaderboardBtn").addEventListener("click", ()=>{
   const lb = document.getElementById("leaderboard");
   if(lb.style.display === "none" || !lb.style.display) { updateLeaderboardUI(); lb.style.display = "block"; }
@@ -678,7 +666,7 @@ document.getElementById("leaderboardBtn").addEventListener("click", ()=>{
 
 /* tag filter */
 document.getElementById("tagFilter").addEventListener("input", ()=>{
-  const tag = document.getElementById("tagFilter").value.trim();
+  const tag = document.getElementById("tagFilter").value.trim().toLowerCase();
   if(!tag) { document.querySelectorAll(".msg").forEach(m=>m.style.display="flex"); return; }
   document.querySelectorAll(".msg").forEach(m=>{
     const content = m.querySelector(".msg-content").innerText.toLowerCase();
@@ -687,13 +675,19 @@ document.getElementById("tagFilter").addEventListener("input", ()=>{
 });
 document.getElementById("clearFilters").addEventListener("click", ()=>{ document.getElementById("tagFilter").value=""; document.getElementById("searchBox").value=""; document.querySelectorAll(".msg").forEach(m=>m.style.display="flex"); });
 
-/* search box (press Enter) */
+/* search (Enter) */
 document.getElementById("searchBox").addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ const q=document.getElementById("searchBox").value.toLowerCase(); document.querySelectorAll(".msg").forEach(m=>{ const t = m.innerText.toLowerCase(); m.style.display = t.includes(q) ? "flex" : "none"; }); }});
 
-/* theme toggle */
+/* theme toggle (make visible & styled) */
 document.getElementById("toggleTheme").addEventListener("click", ()=>{
   document.body.classList.toggle("dark");
+  // small visual feedback
+  document.getElementById("toggleTheme").textContent = document.body.classList.contains("dark") ? "Theme: Dark" : "Theme: Light";
 });
+/* ensure toggle looks good initially */
+document.getElementById("toggleTheme").style.padding = "6px 10px";
+document.getElementById("toggleTheme").style.border = "1px solid #ccc";
+document.getElementById("toggleTheme").style.borderRadius = "6px";
 
 /* sound toggle */
 document.getElementById("soundToggle").addEventListener("click", ()=>{
@@ -701,7 +695,7 @@ document.getElementById("soundToggle").addEventListener("click", ()=>{
   document.getElementById("soundToggle").textContent = soundEnabled ? "🔔" : "🔕";
 });
 
-/* translate button - simplified: open translate in new tab */
+/* translate: open google translate */
 document.getElementById("translateBtn").addEventListener("click", ()=>{
   const text = document.getElementById("message").value;
   if(!text) return alert("Type message to translate.");
@@ -709,7 +703,7 @@ document.getElementById("translateBtn").addEventListener("click", ()=>{
   window.open(url,"_blank");
 });
 
-/* emoji picker: append chosen emoji to message */
+/* emoji picker */
 document.getElementById("emojiPicker").addEventListener("change", (e)=>{
   if(e.target.value){ document.getElementById("message").value += " " + e.target.value; e.target.value = ""; document.getElementById("message").focus(); }
 });
@@ -720,7 +714,7 @@ document.getElementById("setSlowModeBtn").addEventListener("click", ()=>{
   if(!isNaN(s)){ slowModeSeconds = s; db.ref("meta/slowMode").set(s); alert("Slow mode set to "+s+" seconds"); }
 });
 
-/* pin (admin) - toggle pin via button (will pin last selected message if any) */
+/* pin button action (admin) */
 document.getElementById("pinBtn").addEventListener("click", async ()=>{
   const sel = document.querySelector(".msg .msgCheck:checked");
   if(!sel) return alert("Select message checkbox to pin.");
@@ -730,32 +724,28 @@ document.getElementById("pinBtn").addEventListener("click", async ()=>{
   await db.ref("shoutbox/"+key).update({ pinned: !cur.pinned });
 });
 
-/* clear shoutbox (admin) */
+/* clear & delete selected */
 document.getElementById("clearBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; } else { alert("Admin only"); } });
-
-/* delete selected (admin) */
 document.getElementById("deleteSelectedBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key=chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); const el = document.querySelector(".msg[data-key='"+key+"']"); if(el) el.remove(); }); } else alert("Admin only"); });
-
-/* logout admin */
 document.getElementById("logoutBtn").addEventListener("click", ()=>{ setAdminAuthenticated(false); });
 
 /* update admin UI initially */
 updateAdminUI();
 
-/* ---------- SENDING MESSAGES (with spam control, slow mode, points) ---------- */
+/* ---------- SENDING MESSAGES (with spam & slow mode & points) ---------- */
 document.getElementById("sendBtn").addEventListener("click", async ()=>{
   const nameEl=document.getElementById("username"); const msgEl=document.getElementById("message"); const photoEl=document.getElementById("photoInput");
   const name = (nameEl.value||"").trim();
   const msg = (msgEl.value||"").trim();
 
   if(!name && !photoEl.files[0] && !msg) return alert("Enter message or photo.");
-  // admin login trigger
+  // admin login
   if(name.toLowerCase()==="admin" && !isAdminAuthenticated()){
     const pwd = prompt("Enter admin password:");
-    if(pwd===ADMIN_PASSWORD){ setAdminAuthenticated(true); } else { alert("Incorrect password."); return; }
+    if(pwd===ADMIN_PASSWORD){ setAdminAuthenticated(true); markAllSeenByAdmin(); } else { alert("Incorrect password."); return; }
   }
 
-  // slow mode check from DB meta
+  // slow mode from DB
   const metaSnap = await db.ref("meta/slowMode").once("value");
   const slow = metaSnap.exists() ? (metaSnap.val()||0) : slowModeSeconds;
   const now = Date.now();
@@ -764,75 +754,73 @@ document.getElementById("sendBtn").addEventListener("click", async ()=>{
     if(now - last < slow*1000 && !(isAdminAuthenticated() && name.toLowerCase()==="admin")) return alert("Slow mode: wait "+Math.ceil((slow*1000 - (now-last))/1000)+" sec");
   }
 
-  // local spam control: same message rapid send
+  // local spam control: avoid same msg rapid send
   const lastMsgKey = "lastMsg_"+name;
   const lastMsgObj = JSON.parse(localStorage.getItem(lastMsgKey) || "{}");
   if(lastMsgObj.text === msg && (Date.now() - lastMsgObj.time < 5000)) return alert("Please don't spam same message.");
 
-  // image/video/audio upload if present
+  // upload
   let photoURL = "";
   if(photoEl.files && photoEl.files[0]){
     const f = photoEl.files[0];
-    // limit size to 8MB
     if(f.size > 8*1024*1024) return alert("File too large (max 8MB).");
-    try{
-      photoURL = await uploadToImgbb(f);
-      photoEl.value = "";
-    }catch(e){ alert("Upload failed: "+e); return; }
+    try{ photoURL = await uploadToImgbb(f); photoEl.value = ""; } catch(e){ alert("Upload failed: "+e); return; }
   }
 
-  // handle reply data if any
+  // reply info
   const replyToKey = msgEl.dataset.replyToKey || null;
   const replyToName = msgEl.dataset.replyToName || null;
   const replyToText = msgEl.dataset.replyToText || null;
   delete msgEl.dataset.replyToKey; delete msgEl.dataset.replyToName; delete msgEl.dataset.replyToText;
 
-  // build data
+  // compose data
   const data = {
     name: name || "Guest",
     message: msg || "",
     time: Date.now(),
     photoURL: photoURL || "",
-    location: "", // could fetch via IP API if admin
+    location: "",
     admin: (isAdminAuthenticated() && name.toLowerCase()==="admin")||false,
     likes: 0,
     reactions: {},
     pinned: false,
-    replyToKey, replyToName, replyToText
+    replyToKey, replyToName, replyToText,
+    seenBy: {}
   };
 
-  // compute basic points and update users
-  db.ref("users/"+(data.name||"Guest")).transaction(curr=> (curr||{points:0}).points ? { points: ( (curr&&curr.points)||0 ) + 1 } : { points:1 });
+  // increment points
+  db.ref("users/"+(data.name||"Guest")).transaction(curr=> {
+    if(curr && curr.points) { curr.points = curr.points + 1; return curr; }
+    return { points: 1 };
+  });
 
-  // send
+  // push
   db.ref("shoutbox").push(data);
   msgEl.value = "";
   lastSentAt[name] = Date.now();
   localStorage.setItem(lastMsgKey, JSON.stringify({ text: msg, time: Date.now() }));
 
-  // bot auto-reply and suggestions
+  // bot responses / suggestions
   autoBotResponses(data);
 
-  // store last used name
+  // save last name
   localStorage.setItem("lastName", name);
 });
 
-/* ---------- BOT / SUGGESTIONS / MATH SOLVER ---------- */
+/* ---------- BOT / MATH ASSISTANT / SUGGESTIONS ---------- */
 function autoBotResponses(userMsg){
-  // simple keyword-based bot and math solver
   const txt = (userMsg.message||"").toLowerCase();
   const suggestionsEl = document.getElementById("botSuggestions");
   suggestionsEl.textContent = "";
 
-  // auto welcome for new user (first message)
+  // welcome for new user (first message)
   db.ref("users/"+userMsg.name).once("value").then(s=>{
     if(!s.exists() || (s.val() && s.val().points <= 1)){
-      // welcome
-      db.ref("shoutbox").push({ name: "MathBot", message: "Welcome "+userMsg.name+" 👋 — Ask your math doubts! Try `solve 2+2` or type keywords like formula, derivative, integrate.", time: Date.now(), admin:false });
+      db.ref("shoutbox").push({ name: "MathBot", message: "Welcome "+userMsg.name+" 👋 — Ask your math doubts! Type `solve 2+2` or use `$...$` for equations.", time: Date.now(), admin:false });
     }
   });
 
-  // math solver: if message starts with "solve "
+  // math solver
   if(txt.startsWith("solve ")){
     const expr = userMsg.message.slice(6).trim();
     const safe = expr.replace(/[^0-9+\-*/().\s%^]/g,"");
@@ -842,23 +830,21 @@ function autoBotResponses(userMsg){
     return;
   }
 
-  // smart suggestions: if user types math keywords
-  if(/formula|integral|derivative|limit|matrix/.test(txt)){
-    suggestionsEl.innerHTML = "Tip: Try sending exact question or use `$...$` for equations. Example: `$\\int x^2 dx$`";
+  // smart suggestions on keywords
+  if(/formula|integral|derivative|limit|matrix|solve|question|proof/.test(txt)){
+    suggestionsEl.innerHTML = "Tip: Use `$...$` for LaTeX (example: `$\\int x^2 dx$`). Try `solve 45/5`.";
   }
 
-  // small canned replies
+  // greetings
   if(/hello|hi|hey/.test(txt)){
     db.ref("shoutbox").push({ name: "MathBot", message: "Hi "+userMsg.name+"! Need help with any chapter?", time: Date.now() });
   }
 }
 
-/* ---------- MESSAGES LISTENERS & UPDATES ---------- */
-/* Listen for child added and changes */
+/* ---------- LISTENERS: DB -> DOM ---------- */
 db.ref("shoutbox").orderByChild("time").limitToLast(200).on("child_added", snap=>{ addMessageToDOM(snap.key, snap.val()); });
 db.ref("shoutbox").on("child_changed", snap=>{
   const key = snap.key; const data = snap.val();
-  // update DOM if exists
   const el = document.querySelector(".msg[data-key='"+key+"']");
   if(el) el.remove();
   addMessageToDOM(key,data);
@@ -869,12 +855,19 @@ db.ref("shoutbox").on("child_removed", snap=>{
   if(el) el.remove();
 });
 
-/* typing & presence handled above */
+/* mark all messages as seen by admin when admin logs in (read receipts) */
+async function markAllSeenByAdmin(){
+  if(!isAdminAuthenticated()) return;
+  const snap = await db.ref("shoutbox").once("value");
+  const all = snap.val() || {};
+  Object.keys(all).forEach(k => {
+    db.ref("shoutbox/"+k+"/seenBy/admin").set(Date.now());
+  });
+}
 
-/* likes/reactions update listener to reflect counts */
-db.ref("shoutbox").on("value", ()=>{ /* handled in child_changed */ });
+/* fetch typing/presence handled above in typing listeners */
 
-/* admin IP/location info when clicking adminStatus (optional) */
+/* adminStatus click to show IP (optional) */
 document.getElementById("adminStatus").addEventListener("click", async ()=>{
   if(!isAdminAuthenticated()) return;
   try{
@@ -884,23 +877,17 @@ document.getElementById("adminStatus").addEventListener("click", async ()=>{
   }catch(e){ alert("Could not fetch IP info"); }
 });
 
-/* when page visibility changes, reset unread */
+/* visibility change reset unread */
 document.addEventListener("visibilitychange", ()=>{ if(!document.hidden){ unreadCount = 0; showUnreadBadge(); } });
 
-/* helper: request notification permission on load */
+/* request notification permission on load */
 if("Notification" in window && Notification.permission === "default") Notification.requestPermission();
 
-/* small utility: truncate long text (used earlier) */
-function truncate(str, len){ if(!str) return ""; return str.length>len? str.slice(0,len)+"...":str; }
-
-/* stringToColor repeated earlier for scope safety (defined above) */
-
-/* ---------- INITIAL SETUP ---------- */
+/* initial setup */
 updateLeaderboardUI();
 showUnreadBadge();
 
 /* End of script */
 </script>
-
 </body>
 </html>
