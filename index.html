@@ -244,7 +244,10 @@ async function addMessageToDOM(key,data){
     }catch(e){ adminMeta=""; }
   }
 
-  let content=`<b>${checkboxHtml}${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}`;
+  let usernameClass = "username";
+if(data.name.toLowerCase() === "admin") usernameClass += " admin";
+
+let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}`;
   if(data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;}
   content+=`<div class='meta'>${formatDateTime(data.time)}${adminMeta}</div>`;
   div.innerHTML=content;
