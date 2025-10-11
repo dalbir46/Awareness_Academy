@@ -100,6 +100,48 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 #uploadBar { width:0%; height:8px; background:#4CAF50; border-radius:4px; }
 
 @media(max-width:600px){ #shoutbox .send-wrapper { justify-content:flex-start; margin-top:6px; } #shoutbox button{ width:100%; } }
+/* ===== Theme Dropdown Style ===== */
+.dropdown {
+  display: inline-block;
+  position: relative;
+}
+.dropbtn {
+  background-color: #555;
+  color: #fff;
+  padding: 10px 18px;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.dropbtn:hover {
+  background-color: #333;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  border-radius: 8px;
+  z-index: 1000;
+}
+.dropdown-content a {
+  color: #000;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  font-weight: bold;
+}
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+  }
 </style>
 </head>
 <body>
@@ -111,9 +153,15 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   </div>
 </div>
 
-<!-- Theme Toggle Button -->
-<div style="text-align:right; margin:10px 20px;">
-  <button id="themeBtn" style="background-color:#555;color:#fff;padding:8px 16px;border-radius:6px;cursor:pointer;">Theme</button>
+<!-- Theme Dropdown (center position) -->
+<div style="text-align:center; margin:12px 0; position:relative;">
+  <div class="dropdown">
+    <button class="dropbtn"><i class="fa-solid fa-circle-half-stroke"></i> Theme</button>
+    <div class="dropdown-content">
+      <a href="#" onclick="setTheme('light')">🌞 Light Mode</a>
+      <a href="#" onclick="setTheme('dark')">🌙 Dark Mode</a>
+    </div>
+  </div>
 </div>
 <!-- Notice Board -->
 <div class="welcome-cover">
@@ -291,28 +339,20 @@ updateAdminUI();
   // ===== Theme Toggle =====
 const themeBtn = document.getElementById("themeBtn");
 const savedTheme = localStorage.getItem("theme") || "light";
+// ===== Theme Toggle (Dropdown Version) =====
+function setTheme(mode){
+  if(mode === 'dark'){
+    document.body.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.body.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
+}
 
-// Page load pe theme apply
-if(savedTheme === "dark") document.body.classList.add("dark");
-
-// Button click pe toggle
-themeBtn.addEventListener("click", ()=>{
-  document.body.classList.toggle("dark");
-  localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-});
-
-// Dark mode CSS
-const style = document.createElement("style");
-style.innerHTML = `
-body.dark { background:#0f1724; color:#d1d5db; }
-body.dark .msg { background:#07203a; color:#d1d5db; border-color:#12324a; }
-body.dark .box, body.dark .box-welcome { background:#1e293b; color:#d1d5db; border-color:#334155; }
-body.dark .header, body.dark .footer-inner { background:#334155; color:#d1d5db; border-color:#1e293b; }
-body.dark button, body.dark .btn { filter: brightness(1.2); }
-body.dark #shoutbox { background:#1e293b; color:#d1d5db; border-color:#334155; }
-body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-color:#1e293b; }
-`;
-document.head.appendChild(style);
+// Page load hone par theme apply ho jaye
+const savedTheme = localStorage.getItem('theme') || 'light';
+if(savedTheme === 'dark') document.body.classList.add('dark'););
 </script>
 </body>
   </html>
