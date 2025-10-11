@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mathematics Hub Class 6 to 12</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- marked.js for markdown -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<!-- MathJax for LaTeX rendering -->
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <style>
-/* ---------- ORIGINAL STYLES (kept as-is, small additions at end) ---------- */
 body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 0; color: #000; }
 
 /* Header & Footer */
@@ -68,9 +63,9 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 
 /* Shoutbox */
 #shoutbox { background: #fff; border: 2px solid #F44336; border-radius: 6px; padding: 10px; margin: 10px; }
+#typingIndicator { font-size:12px; color:#666; margin-bottom:6px; }
 #messages { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column-reverse; margin-bottom: 8px; }
-.msg { border-bottom: 1px solid #ddd; padding: 6px; display:flex; gap:10px; align-items:flex-start; }
-.msg .bubble { background:#F9F9F9; padding:8px 12px; border-radius:12px; border:1px solid #eee; flex:1; }
+.msg { border-bottom: 1px solid #ddd; padding: 6px; display:block; word-wrap:break-word; }
 .msg .meta { font-size: 12px; color: gray; margin-top:6px; }
 #shoutbox input[type=text], #shoutbox input[type=file] { padding: 6px; width: 100%; border: 1px solid #FFA500; border-radius: 4px; margin-bottom: 6px; box-sizing: border-box; }
 
@@ -98,64 +93,40 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 #logoutBtn { background-color: #555; display:none; }
 #logoutBtn:hover { background-color: #555; filter: brightness(0.85); }
 
+/* Theme button style - make same look as logoutBtn and visible to all */
+#themeBtn {
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  width: auto;
+  height: auto;
+  background-color: #555;
+  display: inline-block;
+}
+#themeBtn:hover { filter: brightness(0.85); }
+
 #adminStatus { color:green; font-weight:bold; margin-bottom:6px; display:none; }
+
+/* Actions under messages */
+.msg-actions { margin-top:6px; display:flex; gap:6px; flex-wrap:wrap; }
+.msg-actions button { padding:4px 8px; border-radius:6px; border:none; cursor:pointer; font-size:13px; }
+.reactBtn { background:#ff6b6b; color:white; } /* heart */
+.replyBtn { background:#2196F3; color:white; }
+.reportBtn { background:#ff9800; color:white; }
+.blockBtn { background:#555; color:white; }
+
+/* Username colors */
+.username { font-weight:bold; }
+.username.user { color: #3366CC; } /* blue */
+.username.admin { color: #2ECC71; } /* green */
 
 /* Progress bar */
 #uploadProgress { width:100%; background:#eee; border-radius:4px; margin:6px 0; display:none; }
 #uploadBar { width:0%; height:8px; background:#4CAF50; border-radius:4px; }
 
 @media(max-width:600px){ #shoutbox .send-wrapper { justify-content:flex-start; margin-top:6px; } #shoutbox button{ width:100%; } }
-
-/* ----------------- NEW/ADDED STYLES FOR FEATURES ----------------- */
-.username { color: #3366CC; font-weight: bold; margin-right:6px; }
-.username.admin { color: #D32F2F; }
-.user-bubble { border-radius: 18px; } /* rounded bubbles */
-.msg .avatar { width:36px; height:36px; border-radius:50%; background:#ccc; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#fff; flex-shrink:0; }
-.controls { display:flex; gap:6px; align-items:center; margin-left:auto; }
-.small-btn { background:none; border:none; cursor:pointer; font-size:14px; padding:4px; border-radius:4px; }
-.small-btn:hover { background:#f0f0f0; }
-.reactions { display:inline-flex; gap:6px; margin-top:6px; }
-.reaction { cursor:pointer; padding:2px 6px; border-radius:12px; border:1px solid #eee; font-size:13px; }
-.pinned { border-left:4px solid gold; padding-left:8px; }
-.highlight-admin { background: #fffbe6; border:1px solid #ffe58f; }
-
-/* Theme button style: same look as logoutBtn (visible to everyone) */
-#themeBtn {
-  background-color: #555;
-  color: #fff;
-  padding: 6px 14px;
-  font-size: 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  width: auto;
-  height: auto;
-  display: inline-block;
-}
-#themeBtn:hover { filter: brightness(0.85); }
-
-/* Dark mode */
-body.dark { background:#0f1724; color:#d1d5db; }
-body.dark .box, body.dark .box-welcome, body.dark .header, body.dark .footer-inner { background:#0b1220; color:#d1d5db; border-color:#223247; }
-body.dark .msg .bubble { background:#07203a; color:#d1d5db; border-color:#12324a; }
-
-/* Search bar */
-#searchBox { width:100%; padding:6px; margin-bottom:6px; border-radius:4px; border:1px solid #ccc; }
-
-/* Typing indicator */
-#typingIndicator { font-size:12px; color:#666; margin-bottom:6px; }
-
-/* Unread count badge */
-#unreadBadge { background:#e53935; color:#fff; padding:3px 7px; border-radius:12px; margin-left:6px; font-size:12px; display:none; }
-
-/* Profanity highlight (hidden words replaced) */
-.profanity { color:#999; font-style:italic; }
-
-/* Mention highlight */
-.mention { background:#e8f0ff; padding:2px 4px; border-radius:4px; }
-
-/* small utility */
-.meta .loc { font-size:11px; color:#999; margin-left:6px; }
-/* end styles */
 </style>
 </head>
 <body>
@@ -174,61 +145,30 @@ body.dark .msg .bubble { background:#07203a; color:#d1d5db; border-color:#12324a
 </div>
 
 <div class="box-welcome">
-  This website is specially designed for Students of class 6 to class 12 to clear their Maths problem in simple way यह वेबसाइट विशेष रूप से कक्षा 6 से कक्षा 12 तक के विद्यार्थियों के लिए आसान तरीके से गणित की समस्याओं को हल करने हेतु डिज़ाइन की गई है।   
+  This website is 2 specially designed for Students of class 6 to class 12 to clear their Maths problem in simple way यह वेबसाइट विशेष रूप से कक्षा 6 से कक्षा 12 तक के विद्यार्थियों के लिए आसान तरीके से गणित की समस्याओं को हल करने हेतु डिज़ाइन की गई है।   
   <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
 </div>
 
 <!-- Shoutbox -->
-<div class="section-title title-shout">Shoutbox <span id="unreadBadge">0</span></div>
+<div class="section-title title-shout">Shoutbox</div>
 <div class="box" id="shoutbox">
   <div id="adminStatus">✅ Admin login successful</div>
 
-  <!-- controls row: search, filter, theme -->
-  <input id="searchBox" placeholder="Search messages... (type and press Enter)" />
-  <div style="display:flex;gap:8px;margin-bottom:6px;">
-    <input type="text" id="tagFilter" placeholder="Filter by tag e.g. #doubt" style="flex:1;padding:6px;border:1px solid #ffa500;border-radius:4px;">
-    <button class="small-btn" id="clearFilters" title="Clear filters">Clear</button>
-    <button id="themeBtn" title="Toggle dark/light">Theme</button>
-  </div>
-
-  <div id="typingIndicator"></div>
+  <div id="typingIndicator" class="small"></div>
   <div id="messages"></div>
 
-  <!-- message inputs -->
   <input type="text" id="username" placeholder="Name (type 'admin' to login as admin)">
-  <input type="text" id="message" placeholder="Type your message (you can use $...$ for LaTeX)">
-  <div style="display:flex;gap:8px;margin-bottom:6px;">
-    <input type="file" id="photoInput" accept="image/*,video/*,audio/*">
-    <select id="emojiPicker" title="Emoji">
-      <option value="">🙂</option>
-      <option value="😊">😊</option>
-      <option value="😂">😂</option>
-      <option value="👍">👍</option>
-      <option value="❤️">❤️</option>
-      <option value="🎯">🎯</option>
-      <option value="📌">📌</option>
-      <option value="🤔">🤔</option>
-      <option value="📐">📐</option>
-    </select>
-    <button id="translateBtn" class="small-btn">Translate</button>
-  </div>
-
+  <input type="text" id="message" placeholder="Type your message">
+  <input type="file" id="photoInput" accept="image/*">
   <div id="uploadProgress"><div id="uploadBar"></div></div>
 
   <div class="send-wrapper">
     <button id="sendBtn">Send</button>
-  </div>
-
-  <div class="send-wrapper">
     <button id="clearBtn">Clear Shoutbox</button>
     <button id="deleteSelectedBtn">Delete Selected</button>
     <button id="logoutBtn">Admin Logout</button>
-    <button id="setSlowModeBtn" class="small-btn" style="display:none;">Set Slow Mode</button>
-    <button id="pinBtn" class="small-btn" style="display:none;">Pin Message</button>
+    <button id="themeBtn" title="Toggle dark/light">Theme</button>
   </div>
-
-  <div id="leaderboard" style="display:none;"></div>
-  <div id="botSuggestions" style="margin-top:8px;color:#444;font-size:13px;"></div>
 </div>
 
 <!-- Updates -->
@@ -294,7 +234,6 @@ body.dark .msg .bubble { background:#07203a; color:#d1d5db; border-color:#12324a
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-/* ----------------- CONFIG & INIT ----------------- */
 var firebaseConfig = {
   apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
   authDomain: "mathematics-hub-7087f.firebaseapp.com",
@@ -307,416 +246,289 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db=firebase.database();
 
-/* Constants & State */
 const ADMIN_PASSWORD="Dalbir@551";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
-let slowModeSeconds = 0;
-let lastSentAt = {};
+
+/* --- Local state --- */
 let blockedNames = JSON.parse(localStorage.getItem("blockedNames")||"[]");
-let unreadCount = 0;
-let soundEnabled = true;
-let currentUserName = localStorage.getItem("lastName") || "";
-document.getElementById("username").value = currentUserName;
+let typingTimers = {}; // for clearing typing entries
 
-/* Profanity & Math */
-const profanityList = ["badword1","badword2","arse"];
-const MATH_ALLOWED = /^[0-9+\-*/().\s%^]*$/;
-
-/* Utilities */
 function escapeHtml(str){ if(str===undefined || str===null) return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+
 function isAdminAuthenticated(){ return sessionStorage.getItem("isAdmin")==="true"; }
-function setAdminAuthenticated(flag){ if(flag) sessionStorage.setItem("isAdmin","true"); else sessionStorage.removeItem("isAdmin"); updateAdminUI(); }
+async function setAdminAuthenticated(flag){
+  if(flag){
+    sessionStorage.setItem("isAdmin","true");
+    updateAdminUI();
+    // mark all messages seen by admin
+    await markAllSeenByAdmin();
+  } else {
+    sessionStorage.removeItem("isAdmin");
+    updateAdminUI();
+  }
+}
 function updateAdminUI(){
   document.getElementById("adminStatus").style.display=isAdminAuthenticated()?"block":"none";
   document.getElementById("logoutBtn").style.display=isAdminAuthenticated()?"inline-block":"none";
   document.getElementById("deleteSelectedBtn").style.display=isAdminAuthenticated()?"inline-block":"none";
-  document.getElementById("setSlowModeBtn").style.display=isAdminAuthenticated()?"inline-block":"none";
-  document.getElementById("pinBtn").style.display=isAdminAuthenticated()?"inline-block":"none";
   updateCheckboxes();
 }
+
+/* relative time */
 function formatDateTime(ts){
-  const d = new Date(ts);
-  const diff = Date.now()-ts;
+  const d=new Date(ts);
+  const diff = Date.now() - ts;
   if(diff < 60000) return "just now";
-  if(diff < 3600000) return Math.floor(diff/60000)+" min ago";
-  if(diff < 86400000) return Math.floor(diff/3600000)+" hr ago";
+  if(diff < 3600000) return Math.floor(diff/60000) + " min ago";
+  if(diff < 86400000) return Math.floor(diff/3600000) + " hr ago";
   let day=d.getDate().toString().padStart(2,'0'), month=(d.getMonth()+1).toString().padStart(2,'0'), year=d.getFullYear();
   let hrs=d.getHours(), mins=d.getMinutes().toString().padStart(2,'0'), ampm=hrs>=12?'PM':'AM';
-  hrs=hrs%12||12;
+  hrs = hrs%12||12;
   return `${day}/${month}/${year} ${hrs}:${mins} ${ampm}`;
 }
-function filterProfanity(text){
-  let out = text;
-  profanityList.forEach(w => {
-    const re = new RegExp('\\b'+w+'\\b','ig');
-    out = out.replace(re, match => '<span class="profanity">***</span>');
-  });
-  return out;
+
+/* mark all messages seen by admin */
+async function markAllSeenByAdmin(){
+  try{
+    const snap = await db.ref("shoutbox").once("value");
+    const all = snap.val() || {};
+    Object.keys(all).forEach(k => {
+      db.ref("shoutbox/"+k+"/seenBy/admin").set(Date.now());
+    });
+  }catch(e){ console.warn("markAllSeenByAdmin failed", e); }
 }
-function renderMarkdown(text){
-  if(!text) return "";
-  let md = marked.parse(text);
-  return md;
-}
+
+/* linkify: convert http/https/www to clickable links (works on escaped text) */
 function linkify(text){
   if(!text) return "";
-  text = text.replace(/\bwww\.[^\s]+/gi, (m)=>"http://"+m);
-  return text.replace(/(https?:\/\/[^\s<]+)/gi, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#3366CC;">$1</a>');
+  // add http:// to www.
+  text = text.replace(/\bwww\.[^\s<]+/gi, function(m){ return "http://"+m; });
+  return text.replace(/(https?:\/\/[^\s<]+)/gi, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#3366CC;text-decoration:underline;">$1</a>');
 }
-function safeEvalMath(expr){
-  expr = expr.replace(/\^/g,'**');
-  if(!MATH_ALLOWED.test(expr)) return null;
-  try{
-    let val = eval(expr);
-    if(typeof val === "number" && isFinite(val)) return val;
-  }catch(e){ return null; }
-  return null;
-}
-const ping = new Audio();
-ping.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=";
-function playPing(){ if(soundEnabled) ping.play().catch(()=>{}); }
 
-/* Imgbb upload */
-async function uploadToImgbb(file){
-  return new Promise((resolve,reject)=>{
-    const reader=new FileReader();
-    reader.onloadend = ()=>{
-      const base64 = reader.result.split(",")[1];
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", "https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY);
-      xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-      xhr.upload.onprogress = function(e){ if(e.lengthComputable){ const percent=(e.loaded/e.total)*100; document.getElementById("uploadProgress").style.display="block"; document.getElementById("uploadBar").style.width=percent+"%"; } };
-      xhr.onload = function(){ document.getElementById("uploadProgress").style.display="none"; document.getElementById("uploadBar").style.width="0%"; if(xhr.status===200){ resolve(JSON.parse(xhr.responseText).data.url); } else reject("Upload failed"); };
-      xhr.onerror = ()=>reject("Upload error");
-      xhr.send("image="+encodeURIComponent(base64));
-    };
-    reader.readAsDataURL(file);
+/* update checkboxes for admin */
+function updateCheckboxes(){
+  document.querySelectorAll(".msg").forEach(msg=>{
+    let chk = msg.querySelector(".msgCheck");
+    if(isAdminAuthenticated()){
+      if(!chk){
+        const key = msg.getAttribute("data-key");
+        const input = document.createElement("input");
+        input.type = "checkbox"; input.className = "msgCheck"; input.setAttribute("data-key",key);
+        // prepend before name
+        const b = msg.querySelector("b");
+        if(b) b.prepend(input);
+      }
+    } else {
+      if(chk) chk.remove();
+    }
   });
 }
 
-/* ---------- MESSAGE RENDERING ---------- */
+/* render single message */
 async function addMessageToDOM(key,data){
+  // don't show blocked users locally
   if(blockedNames.includes(data.name)) return;
 
   const div = document.createElement("div");
   div.classList.add("msg");
-  if(data.pinned) div.classList.add("pinned");
-  if(data.admin) div.classList.add("highlight-admin");
-  div.setAttribute("data-key",key);
+  div.setAttribute("data-key", key);
 
-  // avatar
-  const avatar = document.createElement("div");
-  avatar.className = "avatar";
-  avatar.textContent = (data.name||"G").charAt(0).toUpperCase();
-  avatar.style.background = stringToColor(data.name||"Guest");
-  div.appendChild(avatar);
+  // checkbox for admin (inserted separately later)
+  let checkboxHtml = "";
+  if(isAdminAuthenticated()){ checkboxHtml = `<input type="checkbox" class="msgCheck" data-key="${key}"> `; }
 
-  // bubble
-  const bubble = document.createElement("div");
-  bubble.className = "bubble user-bubble";
-
-  let checkboxHtml="";
+  // admin meta (IP/location) only if admin viewing — keep this optional and non-blocking
+  let adminMeta = "";
   if(isAdminAuthenticated()){
-    checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;
+    try{
+      const res = await fetch('https://ipapi.co/json/');
+      const info = await res.json();
+      adminMeta = ` | IP: ${info.ip} | ${info.city}, ${info.region}, ${info.country_name}`;
+    }catch(e){ adminMeta = ""; }
   }
 
-  const unameSpan = `<span class="username ${data.admin?"admin":""}">${escapeHtml(data.name||"Guest")}${data.admin?" ✅":""}</span>`;
+  // username span with classes
+  const unameClass = (data.admin) ? "username admin" : "username user";
+  const nameHtml = `<b class="${unameClass}">${checkboxHtml}${escapeHtml(data.name)}</b>`;
 
-  // message body: profanity -> markdown -> linkify -> mentions
-  let bodyText = data.message || "";
-  bodyText = filterProfanity(bodyText);
-  bodyText = renderMarkdown(bodyText);
-  bodyText = linkify(bodyText);
-  bodyText = bodyText.replace(/@([A-Za-z0-9_-]+)/g, '<span class="mention">@$1</span>');
+  // message body (escape then linkify)
+  const rawMsg = escapeHtml(data.message||"");
+  const linked = linkify(rawMsg);
 
-  // reply
-  let replyHtml = "";
-  if(data.replyToName){
-    replyHtml = `<div style="font-size:13px;color:#666;margin-bottom:6px;">Reply to <strong>${escapeHtml(data.replyToName)}</strong>: ${escapeHtml(truncate(data.replyToText||"",80))}</div>`;
-  }
-
-  // media
+  // media (if present)
   let mediaHtml = "";
   if(data.photoURL){
-    if(/\.(mp4|webm|ogg)(\?|$)/i.test(data.photoURL)){
-      mediaHtml = `<div style="margin-top:6px;"><video controls style="max-width:220px;border-radius:6px;"><source src="${data.photoURL}"></video></div>`;
-    } else if(/\.(mp3|wav|m4a|ogg)(\?|$)/i.test(data.photoURL)){
-      mediaHtml = `<div style="margin-top:6px;"><audio controls src="${data.photoURL}"></audio></div>`;
-    } else {
-      mediaHtml = `<div style="margin-top:6px;"><img src="${data.photoURL}" style="max-width:220px;border-radius:6px;"></div>`;
-    }
+    mediaHtml = `<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;
   }
 
-  // reactions & likes
-    const likes = data.likes || 0;
-  const reactions = data.reactions || {};
-  let reactionsHtml = `<div class="reactions">`;
-  for(const r in reactions){
-    reactionsHtml += `<span class="reaction" data-key="${key}" data-reaction="${r}">${escapeHtml(r)} ${reactions[r]}</span>`;
-  }
-  reactionsHtml += `</div>`;
+  // meta: relative time + seen by admin flag
+  const seenAdmin = (data.seenBy && data.seenBy.admin) ? " • Seen by admin" : "";
+  const metaHtml = `<div class="meta">${formatDateTime(data.time)}${adminMeta}${seenAdmin}</div>`;
 
-  const meta = `<div class="meta">${formatDateTime(data.time)} ${data.location?("<span class='loc'>"+escapeHtml(data.location)+"</span>"):""}${(data.seenBy && data.seenBy.admin) ? " • Seen by admin" : ""}</div>`;
+  // actions: reaction (like count), reply, report, block
+  const likes = data.likes || 0;
+  const actionsHtml = `
+    <div class="msg-actions">
+      <button class="reactBtn" title="Like">❤️ <span class="like-count">${likes}</span></button>
+      <button class="replyBtn" title="Reply">↩ Reply</button>
+      <button class="reportBtn" title="Report">⚠ Report</button>
+      <button class="blockBtn" title="Block locally">🚫 Block</button>
+    </div>
+  `;
 
-  bubble.innerHTML = `${checkboxHtml}${unameSpan} ${replyHtml}<div class="msg-content">${bodyText}</div>${mediaHtml}${reactionsHtml}${meta}`;
+  div.innerHTML = `${nameHtml}: <span class="msg-body">${linked}</span>${mediaHtml}${metaHtml}${actionsHtml}`;
 
-  // controls
-  const ctrl = document.createElement("div");
-  ctrl.className = "controls";
-
-  const likeBtn = document.createElement("button"); likeBtn.className="small-btn"; likeBtn.innerHTML=`❤️ <span class="like-count">${likes}</span>`;
-  likeBtn.title="Like"; likeBtn.onclick = ()=> { db.ref("shoutbox/"+key+"/likes").transaction(curr=> (curr||0)+1); };
-  const reactBtn = document.createElement("button"); reactBtn.className="small-btn"; reactBtn.innerHTML="🙂"; reactBtn.title="React"; reactBtn.onclick = ()=> { showReactPrompt(key); };
-  const copyBtn = document.createElement("button"); copyBtn.className="small-btn"; copyBtn.innerHTML="📋"; copyBtn.title="Copy"; copyBtn.onclick = ()=> { navigator.clipboard.writeText(data.message||"").then(()=>alert("Copied")); };
-  const replyBtn = document.createElement("button"); replyBtn.className="small-btn"; replyBtn.innerHTML="↩"; replyBtn.title="Reply"; replyBtn.onclick = ()=> {
-    document.getElementById("message").value = `@${data.name} `;
-    document.getElementById("message").focus();
-    document.getElementById("message").dataset.replyToKey = key;
-    document.getElementById("message").dataset.replyToName = data.name;
-    document.getElementById("message").dataset.replyToText = data.message;
-  };
-  const delBtn = document.createElement("button"); delBtn.className="small-btn"; delBtn.innerHTML="🗑"; delBtn.title="Delete (if your message)"; delBtn.onclick = ()=> {
-    const myName = (document.getElementById("username").value||"").trim();
-    if(myName && myName === data.name){ if(confirm("Delete your message?")){ db.ref("shoutbox/"+key).remove(); const el=document.querySelector(".msg[data-key='"+key+"']"); if(el) el.remove(); } } else alert("You can only delete your own messages (same name).");
-  };
-  const reportBtn = document.createElement("button"); reportBtn.className="small-btn"; reportBtn.innerHTML="⚠"; reportBtn.title="Report"; reportBtn.onclick = ()=> {
-    if(confirm("Report this message to admin?")){ db.ref("reports").push({ key, reportedAt: Date.now(), by: document.getElementById("username").value||"Guest", message: data.message||"" }); alert("Reported. Admin will review."); }
-  };
-  const blockBtn = document.createElement("button"); blockBtn.className="small-btn"; blockBtn.innerHTML="🚫"; blockBtn.title="Block"; blockBtn.onclick = ()=> {
-    if(confirm("Block "+data.name+" locally?")){ blockedNames.push(data.name); localStorage.setItem("blockedNames", JSON.stringify(blockedNames)); document.querySelectorAll(".msg").forEach(m=>{ if(m.querySelector(".username") && m.querySelector(".username").textContent.trim().startsWith(data.name)) m.remove(); }); }
-  };
-  const pinBtn = document.createElement("button"); pinBtn.className="small-btn"; pinBtn.innerHTML="📌"; pinBtn.title="Pin (admin)"; pinBtn.style.display=isAdminAuthenticated()?"inline-block":"none"; pinBtn.onclick = async ()=> { if(!isAdminAuthenticated()) return alert("Admin only"); const snap = await db.ref("shoutbox/"+key).once("value"); const cur = snap.val()||{}; await db.ref("shoutbox/"+key).update({ pinned: !cur.pinned }); };
-
-  ctrl.appendChild(likeBtn); ctrl.appendChild(reactBtn); ctrl.appendChild(copyBtn); ctrl.appendChild(replyBtn);
-  ctrl.appendChild(delBtn); ctrl.appendChild(reportBtn); ctrl.appendChild(blockBtn); ctrl.appendChild(pinBtn);
-
-  bubble.appendChild(ctrl);
-  div.appendChild(bubble);
-
+  // attach to DOM
   document.getElementById("messages").prepend(div);
 
-  if(window.MathJax) MathJax.typesetPromise && MathJax.typesetPromise();
+  // attach action handlers
+  const reactBtn = div.querySelector(".reactBtn");
+  const replyBtn = div.querySelector(".replyBtn");
+  const reportBtn = div.querySelector(".reportBtn");
+  const blockBtn = div.querySelector(".blockBtn");
 
-  // unread & notifications
-  if(document.hidden){ unreadCount++; showUnreadBadge(); if(soundEnabled) playPing(); showBrowserNotification(data); } else playPing();
-
-  // reaction click
-  div.querySelectorAll(".reaction").forEach(rEl=>{
-    rEl.onclick = ()=> {
-      const react = rEl.getAttribute("data-reaction");
-      db.ref("shoutbox/"+key+"/reactions/"+react).transaction(curr => (curr||0)+1);
-    };
+  reactBtn && reactBtn.addEventListener("click", ()=>{
+    db.ref("shoutbox/"+key+"/likes").transaction(curr => (curr||0)+1);
   });
+
+  replyBtn && replyBtn.addEventListener("click", ()=>{
+    document.getElementById("message").value = `@${data.name} `;
+    document.getElementById("message").focus();
+    // store reply metadata if needed
+    document.getElementById("message").dataset.replyToKey = key;
+    document.getElementById("message").dataset.replyToName = data.name;
+  });
+
+  reportBtn && reportBtn.addEventListener("click", ()=>{
+    const reporter = (document.getElementById("username").value||"Guest").trim() || "Guest";
+    if(confirm("Report this message to admin?")){
+      db.ref("reports").push({ key, reportedBy: reporter, message: data.message||"", time: Date.now() });
+      alert("Reported. Admin will review.");
+    }
+  });
+
+  blockBtn && blockBtn.addEventListener("click", ()=>{
+    if(confirm("Block user '"+data.name+"' locally? You will no longer see their messages on this device.")){
+      blockedNames.push(data.name);
+      localStorage.setItem("blockedNames", JSON.stringify(blockedNames));
+      // remove their existing messages from DOM
+      document.querySelectorAll(".msg").forEach(m=>{
+        const b = m.querySelector("b");
+        if(b && b.textContent.trim().endsWith(data.name)) {
+          m.remove();
+        } else {
+          // also check span username if formatting differs
+          const unameSpan = m.querySelector("b");
+          if(unameSpan && unameSpan.textContent.includes(data.name)) m.remove();
+        }
+      });
+    }
+  });
+
+  // update checkboxes if admin
+  updateCheckboxes();
 }
 
-/* helpers */
-function truncate(s,n){ if(!s) return ""; return s.length>n?s.slice(0,n)+"...":s; }
-function stringToColor(str){ let hash=0; for(let i=0;i<str.length;i++) hash = str.charCodeAt(i) + ((hash<<5)-hash); const c = (hash & 0x00FFFFFF).toString(16).toUpperCase(); return "#"+("00000".substring(0,6-c.length)+c); }
-function updateCheckboxes(){ document.querySelectorAll(".msg").forEach(msg=>{ let chk=msg.querySelector(".msgCheck"); if(isAdminAuthenticated()){ if(!chk){ const key=msg.getAttribute("data-key"); const input=document.createElement("input"); input.type="checkbox"; input.className="msgCheck"; input.setAttribute("data-key",key); msg.querySelector(".bubble").prepend(input); } } else{ if(chk) chk.remove(); } }); }
-function showUnreadBadge(){ const b=document.getElementById("unreadBadge"); if(unreadCount>0){ b.style.display="inline-block"; b.textContent=unreadCount; } else b.style.display="none"; }
-function showBrowserNotification(data){ if(!("Notification" in window)) return; if(Notification.permission === "default") Notification.requestPermission(); if(Notification.permission === "granted"){ const title = (data.name||"User") + ": " + ((data.message||"").slice(0,120)); const n = new Notification("Mathematics Hub — New message", { body: title, icon: null }); setTimeout(()=>n.close(),4000); } }
-function showReactPrompt(key){ const opts = ["👍","😂","❤️","🤔"]; const r = prompt("React with one of: "+opts.join(" "), opts[0]); if(!r) return; db.ref("shoutbox/"+key+"/reactions/"+r).transaction(curr => (curr||0)+1); }
+/* remove and re-add on change, remove on delete */
+db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snap => { addMessageToDOM(snap.key, snap.val()); });
+db.ref("shoutbox").on("child_changed", snap => {
+  const key = snap.key; const data = snap.val();
+  const el = document.querySelector(".msg[data-key='"+key+"']");
+  if(el) el.remove();
+  addMessageToDOM(key, data);
+});
+db.ref("shoutbox").on("child_removed", snap => {
+  const el = document.querySelector(".msg[data-key='"+snap.key+"']");
+  if(el) el.remove();
+});
 
-/* copyAll removed by request - UI buttons removed */
-
-/* typing */
+/* typing indicator handling */
 let typingTimeout;
 document.getElementById("message").addEventListener("input", ()=>{
   const name = (document.getElementById("username").value||"Guest").trim();
   if(!name) return;
   db.ref("typing/"+name).set(true);
   clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(()=>{ db.ref("typing/"+name).remove(); },2000);
+  typingTimeout = setTimeout(()=>{ db.ref("typing/"+name).remove(); }, 1800);
 });
-db.ref("typing").on("value", snap=>{
+db.ref("typing").on("value", snap => {
   const val = snap.val() || {};
-  const keys = Object.keys(val);
+  const names = Object.keys(val);
   const current = (document.getElementById("username").value||"").trim();
-  const others = keys.filter(k=>k!==current);
-  document.getElementById("typingIndicator").textContent = others.length ? (others.join(", ") + " typing...") : "";
+  const others = names.filter(n => n !== current);
+  document.getElementById("typingIndicator").textContent = others.length ? others.join(", ") + " typing..." : "";
 });
 
-/* leaderboard functions remain but no UI button (kept for future) */
-function updateLeaderboardUI(){
-  db.ref("users").orderByChild("points").limitToLast(10).once("value").then(s=>{
-    const html = [];
-    s.forEach(child=> html.push(`${escapeHtml(child.key)} — ${child.val().points} pts`));
-    document.getElementById("leaderboard").innerHTML = "<strong>Leaderboard</strong><br>"+html.reverse().join("<br>");
-  });
-}
+/* upload to imgbb (same as original) */
+async function uploadToImgbb(file){ return new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.onloadend=()=>{ const base64=reader.result.split(",")[1]; const xhr=new XMLHttpRequest(); xhr.open("POST","https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY); xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); xhr.upload.onprogress=function(e){if(e.lengthComputable){const percent=(e.loaded/e.total)*100;document.getElementById("uploadProgress").style.display="block";document.getElementById("uploadBar").style.width=percent+"%";}}; xhr.onload=function(){document.getElementById("uploadProgress").style.display="none"; if(xhr.status===200){resolve(JSON.parse(xhr.responseText).data.url);} else reject("Upload failed");}; xhr.onerror=()=>reject("Upload error"); xhr.send("image="+encodeURIComponent(base64));}; reader.readAsDataURL(file); }); }
 
-/* tag filter & search */
-document.getElementById("tagFilter").addEventListener("input", ()=>{
-  const tag = document.getElementById("tagFilter").value.trim().toLowerCase();
-  if(!tag){ document.querySelectorAll(".msg").forEach(m=>m.style.display="flex"); return; }
-  document.querySelectorAll(".msg").forEach(m=>{
-    const content = m.querySelector(".msg-content").innerText.toLowerCase();
-    m.style.display = content.includes(tag.replace("#","").toLowerCase()) ? "flex" : "none";
-  });
-});
-document.getElementById("clearFilters").addEventListener("click", ()=>{ document.getElementById("tagFilter").value=""; document.getElementById("searchBox").value=""; document.querySelectorAll(".msg").forEach(m=>m.style.display="flex"); });
-document.getElementById("searchBox").addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ const q=document.getElementById("searchBox").value.toLowerCase(); document.querySelectorAll(".msg").forEach(m=>{ const t = m.innerText.toLowerCase(); m.style.display = t.includes(q) ? "flex" : "none"; }); }});
-
-/* theme button (visible & styled like logout) */
-const themeBtn = document.getElementById("themeBtn");
-const savedTheme = localStorage.getItem("theme") || "light";
-if(savedTheme === "dark") document.body.classList.add("dark");
-themeBtn.addEventListener("click", ()=>{
-  document.body.classList.toggle("dark");
-  localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-});
-
-/* translate & emoji */
-document.getElementById("translateBtn").addEventListener("click", ()=>{
-  const text = document.getElementById("message").value;
-  if(!text) return alert("Type message to translate.");
-  const url = "https://translate.google.com/?sl=auto&tl=en&text="+encodeURIComponent(text);
-  window.open(url,"_blank");
-});
-document.getElementById("emojiPicker").addEventListener("change", (e)=>{ if(e.target.value){ document.getElementById("message").value += " " + e.target.value; e.target.value = ""; document.getElementById("message").focus(); } });
-
-/* set slow mode (admin) */
-document.getElementById("setSlowModeBtn").addEventListener("click", ()=>{
-  const s = parseInt(prompt("Enter slow mode seconds (0 to disable):", slowModeSeconds||0));
-  if(!isNaN(s)){ slowModeSeconds = s; db.ref("meta/slowMode").set(s); alert("Slow mode set to "+s+" seconds"); }
-});
-
-/* pin (admin) */
-document.getElementById("pinBtn").addEventListener("click", async ()=>{
-  const sel = document.querySelector(".msg .msgCheck:checked");
-  if(!sel) return alert("Select message checkbox to pin.");
-  const key = sel.getAttribute("data-key");
-  const snap = await db.ref("shoutbox/"+key).once("value");
-  const cur = snap.val() || {};
-  await db.ref("shoutbox/"+key).update({ pinned: !cur.pinned });
-});
-
-/* clear, delete selected, logout */
-document.getElementById("clearBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; } else { alert("Admin only"); } });
-document.getElementById("deleteSelectedBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key=chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); const el = document.querySelector(".msg[data-key='"+key+"']"); if(el) el.remove(); }); } else alert("Admin only"); });
-document.getElementById("logoutBtn").addEventListener("click", ()=>{ setAdminAuthenticated(false); });
-
-updateAdminUI();
-
-/* ---------- SENDING MESSAGES ---------- */
+/* send message (with admin login and automatic reply bot) */
 document.getElementById("sendBtn").addEventListener("click", async ()=>{
-  const nameEl=document.getElementById("username"); const msgEl=document.getElementById("message"); const photoEl=document.getElementById("photoInput");
+  const nameEl = document.getElementById("username");
+  const msgEl = document.getElementById("message");
+  const photoEl = document.getElementById("photoInput");
   const name = (nameEl.value||"").trim();
   const msg = (msgEl.value||"").trim();
+  if(!name && !photoEl.files[0]) return alert("Enter message or photo.");
 
-  if(!name && !photoEl.files[0] && !msg) return alert("Enter message or photo.");
+  // admin login
   if(name.toLowerCase()==="admin" && !isAdminAuthenticated()){
     const pwd = prompt("Enter admin password:");
-    if(pwd===ADMIN_PASSWORD){ setAdminAuthenticated(true); markAllSeenByAdmin(); } else { alert("Incorrect password."); return; }
+    if(pwd === ADMIN_PASSWORD){
+      await setAdminAuthenticated(true);
+    } else { alert("Incorrect password."); return; }
   }
 
-  const metaSnap = await db.ref("meta/slowMode").once("value");
-  const slow = metaSnap.exists() ? (metaSnap.val()||0) : slowModeSeconds;
-  const now = Date.now();
-  if(slow>0){
-    const last = lastSentAt[name] || 0;
-    if(now - last < slow*1000 && !(isAdminAuthenticated() && name.toLowerCase()==="admin")) return alert("Slow mode: wait "+Math.ceil((slow*1000 - (now-last))/1000)+" sec");
-  }
-
-  const lastMsgKey = "lastMsg_"+name;
-  const lastMsgObj = JSON.parse(localStorage.getItem(lastMsgKey) || "{}");
-  if(lastMsgObj.text === msg && (Date.now() - lastMsgObj.time < 5000)) return alert("Please don't spam same message.");
-
+  // upload if any
   let photoURL = "";
-  if(photoEl.files && photoEl.files[0]){
-    const f = photoEl.files[0];
-    if(f.size > 8*1024*1024) return alert("File too large (max 8MB).");
-    try{ photoURL = await uploadToImgbb(f); photoEl.value = ""; } catch(e){ alert("Upload failed: "+e); return; }
+  if(photoEl.files[0]){
+    try{ photoURL = await uploadToImgbb(photoEl.files[0]); photoEl.value = ""; } catch(e){ alert("Image upload failed: "+e); return; }
   }
 
-  const replyToKey = msgEl.dataset.replyToKey || null;
-  const replyToName = msgEl.dataset.replyToName || null;
-  const replyToText = msgEl.dataset.replyToText || null;
-  delete msgEl.dataset.replyToKey; delete msgEl.dataset.replyToName; delete msgEl.dataset.replyToText;
+  // prepare data
+  const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL: photoURL || "", likes: 0, seenBy: {} , admin: (isAdminAuthenticated() && name.toLowerCase()==="admin")||false };
 
-  const data = {
-    name: name || "Guest",
-    message: msg || "",
-    time: Date.now(),
-    photoURL: photoURL || "",
-    location: "",
-    admin: (isAdminAuthenticated() && name.toLowerCase()==="admin")||false,
-    likes: 0,
-    reactions: {},
-    pinned: false,
-    replyToKey, replyToName, replyToText,
-    seenBy: {}
-  };
-
-  db.ref("users/"+(data.name||"Guest")).transaction(curr=> {
-    if(curr && curr.points) { curr.points = curr.points + 1; return curr; }
-    return { points: 1 };
-  });
-
-  db.ref("shoutbox").push(data);
+  // push
+  const ref = await db.ref("shoutbox").push(data);
   msgEl.value = "";
-  lastSentAt[name] = Date.now();
-  localStorage.setItem(lastMsgKey, JSON.stringify({ text: msg, time: Date.now() }));
 
-  autoBotResponses(data);
-  localStorage.setItem("lastName", name);
+  // automatic reply (simple bot) after short delay (only for non-bot sends)
+  const sender = (name || "Guest").toLowerCase();
+  if(sender !== "mathbot" && sender !== "bot"){
+    setTimeout(()=>{
+      const autoReplyText = generateAutoReply(msg, name || "Guest");
+      db.ref("shoutbox").push({ name: "MathBot", message: autoReplyText, time: Date.now(), photoURL: "", likes: 0 });
+    }, 900);
+  }
 });
 
-/* ---------- BOT / MATH ASSISTANT ---------- */
-function autoBotResponses(userMsg){
-  const txt = (userMsg.message||"").toLowerCase();
-  const suggestionsEl = document.getElementById("botSuggestions");
-  suggestionsEl.textContent = "";
-
-  db.ref("users/"+userMsg.name).once("value").then(s=>{
-    if(!s.exists() || (s.val() && s.val().points <= 1)){
-      db.ref("shoutbox").push({ name: "MathBot", message: "Welcome "+userMsg.name+" 👋 — Ask your math doubts! Type `solve 2+2` or use `$...$` for equations.", time: Date.now(), admin:false });
-    }
-  });
-
-  if(txt.startsWith("solve ")){
-    const expr = userMsg.message.slice(6).trim();
-    const safe = expr.replace(/[^0-9+\-*/().\s%^]/g,"");
-    const res = safeEvalMath(safe);
-    const reply = res === null ? "Sorry, I couldn't evaluate that expression." : "Result: " + res;
-    db.ref("shoutbox").push({ name: "MathBot", message: reply, time: Date.now() });
-    return;
-  }
-
-  if(/formula|integral|derivative|limit|matrix|solve|question|proof/.test(txt)){
-    suggestionsEl.innerHTML = "Tip: Use `$...$` for LaTeX (example: `$\\int x^2 dx$`). Try `solve 45/5`.";
-  }
-
-  if(/hello|hi|hey/.test(txt)){
-    db.ref("shoutbox").push({ name: "MathBot", message: "Hi "+userMsg.name+"! Need help with any chapter?", time: Date.now() });
-  }
+/* generate auto reply - simple rules */
+function generateAutoReply(userMsg, userName){
+  const txt = (userMsg||"").toLowerCase();
+  if(!txt) return `Hi ${userName}, thanks for your message — we will respond soon.`;
+  if(/hello|hi|hey/.test(txt)) return `Hi ${userName}! How can I help you with maths today?`;
+  if(/\?/.test(txt) || /how|what|why|solve|question/.test(txt)) return `Thanks ${userName}, I'll try to help — please give details (chapter/question number).`;
+  return `Thanks ${userName}, noted. If you need help, ask with details or type 'solve 2+2' for example.`;
 }
 
-/* ---------- DB LISTENERS ---------- */
-db.ref("shoutbox").orderByChild("time").limitToLast(200).on("child_added", snap=>{ addMessageToDOM(snap.key, snap.val()); });
-db.ref("shoutbox").on("child_changed", snap=>{
-  const key = snap.key; const data = snap.val();
-  const el = document.querySelector(".msg[data-key='"+key+"']");
-  if(el) el.remove();
-  addMessageToDOM(key,data);
-  updateLeaderboardUI();
-});
-db.ref("shoutbox").on("child_removed", snap=>{
-  const el = document.querySelector(".msg[data-key='"+snap.key+"']");
-  if(el) el.remove();
+/* clear, delete selected, logout (admin protected) */
+document.getElementById("clearBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; } else { alert("Admin only"); } });
+document.getElementById("deleteSelectedBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key = chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); const el = document.querySelector(".msg[data-key='"+key+"']"); if(el) el.remove(); }); } else { alert("Admin only"); } });
+document.getElementById("logoutBtn").addEventListener("click", ()=>{ setAdminAuthenticated(false); });
+
+/* theme toggle button */
+const themeBtn = document.getElementById("themeBtn");
+const savedTheme = localStorage.getItem("theme") || "light";
+if(savedTheme === "dark"){ document.body.classList.add("dark"); themeBtn.textContent = "Theme: Dark"; } else themeBtn.textContent = "Theme: Light";
+themeBtn.addEventListener("click", ()=>{
+  document.body.classList.toggle("dark");
+  const now = document.body.classList.contains("dark") ? "dark" : "light";
+  localStorage.setItem("theme", now);
+  themeBtn.textContent = now === "dark" ? "Theme: Dark" : "Theme: Light";
 });
 
-/* mark all messages seen by admin */
-async function markAllSeenByAdmin(){
-  if(!isAdminAuthenticated()) return;
-  const snap = await db.ref("shoutbox").once("value");
-  const all = snap.val() || {};
-  Object.keys(all).forEach(k => {
-    db.ref("shoutbox/"+k+"/seenBy/admin").set(Date.now());
-  });
-}
-
-/* adminStatus click to show IP info */
+/* adminStatus click -> show IP info (optional) */
 document.getElementById("adminStatus").addEventListener("click", async ()=>{
   if(!isAdminAuthenticated()) return;
   try{
@@ -726,15 +538,19 @@ document.getElementById("adminStatus").addEventListener("click", async ()=>{
   }catch(e){ alert("Could not fetch IP info"); }
 });
 
-/* unread reset on visibility */
-document.addEventListener("visibilitychange", ()=>{ if(!document.hidden){ unreadCount = 0; showUnreadBadge(); } });
+/* utility: update checkboxes when admin toggles */
+function updateCheckboxes(){ document.querySelectorAll(".msg").forEach(msg=>{ let chk=msg.querySelector(".msgCheck"); if(isAdminAuthenticated()){ if(!chk){ const key=msg.getAttribute("data-key"); const input=document.createElement("input"); input.type="checkbox"; input.className="msgCheck"; input.setAttribute("data-key",key); const b = msg.querySelector("b"); if(b) b.prepend(input); } } else { if(chk) chk.remove(); } }); }
 
-/* request notifications permission */
-if("Notification" in window && Notification.permission === "default") Notification.requestPermission();
+/* initialise typing removal when page unload */
+window.addEventListener("beforeunload", ()=>{
+  const name = (document.getElementById("username").value||"").trim();
+  if(name) db.ref("typing/"+name).remove();
+});
 
-/* initial */
-updateLeaderboardUI();
-showUnreadBadge();
+/* blockedNames persisted already: remove any initial blocked messages in DOM if present */
+document.addEventListener("DOMContentLoaded", ()=>{
+  // nothing special here; messages listener handles blocking
+});
 
 </script>
 </body>
