@@ -6,7 +6,7 @@
 <title>Mathematics Hub Class 6 to 12</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 0; color: #000; }
+body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 0; color: #000; transition: background 0.3s, color 0.3s; }
 
 /* Header & Footer */
 .header-wrapper, .footer-wrapper { background: linear-gradient(135deg, #6a11cb, #2575fc); padding: 12px; }
@@ -31,10 +31,6 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
 .linkbar a { color: #fff; text-decoration: none; font-weight: bold; margin: 0 10px; }
 .linkbar a:hover { text-decoration: underline; }
 
-/* Small text */
-.small { font-size: 12px; color: #555; }
-.blue { color: #3366CC; font-weight: bold; }
-
 /* Buttons */
 button, .btn { border: none; padding: 12px 14px; color: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; margin: 6px; width: 100%; height: 60px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease; }
 button:hover, .btn:hover { filter: brightness(0.85); }
@@ -49,89 +45,45 @@ button:hover, .btn:hover { filter: brightness(0.85); }
 .btn11 { background: #00BFFF; }
 .btn12 { background: #DC143C; }
 
-/* MCQ Class 12 Button */
-.btn-mcq12 { background-color: #8B0000; }
-
 /* Contact Buttons */
 #contact-buttons #whatsapp-btn { background-color: #25D366; color: #fff; }
 #contact-buttons #telegram-btn { background-color: #1DA1F2; color: #fff; }
 
-/* Elegant Outer cover for Notice Board */
-.welcome-cover { background: #F3E5F5; padding: 6px; border-radius: 8px; margin: 12px; border: 6px solid #9C27B0; }
-.welcome-cover .section-title { margin: 0; font-size: 18px; background: transparent; color: black; border-radius: 6px; }
-.welcome-cover .section-title u { text-decoration: underline; }
-
 /* Shoutbox */
-#shoutbox { background: #fff; border: 2px solid #F44336; border-radius: 6px; padding: 10px; margin: 10px; }
-#typingIndicator { font-size:12px; color:#666; margin-bottom:6px; }
-#messages { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column-reverse; margin-bottom: 8px; }
-.msg { border-bottom: 1px solid #ddd; padding: 6px; display:block; word-wrap:break-word; }
-.msg .meta { font-size: 12px; color: gray; margin-top:6px; }
+#shoutbox { background: #fff; border: 2px solid #F44336; border-radius: 6px; padding: 10px; margin: 10px; position: relative; }
+#messages { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column-reverse; margin-bottom: 8px; }
+.msg { border-bottom: 1px solid #ddd; padding: 6px 0; }
+.meta { font-size: 12px; color: gray; }
+.msg-actions { display: flex; gap: 8px; margin-top: 4px; font-size: 12px; }
+.msg-actions button { background: none; border: none; cursor: pointer; color: #555; font-size: 14px; }
+.msg-actions button:hover { color: #000; transform: scale(1.1); }
+
+/* Input and buttons */
 #shoutbox input[type=text], #shoutbox input[type=file] { padding: 6px; width: 100%; border: 1px solid #FFA500; border-radius: 4px; margin-bottom: 6px; box-sizing: border-box; }
-
-/* Buttons in shoutbox */
-#shoutbox .send-wrapper { display: flex; justify-content: flex-end; margin-top: -2px; gap:8px; flex-wrap:wrap; }
-
-/* Send button */
-#shoutbox button#sendBtn { padding: 6px 14px; font-size: 12px; border-radius: 4px; background-color: #4CAF50; color: #fff; cursor: pointer; width: auto; height: auto; }
-#shoutbox button#sendBtn:hover { background-color: #45a049; }
-
-/* Admin buttons style same as clear */
-#clearBtn, #deleteSelectedBtn, #logoutBtn {
-  padding: 6px 14px;
-  font-size: 12px;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-  width: auto;
-  height: auto;
+#sendBtn, #clearBtn, #logoutBtn, #themeBtn {
+  padding: 6px 14px; font-size: 12px; border-radius: 4px;
+  color: #fff; cursor: pointer; width: auto; height: auto;
 }
+#sendBtn { background-color: #4CAF50; }
 #clearBtn { background-color: red; }
-#clearBtn:hover { background-color: darkred; }
-#deleteSelectedBtn { background-color: #8B0000; display:none; }
-#deleteSelectedBtn:hover { background-color: #8B0000; filter: brightness(0.85); }
 #logoutBtn { background-color: #555; display:none; }
-#logoutBtn:hover { background-color: #555; filter: brightness(0.85); }
-
-/* Theme button style - make same look as logoutBtn and visible to all */
-#themeBtn {
-  padding: 6px 14px;
-  font-size: 12px;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-  width: auto;
-  height: auto;
-  background-color: #555;
-  display: inline-block;
-}
-#themeBtn:hover { filter: brightness(0.85); }
-
-#adminStatus { color:green; font-weight:bold; margin-bottom:6px; display:none; }
-
-/* Actions under messages */
-.msg-actions { margin-top:6px; display:flex; gap:6px; flex-wrap:wrap; }
-.msg-actions button { padding:4px 8px; border-radius:6px; border:none; cursor:pointer; font-size:13px; }
-.reactBtn { background:#ff6b6b; color:white; } /* heart */
-.replyBtn { background:#2196F3; color:white; }
-.reportBtn { background:#ff9800; color:white; }
-.blockBtn { background:#555; color:white; }
-
-/* Username colors */
-.username { font-weight:bold; }
-.username.user { color: #3366CC; } /* blue */
-.username.admin { color: #2ECC71; } /* green */
+#themeBtn { background-color: #6a11cb; }
 
 /* Progress bar */
 #uploadProgress { width:100%; background:#eee; border-radius:4px; margin:6px 0; display:none; }
 #uploadBar { width:0%; height:8px; background:#4CAF50; border-radius:4px; }
+
+/* Typing status */
+#typingStatus { font-size: 12px; color: gray; font-style: italic; margin: 4px 0; }
+
+.dark-mode { background:#121212; color:#f5f5f5; }
+.dark-mode .box { background:#1e1e1e; color:#ddd; }
 
 @media(max-width:600px){ #shoutbox .send-wrapper { justify-content:flex-start; margin-top:6px; } #shoutbox button{ width:100%; } }
 </style>
 </head>
 <body>
 
-<!-- Header -->
 <div class="header-wrapper">
   <div class="header">
     <div>Welcome to Mathematics Hub</div>
@@ -139,44 +91,24 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   </div>
 </div>
 
-<!-- Notice Board -->
-<div class="welcome-cover">
-  <div class="section-title"><u>Notice Board</u> :-</div>
-</div>
-
 <div class="box-welcome">
-  This website is 2 specially designed for Students of class 6 to class 12 to clear their Maths problem in simple way यह वेबसाइट विशेष रूप से कक्षा 6 से कक्षा 12 तक के विद्यार्थियों के लिए आसान तरीके से गणित की समस्याओं को हल करने हेतु डिज़ाइन की गई है।   
-  <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
+  This website is designed for students of class 6–12 to clear their Maths problems easily.
 </div>
 
 <!-- Shoutbox -->
 <div class="section-title title-shout">Shoutbox</div>
 <div class="box" id="shoutbox">
-  <div id="adminStatus">✅ Admin login successful</div>
-
-  <div id="typingIndicator" class="small"></div>
+  <div id="adminStatus" style="display:none;color:green;font-weight:bold;">✅ Admin login successful</div>
+  <button id="themeBtn">Toggle Theme</button>
   <div id="messages"></div>
-
+  <div id="typingStatus"></div>
   <input type="text" id="username" placeholder="Name (type 'admin' to login as admin)">
   <input type="text" id="message" placeholder="Type your message">
   <input type="file" id="photoInput" accept="image/*">
   <div id="uploadProgress"><div id="uploadBar"></div></div>
-
-  <div class="send-wrapper">
-    <button id="sendBtn">Send</button>
-    <button id="clearBtn">Clear Shoutbox</button>
-    <button id="deleteSelectedBtn">Delete Selected</button>
-    <button id="logoutBtn">Admin Logout</button>
-    <button id="themeBtn" title="Toggle dark/light">Theme</button>
-  </div>
-</div>
-
-<!-- Updates -->
-<div class="section-title title-updates" id="updates">Latest Updates</div>
-<div class="box">
-  • <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>
-  • <b>Sample Paper 2024–25</b> — Solutions added<br>
-  • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
+  <div class="send-wrapper"><button id="sendBtn">Send</button></div>
+  <div class="send-wrapper"><button id="clearBtn">Clear Shoutbox</button></div>
+  <div class="send-wrapper"><button id="logoutBtn">Admin Logout</button></div>
 </div>
 
 <!-- Classes -->
@@ -191,367 +123,85 @@ button:hover, .btn:hover { filter: brightness(0.85); }
   <button class="btn btn12" onclick="location.href='class12.html'" style="grid-column: span 2;">Class 12</button>
 </div>
 
-<!-- Practice Zone -->
-<div class="section-title title-practice" id="practice">Practice Zone</div>
-<div class="box">
-  Daily practice problems, MCQ quizzes और chapter-wise question banks.<br><br>
-  <button class="btn btn-mcq12">MCQ: Class 12</button>
-  <button class="btn btn9">MCQ: Class 10</button>
-  <button class="btn btn7">Daily Practice</button>
-</div>
+<div class="footer-wrapper"><div class="footer-inner">© 2025 Mathematics Hub</div></div>
 
-<!-- Resources -->
-<div class="section-title title-res" id="resources">Resources</div>
-<div class="box">
-  <b>Quick Links:</b><br>
-  • NCERT Solutions (All Classes)<br>
-  • Formula Sheets<br>
-  • Sample Papers
-</div>
-
-<!-- Contact -->
-<div class="section-title title-contact">Contact & Support</div>
-<div class="box" id="contact-buttons">
-  Email: dalbir46@gmail.com • WhatsApp: +91 9468067047<br><br>
-  <button id="whatsapp-btn" onclick="window.open('https://chat.whatsapp.com/I3kosBY1yVp2irNXhkPDZV?mode=ems_share_t','_blank')"><i class="fab fa-whatsapp"></i> Join us on WhatsApp</button>
-  <button id="telegram-btn" onclick="window.open('https://t.me/Mathematic_hub','_blank')"><i class="fab fa-telegram-plane"></i> Join us on Telegram</button>
-</div>
-
-<!-- Navigation Bar -->
-<div class="linkbar">
-  <a href="#">Home</a> | <a href="#updates">Latest Updates</a> | <a href="#practice">Practice Zone</a> | <a href="#resources">Resources</a>
-</div>
-
-<!-- Footer -->
-<div class="footer-wrapper">
-  <div class="footer-inner">
-    © 2025 Mathematics Hub
-  </div>
-</div>
-
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
 <script>
-var firebaseConfig = {
-  apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
-  authDomain: "mathematics-hub-7087f.firebaseapp.com",
-  databaseURL: "https://mathematics-hub-7087f-default-rtdb.firebaseio.com",
-  projectId: "mathematics-hub-7087f",
-  storageBucket: "mathematics-hub-7087f.appspot.com",
-  messagingSenderId: "182359137920",
-  appId: "1:182359137920:web:1cf89e1d441ea1503a9065"
-};
+const firebaseConfig={apiKey:"AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",authDomain:"mathematics-hub-7087f.firebaseapp.com",databaseURL:"https://mathematics-hub-7087f-default-rtdb.firebaseio.com",projectId:"mathematics-hub-7087f",storageBucket:"mathematics-hub-7087f.appspot.com",messagingSenderId:"182359137920",appId:"1:182359137920:web:1cf89e1d441ea1503a9065"};
 firebase.initializeApp(firebaseConfig);
 var db=firebase.database();
-
 const ADMIN_PASSWORD="Dalbir@551";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 
-/* --- Local state --- */
-let blockedNames = JSON.parse(localStorage.getItem("blockedNames")||"[]");
-let typingTimers = {}; // for clearing typing entries
+function escapeHtml(t){if(!t&&t!=="")return"";return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
+function makeLinksClickable(text){return text.replace(/(https?:\/\/[^\s]+|www\.[^\s]+)/g,function(url){let href=url.startsWith("http")?url:"https://"+url;return `<a href="${href}" target="_blank" style="color:#007bff;">${url}</a>`;});}
+function isAdminAuthenticated(){return sessionStorage.getItem("isAdmin")==="true";}
+function setAdminAuthenticated(f){if(f)sessionStorage.setItem("isAdmin","true");else sessionStorage.removeItem("isAdmin");updateAdminUI();}
+function updateAdminUI(){document.getElementById("adminStatus").style.display=isAdminAuthenticated()?"block":"none";document.getElementById("logoutBtn").style.display=isAdminAuthenticated()?"inline-block":"none";}
 
-function escapeHtml(str){ if(str===undefined || str===null) return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+function formatTimeAgo(timestamp){const diff=Date.now()-timestamp;const min=Math.floor(diff/60000);if(min<1)return"just now";if(min==1)return"1 min ago";if(min<60)return min+" min ago";return new Date(timestamp).toLocaleString();}
 
-function isAdminAuthenticated(){ return sessionStorage.getItem("isAdmin")==="true"; }
-async function setAdminAuthenticated(flag){
-  if(flag){
-    sessionStorage.setItem("isAdmin","true");
-    updateAdminUI();
-    // mark all messages seen by admin
-    await markAllSeenByAdmin();
-  } else {
-    sessionStorage.removeItem("isAdmin");
-    updateAdminUI();
-  }
-}
-function updateAdminUI(){
-  document.getElementById("adminStatus").style.display=isAdminAuthenticated()?"block":"none";
-  document.getElementById("logoutBtn").style.display=isAdminAuthenticated()?"inline-block":"none";
-  document.getElementById("deleteSelectedBtn").style.display=isAdminAuthenticated()?"inline-block":"none";
-  updateCheckboxes();
-}
-
-/* relative time */
-function formatDateTime(ts){
-  const d=new Date(ts);
-  const diff = Date.now() - ts;
-  if(diff < 60000) return "just now";
-  if(diff < 3600000) return Math.floor(diff/60000) + " min ago";
-  if(diff < 86400000) return Math.floor(diff/3600000) + " hr ago";
-  let day=d.getDate().toString().padStart(2,'0'), month=(d.getMonth()+1).toString().padStart(2,'0'), year=d.getFullYear();
-  let hrs=d.getHours(), mins=d.getMinutes().toString().padStart(2,'0'), ampm=hrs>=12?'PM':'AM';
-  hrs = hrs%12||12;
-  return `${day}/${month}/${year} ${hrs}:${mins} ${ampm}`;
-}
-
-/* mark all messages seen by admin */
-async function markAllSeenByAdmin(){
-  try{
-    const snap = await db.ref("shoutbox").once("value");
-    const all = snap.val() || {};
-    Object.keys(all).forEach(k => {
-      db.ref("shoutbox/"+k+"/seenBy/admin").set(Date.now());
-    });
-  }catch(e){ console.warn("markAllSeenByAdmin failed", e); }
-}
-
-/* linkify: convert http/https/www to clickable links (works on escaped text) */
-function linkify(text){
-  if(!text) return "";
-  // add http:// to www.
-  text = text.replace(/\bwww\.[^\s<]+/gi, function(m){ return "http://"+m; });
-  return text.replace(/(https?:\/\/[^\s<]+)/gi, '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#3366CC;text-decoration:underline;">$1</a>');
-}
-
-/* update checkboxes for admin */
-function updateCheckboxes(){
-  document.querySelectorAll(".msg").forEach(msg=>{
-    let chk = msg.querySelector(".msgCheck");
-    if(isAdminAuthenticated()){
-      if(!chk){
-        const key = msg.getAttribute("data-key");
-        const input = document.createElement("input");
-        input.type = "checkbox"; input.className = "msgCheck"; input.setAttribute("data-key",key);
-        // prepend before name
-        const b = msg.querySelector("b");
-        if(b) b.prepend(input);
-      }
-    } else {
-      if(chk) chk.remove();
-    }
-  });
-}
-
-/* render single message */
 async function addMessageToDOM(key,data){
-  // don't show blocked users locally
-  if(blockedNames.includes(data.name)) return;
-
-  const div = document.createElement("div");
-  div.classList.add("msg");
-  div.setAttribute("data-key", key);
-
-  // checkbox for admin (inserted separately later)
-  let checkboxHtml = "";
-  if(isAdminAuthenticated()){ checkboxHtml = `<input type="checkbox" class="msgCheck" data-key="${key}"> `; }
-
-  // admin meta (IP/location) only if admin viewing — keep this optional and non-blocking
-  let adminMeta = "";
-  if(isAdminAuthenticated()){
-    try{
-      const res = await fetch('https://ipapi.co/json/');
-      const info = await res.json();
-      adminMeta = ` | IP: ${info.ip} | ${info.city}, ${info.region}, ${info.country_name}`;
-    }catch(e){ adminMeta = ""; }
-  }
-
-  // username span with classes
-  const unameClass = (data.admin) ? "username admin" : "username user";
-  const nameHtml = `<b class="${unameClass}">${checkboxHtml}${escapeHtml(data.name)}</b>`;
-
-  // message body (escape then linkify)
-  const rawMsg = escapeHtml(data.message||"");
-  const linked = linkify(rawMsg);
-
-  // media (if present)
-  let mediaHtml = "";
-  if(data.photoURL){
-    mediaHtml = `<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;
-  }
-
-  // meta: relative time + seen by admin flag
-  const seenAdmin = (data.seenBy && data.seenBy.admin) ? " • Seen by admin" : "";
-  const metaHtml = `<div class="meta">${formatDateTime(data.time)}${adminMeta}${seenAdmin}</div>`;
-
-  // actions: reaction (like count), reply, report, block
-  const likes = data.likes || 0;
-  const actionsHtml = `
-    <div class="msg-actions">
-      <button class="reactBtn" title="Like">❤️ <span class="like-count">${likes}</span></button>
-      <button class="replyBtn" title="Reply">↩ Reply</button>
-      <button class="reportBtn" title="Report">⚠ Report</button>
-      <button class="blockBtn" title="Block locally">🚫 Block</button>
-    </div>
-  `;
-
-  div.innerHTML = `${nameHtml}: <span class="msg-body">${linked}</span>${mediaHtml}${metaHtml}${actionsHtml}`;
-
-  // attach to DOM
+  const div=document.createElement("div");div.classList.add("msg");div.setAttribute("data-key",key);
+  const nameColor=(data.name.toLowerCase()==="admin")?"green":"#3366CC";
+  let msgHTML=makeLinksClickable(escapeHtml(data.message));
+  div.innerHTML=`<b style="color:${nameColor}">${escapeHtml(data.name)}</b>: ${msgHTML}
+  ${data.photoURL?`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`:""}
+  <div class='meta'>Seen by admin • ${formatTimeAgo(data.time)}</div>
+  <div class='msg-actions'>
+    <button>🙂</button>
+    <button>💬</button>
+    <button>🚩</button>
+    <button>⛔</button>
+  </div>`;
   document.getElementById("messages").prepend(div);
+}
 
-  // attach action handlers
-  const reactBtn = div.querySelector(".reactBtn");
-  const replyBtn = div.querySelector(".replyBtn");
-  const reportBtn = div.querySelector(".reportBtn");
-  const blockBtn = div.querySelector(".blockBtn");
+db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added",snap=>addMessageToDOM(snap.key,snap.val()));
 
-  reactBtn && reactBtn.addEventListener("click", ()=>{
-    db.ref("shoutbox/"+key+"/likes").transaction(curr => (curr||0)+1);
-  });
-
-  replyBtn && replyBtn.addEventListener("click", ()=>{
-    document.getElementById("message").value = `@${data.name} `;
-    document.getElementById("message").focus();
-    // store reply metadata if needed
-    document.getElementById("message").dataset.replyToKey = key;
-    document.getElementById("message").dataset.replyToName = data.name;
-  });
-
-  reportBtn && reportBtn.addEventListener("click", ()=>{
-    const reporter = (document.getElementById("username").value||"Guest").trim() || "Guest";
-    if(confirm("Report this message to admin?")){
-      db.ref("reports").push({ key, reportedBy: reporter, message: data.message||"", time: Date.now() });
-      alert("Reported. Admin will review.");
-    }
-  });
-
-  blockBtn && blockBtn.addEventListener("click", ()=>{
-    if(confirm("Block user '"+data.name+"' locally? You will no longer see their messages on this device.")){
-      blockedNames.push(data.name);
-      localStorage.setItem("blockedNames", JSON.stringify(blockedNames));
-      // remove their existing messages from DOM
-      document.querySelectorAll(".msg").forEach(m=>{
-        const b = m.querySelector("b");
-        if(b && b.textContent.trim().endsWith(data.name)) {
-          m.remove();
-        } else {
-          // also check span username if formatting differs
-          const unameSpan = m.querySelector("b");
-          if(unameSpan && unameSpan.textContent.includes(data.name)) m.remove();
-        }
+document.getElementById("sendBtn").addEventListener("click",async()=>{
+  const name=document.getElementById("username").value.trim()||"Guest";
+  const msg=document.getElementById("message").value.trim();
+  const file=document.getElementById("photoInput").files[0];
+  if(!name&&!file)return alert("Enter message or photo.");
+  if(name.toLowerCase()==="admin"&&!isAdminAuthenticated()){
+    const pwd=prompt("Enter admin password:");
+    if(pwd===ADMIN_PASSWORD)setAdminAuthenticated(true);
+    else return alert("Incorrect password.");
+  }
+  let photoURL="";
+  if(file){
+    const reader=new FileReader();
+    reader.onloadend=()=>{
+      const base64=reader.result.split(",")[1];
+      fetch("https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY,{
+        method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
+        body:"image="+encodeURIComponent(base64)
+      }).then(r=>r.json()).then(data=>{
+        photoURL=data.data.url;
+        db.ref("shoutbox").push({name,message:msg,time:Date.now(),photoURL});
       });
-    }
-  });
-
-  // update checkboxes if admin
-  updateCheckboxes();
-}
-
-/* remove and re-add on change, remove on delete */
-db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snap => { addMessageToDOM(snap.key, snap.val()); });
-db.ref("shoutbox").on("child_changed", snap => {
-  const key = snap.key; const data = snap.val();
-  const el = document.querySelector(".msg[data-key='"+key+"']");
-  if(el) el.remove();
-  addMessageToDOM(key, data);
-});
-db.ref("shoutbox").on("child_removed", snap => {
-  const el = document.querySelector(".msg[data-key='"+snap.key+"']");
-  if(el) el.remove();
-});
-
-/* typing indicator handling */
-let typingTimeout;
-document.getElementById("message").addEventListener("input", ()=>{
-  const name = (document.getElementById("username").value||"Guest").trim();
-  if(!name) return;
-  db.ref("typing/"+name).set(true);
-  clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(()=>{ db.ref("typing/"+name).remove(); }, 1800);
-});
-db.ref("typing").on("value", snap => {
-  const val = snap.val() || {};
-  const names = Object.keys(val);
-  const current = (document.getElementById("username").value||"").trim();
-  const others = names.filter(n => n !== current);
-  document.getElementById("typingIndicator").textContent = others.length ? others.join(", ") + " typing..." : "";
-});
-
-/* upload to imgbb (same as original) */
-async function uploadToImgbb(file){ return new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.onloadend=()=>{ const base64=reader.result.split(",")[1]; const xhr=new XMLHttpRequest(); xhr.open("POST","https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY); xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); xhr.upload.onprogress=function(e){if(e.lengthComputable){const percent=(e.loaded/e.total)*100;document.getElementById("uploadProgress").style.display="block";document.getElementById("uploadBar").style.width=percent+"%";}}; xhr.onload=function(){document.getElementById("uploadProgress").style.display="none"; if(xhr.status===200){resolve(JSON.parse(xhr.responseText).data.url);} else reject("Upload failed");}; xhr.onerror=()=>reject("Upload error"); xhr.send("image="+encodeURIComponent(base64));}; reader.readAsDataURL(file); }); }
-
-/* send message (with admin login and automatic reply bot) */
-document.getElementById("sendBtn").addEventListener("click", async ()=>{
-  const nameEl = document.getElementById("username");
-  const msgEl = document.getElementById("message");
-  const photoEl = document.getElementById("photoInput");
-  const name = (nameEl.value||"").trim();
-  const msg = (msgEl.value||"").trim();
-  if(!name && !photoEl.files[0]) return alert("Enter message or photo.");
-
-  // admin login
-  if(name.toLowerCase()==="admin" && !isAdminAuthenticated()){
-    const pwd = prompt("Enter admin password:");
-    if(pwd === ADMIN_PASSWORD){
-      await setAdminAuthenticated(true);
-    } else { alert("Incorrect password."); return; }
+    };
+    reader.readAsDataURL(file);
+  } else {
+    db.ref("shoutbox").push({name,message:msg,time:Date.now(),photoURL});
   }
-
-  // upload if any
-  let photoURL = "";
-  if(photoEl.files[0]){
-    try{ photoURL = await uploadToImgbb(photoEl.files[0]); photoEl.value = ""; } catch(e){ alert("Image upload failed: "+e); return; }
-  }
-
-  // prepare data
-  const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL: photoURL || "", likes: 0, seenBy: {} , admin: (isAdminAuthenticated() && name.toLowerCase()==="admin")||false };
-
-  // push
-  const ref = await db.ref("shoutbox").push(data);
-  msgEl.value = "";
-
-  // automatic reply (simple bot) after short delay (only for non-bot sends)
-  const sender = (name || "Guest").toLowerCase();
-  if(sender !== "mathbot" && sender !== "bot"){
-    setTimeout(()=>{
-      const autoReplyText = generateAutoReply(msg, name || "Guest");
-      db.ref("shoutbox").push({ name: "MathBot", message: autoReplyText, time: Date.now(), photoURL: "", likes: 0 });
-    }, 900);
-  }
+  document.getElementById("message").value="";
+  // Auto reply by bot
+  setTimeout(()=>db.ref("shoutbox").push({name:"MathsBot 🤖",message:`Hi ${name}! Thanks for your message.`,time:Date.now()}),1200);
 });
 
-/* generate auto reply - simple rules */
-function generateAutoReply(userMsg, userName){
-  const txt = (userMsg||"").toLowerCase();
-  if(!txt) return `Hi ${userName}, thanks for your message — we will respond soon.`;
-  if(/hello|hi|hey/.test(txt)) return `Hi ${userName}! How can I help you with maths today?`;
-  if(/\?/.test(txt) || /how|what|why|solve|question/.test(txt)) return `Thanks ${userName}, I'll try to help — please give details (chapter/question number).`;
-  return `Thanks ${userName}, noted. If you need help, ask with details or type 'solve 2+2' for example.`;
-}
-
-/* clear, delete selected, logout (admin protected) */
-document.getElementById("clearBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; } else { alert("Admin only"); } });
-document.getElementById("deleteSelectedBtn").addEventListener("click", ()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key = chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); const el = document.querySelector(".msg[data-key='"+key+"']"); if(el) el.remove(); }); } else { alert("Admin only"); } });
-document.getElementById("logoutBtn").addEventListener("click", ()=>{ setAdminAuthenticated(false); });
-
-/* theme toggle button */
-const themeBtn = document.getElementById("themeBtn");
-const savedTheme = localStorage.getItem("theme") || "light";
-if(savedTheme === "dark"){ document.body.classList.add("dark"); themeBtn.textContent = "Theme: Dark"; } else themeBtn.textContent = "Theme: Light";
-themeBtn.addEventListener("click", ()=>{
-  document.body.classList.toggle("dark");
-  const now = document.body.classList.contains("dark") ? "dark" : "light";
-  localStorage.setItem("theme", now);
-  themeBtn.textContent = now === "dark" ? "Theme: Dark" : "Theme: Light";
+document.getElementById("message").addEventListener("input",()=>{
+  document.getElementById("typingStatus").innerText="Typing...";
+  clearTimeout(window.typingTimer);
+  window.typingTimer=setTimeout(()=>document.getElementById("typingStatus").innerText="",1500);
 });
 
-/* adminStatus click -> show IP info (optional) */
-document.getElementById("adminStatus").addEventListener("click", async ()=>{
-  if(!isAdminAuthenticated()) return;
-  try{
-    const res = await fetch('https://ipapi.co/json/');
-    const info = await res.json();
-    alert("IP: "+info.ip+"\nCity: "+info.city+", "+info.region+"\nCountry: "+info.country_name);
-  }catch(e){ alert("Could not fetch IP info"); }
-});
-
-/* utility: update checkboxes when admin toggles */
-function updateCheckboxes(){ document.querySelectorAll(".msg").forEach(msg=>{ let chk=msg.querySelector(".msgCheck"); if(isAdminAuthenticated()){ if(!chk){ const key=msg.getAttribute("data-key"); const input=document.createElement("input"); input.type="checkbox"; input.className="msgCheck"; input.setAttribute("data-key",key); const b = msg.querySelector("b"); if(b) b.prepend(input); } } else { if(chk) chk.remove(); } }); }
-
-/* initialise typing removal when page unload */
-window.addEventListener("beforeunload", ()=>{
-  const name = (document.getElementById("username").value||"").trim();
-  if(name) db.ref("typing/"+name).remove();
-});
-
-/* blockedNames persisted already: remove any initial blocked messages in DOM if present */
-document.addEventListener("DOMContentLoaded", ()=>{
-  // nothing special here; messages listener handles blocking
-});
-
+document.getElementById("clearBtn").addEventListener("click",()=>{if(isAdminAuthenticated()&&confirm("Clear all messages?")){db.ref("shoutbox").remove();document.getElementById("messages").innerHTML="";}else alert("Admin only");});
+document.getElementById("logoutBtn").addEventListener("click",()=>{setAdminAuthenticated(false);});
+document.getElementById("themeBtn").addEventListener("click",()=>{document.body.classList.toggle("dark-mode");});
+updateAdminUI();
 </script>
 </body>
 </html>
