@@ -240,7 +240,32 @@ style.innerHTML = `
 body.dark { background:#0f1724; color:#d1d5db; }
 body.dark .msg { background:#07203a; color:#d1d5db; border-color:#12324a; }
 body.dark .box, body.dark .box-welcome { background:#1e293b; color:#d1d5db; border-color:#334155; }
-body.dark .header, body.dark .footer-inner { background:#334155; color:#d1d5db; border-color:#1e293b; }
+body.dark .header, body.dark .footer-inner { background:#334155; color:#d1d5db; border-color:#1e293b; }/* Dark Mode Notice Board: Modern Neon Style */
+body.dark .welcome-cover {
+  background: linear-gradient(90deg,#1e1b4b,#3b0764);
+  border: 2px solid #8b5cf6;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow:0 6px 18px rgba(11,6,34,0.6),0 0 12px rgba(139,92,246,0.08) inset;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+body.dark .welcome-cover .section-title {
+  color: #facc15;
+  font-weight:700;
+  text-shadow:0 1px 0 rgba(0,0,0,0.6),0 6px 18px rgba(250,204,21,0.06);
+}
+body.dark .welcome-cover .section-title::after {
+  content:"";
+  display:block;
+  margin:8px auto 0;
+  width:54px;
+  height:3px;
+  border-radius:3px;
+  background: linear-gradient(90deg,rgba(250,204,21,0.9),rgba(139,92,246,0.8));
+  box-shadow:0 6px 18px rgba(139,92,246,0.12);
+  }
 body.dark button, body.dark .btn { filter: brightness(1.2); }
 body.dark #shoutbox { background:#1e293b; color:#d1d5db; border-color:#334155; }
 body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-color:#1e293b; }
