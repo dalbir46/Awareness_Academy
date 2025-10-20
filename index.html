@@ -368,15 +368,18 @@ body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-
 `;
 document.head.appendChild(style);
 // === Handle Admin Mark Buttons ===
-document.addEventListener("click", async (e) => {
+document.addEventListener("click", async function (e) {
   if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
     const key = e.target.getAttribute("data-key");
     const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
-    updateDoubtStats(); // refresh after status change
-    // Update Firebase (assuming your message structure has a 'status' field)
-    await update(ref(db, "messages/" + key), { status });
-    alert(`Doubt marked as ${status}`);
-    refreshDoubtNumbers(); // re-number after status change
+
+    // ✅ Firebase me correct path use karo
+    await db.ref("shoutbox/" + key).update({ status });
+
+    // ✅ Latest updates auto refresh ho jaayein
+    loadMessages(); // function jo aapke messages ko reload karta hai
+  }
+}); // re-number after status change
   }
 });
 db.ref("shoutbox").on("value", () => {
