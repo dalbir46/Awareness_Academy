@@ -119,3 +119,361 @@ body.dark .msg b.username.admin, body.dark .msg b.username.admin * { color: #008
   This website is specially designed for Students of class 6 to class 12 to clear their Maths problem in simple way यह वेबसाइट विशेष रूप से कक्षा 6 से कक्षा 12 तक के विद्यार्थियों के लिए आसान तरीके से गणित की समस्याओं को हल करने हेतु डिज़ाइन की गई है।   
   <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
 </div>
+<!-- Shoutbox -->
+<div class="section-title title-shout">Shoutbox</div>
+<div class="box" id="shoutbox">
+  <div id="adminStatus">✅ Admin login successful</div>
+  <div id="messages"></div>
+  <input type="text" id="username" placeholder="Name (Type your name here )">
+  <input type="text" id="message" placeholder="Type your message">
+  <input type="file" id="photoInput" accept="image/*">
+  <div id="uploadProgress"><div id="uploadBar"></div></div>
+  <div class="send-wrapper"><button id="sendBtn">Send</button></div>
+  <div class="send-wrapper"><button id="clearBtn">Clear Shoutbox</button></div>
+  <div class="send-wrapper"><button id="deleteSelectedBtn">Delete Selected</button></div>
+  <div class="send-wrapper"><button id="logoutBtn">Admin Logout</button></div>
+</div>
+
+<!-- Updates -->
+<div class="section-title title-updates" id="updates">Latest Updates</div>
+<div class="box">
+  <hr>
+  <div id="doubtStats" style="font-weight:bold; color:#2F4F4F;">
+    Total Doubts: 0 | Solved: 0 | Working: 0
+  </div>
+  • <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>
+  • <b>Sample Paper 2024–25</b> — Solutions added<br>
+  • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
+</div>
+
+<!-- Classes -->
+<div class="section-title title-class">Select Your Class</div>
+<div class="box class-grid">
+  <button class="btn btn6" onclick="location.href='class6.html'">Class 6</button>
+  <button class="btn btn7" onclick="location.href='class7.html'">Class 7</button>
+  <button class="btn btn8" onclick="location.href='class8.html'">Class 8</button>
+  <button class="btn btn9" onclick="location.href='class9.html'">Class 9</button>
+  <button class="btn btn10" onclick="location.href='class10.html'">Class 10</button>
+  <button class="btn btn11" onclick="location.href='class11.html'">Class 11</button>
+  <button class="btn btn12" onclick="location.href='class12.html'" style="grid-column: span 2;">Class 12</button>
+</div>
+
+<!-- Practice Zone -->
+<div class="section-title title-practice" id="practice">Practice Zone</div>
+<div class="box">
+  Daily practice problems, MCQ quizzes और chapter-wise question banks.<br><br>
+  <button class="btn btn-mcq12">MCQ: Class 12</button>
+  <button class="btn btn9">MCQ: Class 10</button>
+  <button class="btn btn7">Daily Practice</button>
+</div>
+
+<!-- Resources -->
+<div class="section-title title-res" id="resources">Resources</div>
+<div class="box">
+  <b>Quick Links:</b><br>
+  • NCERT Solutions (All Classes)<br>
+  • Formula Sheets<br>
+  • Sample Papers
+    </div><!-- Contact -->
+<div class="section-title title-contact">Contact & Support</div>
+<div class="box" id="contact-buttons">
+  Email: dalbir46@gmail.com • WhatsApp: +91 9468067047<br><br>
+  <button id="whatsapp-btn" onclick="window.open('https://chat.whatsapp.com/I3kosBY1yVp2irNXhkPDZV?mode=ems_share_t','_blank')">
+    <i class="fab fa-whatsapp"></i> Join us on WhatsApp
+  </button> 
+  <button id="telegram-btn" onclick="window.open('https://t.me/Mathematic_hub','_blank')">
+    <i class="fab fa-telegram-plane"></i> Join us on Telegram
+  </button>
+</div>
+
+<!-- Navigation Bar -->
+<div class="linkbar">
+  <a href="#">Home</a> | 
+  <a href="#updates">Latest Updates</a> | 
+  <a href="#practice">Practice Zone</a> | 
+  <a href="#resources">Resources</a>
+</div>
+
+<!-- Footer -->
+<div class="footer-wrapper">
+  <div class="footer-inner">
+    © 2025 Mathematics Hub
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+var firebaseConfig = {
+  apiKey: "AIzaSyCrAjPSSQ5-nvEQNK1vxxZcWEi0ml4AePQ",
+  authDomain: "mathematics-hub-7087f.firebaseapp.com",
+  databaseURL: "https://mathematics-hub-7087f-default-rtdb.firebaseio.com",
+  projectId: "mathematics-hub-7087f",
+  storageBucket: "mathematics-hub-7087f.appspot.com",
+  messagingSenderId: "182359137920",
+  appId: "1:182359137920:web:1cf89e1d441ea1503a9065"
+};
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+
+const ADMIN_PASSWORD = "password";
+const IMGBB_API_KEY = "9a1627658ec3732fd03cb87cbff0ed66";
+  // ===== Helper Functions =====
+function escapeHtml(str){
+  if(!str && str !== "") return "";
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/\"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function isAdminAuthenticated(){ return sessionStorage.getItem("isAdmin")==="true"; }
+function setAdminAuthenticated(flag){ 
+  if(flag) sessionStorage.setItem("isAdmin","true"); 
+  else sessionStorage.removeItem("isAdmin"); 
+  updateAdminUI();
+}
+
+function updateAdminUI(){
+  document.getElementById("adminStatus").style.display = isAdminAuthenticated()?"block":"none";
+  document.getElementById("logoutBtn").style.display = isAdminAuthenticated()?"inline-block":"none";
+  document.getElementById("deleteSelectedBtn").style.display = isAdminAuthenticated()?"inline-block":"none";
+  updateCheckboxes();
+}
+
+function formatDateTime(ts){
+  const d = new Date(ts);
+  let hrs=d.getHours(), mins=d.getMinutes().toString().padStart(2,'0'), ampm=hrs>=12?'PM':'AM';
+  hrs=hrs%12||12;
+  let day=d.getDate().toString().padStart(2,'0'), month=(d.getMonth()+1).toString().padStart(2,'0'), year=d.getFullYear();
+  return `${day}/${month}/${year} ${hrs}:${mins} ${ampm}`;
+}
+
+// ===== Add Message to DOM =====
+async function addMessageToDOM(key, data){
+  const div = document.createElement("div"); 
+  div.classList.add("msg"); 
+  div.setAttribute("data-key", key);
+  if(data.status) div.dataset.status = data.status;
+
+  // Username & message content
+  let usernameClass = "username";
+  if(data.name.toLowerCase() === "admin") usernameClass += " admin";
+  const checkboxHtml = isAdminAuthenticated() ? `<input type="checkbox" class="msgCheck" data-key="${key}"> ` : "";
+  let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}`;
+  if(data.photoURL){ content += `<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`; }
+  content += `<div class='meta'>${formatDateTime(data.time)}</div>`;
+  div.innerHTML = content;
+
+  // Add admin buttons for doubts
+  addAdminButtons(div, data, key);
+
+  document.getElementById("messages").prepend(div);
+  updateDoubtStats();
+  refreshDoubtNumbers();
+}
+
+// ===== Admin Buttons Function =====
+function addAdminButtons(div, data, key){
+  if(isAdminAuthenticated()){
+    const lowerMsg = data.message.toLowerCase();
+    if(lowerMsg.includes("doubt") || lowerMsg.includes("solve")){
+      const btnContainer = document.createElement("div");
+      btnContainer.className = "admin-btns";
+      btnContainer.style.marginTop = "5px";
+
+      const workingBtn = document.createElement("button");
+      workingBtn.className = "mark-working";
+      workingBtn.setAttribute("data-key", key);
+      workingBtn.textContent = "Mark Working";
+      workingBtn.style.cssText = "background:#ffc107;border:none;padding:4px 6px;border-radius:4px;cursor:pointer;";
+
+      const solvedBtn = document.createElement("button");
+      solvedBtn.className = "mark-solved";
+      solvedBtn.setAttribute("data-key", key);
+      solvedBtn.textContent = "Mark Solved";
+      solvedBtn.style.cssText = "background:#28a745;border:none;padding:4px 6px;border-radius:4px;color:#fff;cursor:pointer;";
+
+      btnContainer.appendChild(workingBtn);
+      btnContainer.appendChild(solvedBtn);
+      div.appendChild(btnContainer);
+    }
+  }
+}
+
+// ===== Doubt Stats & Numbering =====
+function updateDoubtStats(){
+  let total=0, solved=0, working=0;
+  document.querySelectorAll(".msg").forEach(msg=>{
+    const text = msg.textContent.toLowerCase();
+    if(text.includes("doubt") || text.includes("solve")){
+      total++;
+      if(msg.dataset.status==="Solved") solved++;
+      else if(msg.dataset.status==="Working") working++;
+    }
+  });
+  const statsEl = document.getElementById("doubtStats");
+  if(statsEl) statsEl.textContent = `Total Doubts: ${total} | Solved: ${solved} | Working: ${working}`;
+}
+
+let doubtList = [];
+function refreshDoubtNumbers(){
+  doubtList=[];
+  document.querySelectorAll(".msg").forEach(msg=>{
+    const text = msg.textContent.toLowerCase();
+    if(text.includes("doubt") || text.includes("solve")) doubtList.push(msg);
+  });
+  doubtList.forEach((msg,i)=>{
+    let serialTag = msg.querySelector(".serial");
+    if(!serialTag){
+      serialTag = document.createElement("div");
+      serialTag.className="serial";
+      serialTag.style.color="red";
+      serialTag.style.fontWeight="bold";
+      serialTag.style.fontSize="12px";
+      msg.prepend(serialTag);
+    }
+    serialTag.textContent = "Doubt #" + (i+1);
+  });
+  }
+  <!-- ===== Update Checkboxes ===== -->
+<script>
+function updateCheckboxes(){
+  document.querySelectorAll(".msg").forEach(msg=>{
+    let chk=msg.querySelector(".msgCheck");
+    if(isAdminAuthenticated()){
+      if(!chk){
+        const key=msg.getAttribute("data-key");
+        const input=document.createElement("input");
+        input.type="checkbox";
+        input.className="msgCheck";
+        input.setAttribute("data-key",key);
+        msg.querySelector("b").prepend(input);
+      }
+    } else { if(chk) chk.remove(); }
+  });
+}
+
+// ===== Upload Image to Imgbb =====
+async function uploadToImgbb(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onloadend = ()=>{
+      const base64 = reader.result.split(",")[1];
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST","https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY);
+      xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+      xhr.upload.onprogress = function(e){
+        if(e.lengthComputable){
+          const percent = (e.loaded/e.total)*100;
+          document.getElementById("uploadProgress").style.display="block";
+          document.getElementById("uploadBar").style.width = percent+"%";
+        }
+      };
+      xhr.onload = function(){
+        document.getElementById("uploadProgress").style.display="none";
+        if(xhr.status===200) resolve(JSON.parse(xhr.responseText).data.url);
+        else reject("Upload failed");
+      };
+      xhr.onerror = ()=>reject("Upload error");
+      xhr.send("image="+encodeURIComponent(base64));
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ===== Event Listeners =====
+document.getElementById("sendBtn").addEventListener("click", async ()=>{
+  const nameEl=document.getElementById("username");
+  const msgEl=document.getElementById("message");
+  const photoEl=document.getElementById("photoInput");
+  const name=nameEl.value.trim();
+  const msg=msgEl.value.trim();
+  if(!name && !photoEl.files[0]) return alert("Enter message or photo.");
+
+  if(name.toLowerCase()==="admin" && !isAdminAuthenticated()){
+    const pwd=prompt("Enter admin password:");
+    if(pwd===ADMIN_PASSWORD){ setAdminAuthenticated(true); }
+    else { alert("Incorrect password."); return; }
+  }
+
+  let photoURL="";
+  if(photoEl.files[0]){
+    try{ photoURL=await uploadToImgbb(photoEl.files[0]); photoEl.value=""; }
+    catch(e){ alert("Image upload failed: "+e); return; }
+  }
+
+  const data={name:name||"Guest",message:msg,time:Date.now(),photoURL};
+  db.ref("shoutbox").push(data);
+  msgEl.value="";
+});
+
+// Clear shoutbox
+document.getElementById("clearBtn").addEventListener("click", ()=>{
+  if(isAdminAuthenticated() && confirm("Clear all messages?")){
+    db.ref("shoutbox").remove();
+    document.getElementById("messages").innerHTML="";
+  } else { alert("Admin only"); }
+});
+
+// Delete selected
+document.getElementById("deleteSelectedBtn").addEventListener("click", ()=>{
+  if(isAdminAuthenticated()){
+    document.querySelectorAll(".msgCheck:checked").forEach(chk=>{
+      const key=chk.getAttribute("data-key");
+      db.ref("shoutbox/"+key).remove();
+      const msgEl = document.querySelector(".msg[data-key='"+key+"']");
+      if(msgEl) msgEl.remove();
+    });
+  }
+});
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click",()=>{ setAdminAuthenticated(false); });
+
+// ===== Admin Mark Working / Solved =====
+document.addEventListener("click", async (e)=>{
+  if(e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")){
+    const key = e.target.getAttribute("data-key");
+    const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
+    await db.ref("shoutbox/"+key).update({status});
+    const msgEl = document.querySelector(".msg[data-key='"+key+"']");
+    if(msgEl) msgEl.dataset.status = status;
+    alert(`Doubt marked as ${status}`);
+    updateDoubtStats();
+    refreshDoubtNumbers();
+  }
+});
+
+// Firebase Child Added Listener
+db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snap=>{
+  addMessageToDOM(snap.key, snap.val());
+});
+
+// Firebase Value Listener for Updates
+db.ref("shoutbox").on("value", ()=>{
+  refreshDoubtNumbers();
+  updateDoubtStats();
+});
+
+// Theme Dropdown / Dark Mode
+const themeSelect = document.getElementById("themeSelect");
+const savedTheme = localStorage.getItem('theme') || 'light';
+if(savedTheme==='dark') document.body.classList.add('dark');
+if(themeSelect) themeSelect.value = savedTheme;
+
+if(themeSelect){
+  themeSelect.addEventListener('change', function(){
+    const mode = this.value;
+    if(mode==='dark') document.body.classList.add('dark');
+    else document.body.classList.remove('dark');
+    localStorage.setItem('theme', mode);
+  });
+}
+</script>
+
+</body>
+</html>
