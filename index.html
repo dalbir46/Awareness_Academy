@@ -177,9 +177,45 @@ let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(data.name
   if(data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;}
   content+=`<div class='meta'>${formatDateTime(data.time)}${adminMeta}</div>`;
   div.innerHTML=content;
+  // === Admin buttons for doubts ===
+  if (isAdminAuthenticated()) {
+    const lowerMsg = data.message.toLowerCase();
+    if (lowerMsg.includes("doubt") || lowerMsg.includes("solve")) {
+      content += `
+        <div class="admin-btns" style="margin-top:5px;">
+          <button class="mark-working" data-key="${key}" style="background:#ffc107;border:none;padding:4px 6px;border-radius:4px;cursor:pointer;">Mark Working</button>
+          <button class="mark-solved" data-key="${key}" style="background:#28a745;border:none;padding:4px 6px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>
+        </div>`;
+    }
+  }
   document.getElementById("messages").prepend(div);
 }
+// === Detect Doubt Messages and Number Them ===
+let doubtList = [];
 
+function refreshDoubtNumbers() {
+  doubtList = [];
+  document.querySelectorAll(".msg").forEach((msg) => {
+    const text = msg.textContent.toLowerCase();
+    if (text.includes("doubt") || text.includes("solve")) {
+      doubtList.push(msg);
+    }
+  });
+
+  // Numbering
+  doubtList.forEach((msg, i) => {
+    let serialTag = msg.querySelector(".serial");
+    if (!serialTag) {
+      serialTag = document.createElement("div");
+      serialTag.className = "serial";
+      serialTag.style.color = "red";
+      serialTag.style.fontWeight = "bold";
+      serialTag.style.fontSize = "12px";
+      msg.prepend(serialTag);
+    }
+    serialTag.textContent = "Doubt #" + (i + 1);
+  });
+}
 function updateCheckboxes(){
   document.querySelectorAll(".msg").forEach(msg=>{
     let chk=msg.querySelector(".msgCheck");
@@ -283,5 +319,16 @@ body.dark #shoutbox { background:#1e293b; color:#d1d5db; border-color:#334155; }
 body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-color:#1e293b; }
 `;
 document.head.appendChild(style);
-</script></body>
+// === Handle Admin Mark Buttons ===
+document.addEventListener("click", async (e) => {
+  if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
+    const key = e.target.getAttribute("data-key");
+    const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
+    
+    // Update Firebase (assuming your message structure has a 'status' field)
+    await update(ref(db, "messages/" + key), { status });
+    alert(`Doubt marked as ${status}`);
+    refreshDoubtNumbers(); // re-number after status change
+  }
+});</script></body>
   </html>
