@@ -50,7 +50,14 @@ body.dark .msg b.username * {
 body.dark .msg b.username.admin,
 body.dark .msg b.username.admin * {
   color: #008000 !important;
-}#shoutbox button#sendBtn { padding: 6px 14px; font-size: 12px; border-radius: 4px; background-color: #4CAF50; color: #fff; cursor: pointer; width: auto; height: auto; } #shoutbox button#sendBtn:hover { background-color: #45a049; }
+}
+
+/* Send button small style used for admin buttons too */
+#shoutbox button#sendBtn { padding: 6px 14px; font-size: 12px; border-radius: 4px; background-color: #4CAF50; color: #fff; cursor: pointer; width: auto; height: auto; }
+#shoutbox button#sendBtn:hover { background-color: #45a049; }
+
+/* Admin buttons style same as send (small) */
+.small-admin-btn { padding: 6px 14px; font-size: 12px; border-radius: 4px; color:#fff; border:none; cursor:pointer; width:auto; height:auto; }
 
 /* Admin buttons style same as clear */ #clearBtn, #deleteSelectedBtn, #logoutBtn { padding: 6px 14px; font-size: 12px; border-radius: 4px; color: #fff; cursor: pointer; width: auto; height: auto; } #clearBtn { background-color: red; } #clearBtn:hover { background-color: darkred; } #deleteSelectedBtn { background-color: #8B0000; display:none; } #deleteSelectedBtn:hover { background-color: #8B0000; filter: brightness(0.85); } #logoutBtn { background-color: #555; display:none; } #logoutBtn:hover { background-color: #555; filter: brightness(0.85); }
 
@@ -164,11 +171,20 @@ function removeMessageDOM(key){
   if(el) el.remove();
 }
 
+/* Function to detect if a message should be treated as a doubt.
+   Only messages containing these keywords (case-insensitive) are doubts:
+   doubt, solve, solution, question, query
+*/
+function isDoubtMessage(text){
+  if(!text) return false;
+  return /\b(doubt|solve|solution|question|query)\b/i.test(text);
+}
+
 /* enhanced addMessageToDOM: keep same look but include serial+status (non-intrusive) */
 async function addMessageToDOM(key,data){
   removeMessageDOM(key);
   const div=document.createElement("div"); div.classList.add("msg"); div.setAttribute("data-key",key);
-  let checkboxHtml=""; if(isAdminAuthenticated()){ checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;}
+  let checkboxHtml=""; if(isAdminAuthenticated() && data && typeof data.serial !== 'undefined'){ checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;}
 
   let adminMeta="";
   if(isAdminAuthenticated()){
@@ -180,20 +196,20 @@ async function addMessageToDOM(key,data){
   let usernameClass = "username";
   if(data && data.name && data.name.toLowerCase() === "admin") usernameClass += " admin";
 
-  // non-intrusive serial/status display
-  const serialHtml = (data && data.serial) ? `<span class="serial-b" style="font-weight:700;color:#333;margin-left:6px;">[#${String(data.serial).padStart(2,'0')}]</span>` : '';
+  // only show serial/status if this message is a doubt (has serial)
+  const serialHtml = (data && typeof data.serial !== 'undefined') ? `<span class="serial-b" style="font-weight:700;color:#333;margin-left:6px;">[#${String(data.serial).padStart(2,'0')}]</span>` : '';
   const statusHtml = (data && data.status) ? `<span class="status-b" style="font-weight:700;color:#666;margin-right:6px;">${escapeHtml(data.status)}</span>` : '';
 
   let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(data && data.name ? data.name : 'Guest')}</b>: ${escapeHtml(data && data.message ? data.message : '')} ${serialHtml}`;
   if(data && data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;}
   content+=`<div class='meta'>${statusHtml}${formatDateTime(data && data.time ? data.time : Date.now())}${adminMeta}</div>`;
 
-  // admin controls appended, visible only when admin logged in
-  if(isAdminAuthenticated()){
+  // Admin controls appended, visible only when admin logged in AND this message is a doubt (has serial)
+  if(isAdminAuthenticated() && data && typeof data.serial !== 'undefined'){
     content += `<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">`;
-    content += `<button onclick="markStatus('${key}','working')" style="padding:6px 10px;border-radius:4px;background:#f59e0b;color:#fff;border:none;cursor:pointer;">Mark Working</button>`;
-    content += `<button onclick="markStatus('${key}','solved')" style="padding:6px 10px;border-radius:4px;background:#10b981;color:#fff;border:none;cursor:pointer;">Mark Solved</button>`;
-    content += `<button onclick="markStatus('${key}','pending')" style="padding:6px 10px;border-radius:4px;background:#3b82f6;color:#fff;border:none;cursor:pointer;">Mark Pending</button>`;
+    // small admin buttons (same sizing as send)
+    content += `<button class="small-admin-btn" onclick="markStatus('${key}','working')" style="background:#f59e0b;">Mark Working</button>`;
+    content += `<button class="small-admin-btn" onclick="markStatus('${key}','solved')" style="background:#10b981;">Mark Solved</button>`;
     content += `</div>`;
   }
 
@@ -205,7 +221,14 @@ function updateCheckboxes(){
   document.querySelectorAll(".msg").forEach(msg=>{
     let chk=msg.querySelector(".msgCheck");
     if(isAdminAuthenticated()){
-      if(!chk){ const key=msg.getAttribute("data-key"); const input=document.createElement("input"); input.type="checkbox"; input.className="msgCheck"; input.setAttribute("data-key",key); msg.querySelector("b").prepend(input);}
+      if(!chk && msg.getAttribute('data-key')){
+        // Only add checkbox if that message has a serial (doubt). If no serial, skip.
+        const key = msg.getAttribute("data-key");
+        // attempt to detect if this message has serial by checking the innerHTML for [# pattern
+        if(msg.innerHTML.indexOf('[#') !== -1){
+          const input=document.createElement("input"); input.type="checkbox"; input.className="msgCheck"; input.setAttribute("data-key",key); msg.querySelector("b").prepend(input);
+        }
+      }
     } else{ if(chk) chk.remove(); }
   });
 }
@@ -216,7 +239,7 @@ db.ref("shoutbox").on("child_changed",snap=>{ addMessageToDOM(snap.key,snap.val(
 
 async function uploadToImgbb(file){ return new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.onloadend=()=>{ const base64=reader.result.split(",")[1]; const xhr=new XMLHttpRequest(); xhr.open("POST","https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY); xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); xhr.upload.onprogress=function(e){if(e.lengthComputable){const percent=(e.loaded/e.total)*100;document.getElementById("uploadProgress").style.display="block";document.getElementById("uploadBar").style.width=percent+"%";}}; xhr.onload=function(){document.getElementById("uploadProgress").style.display="none"; if(xhr.status===200){resolve(JSON.parse(xhr.responseText).data.url);} else reject("Upload failed");}; xhr.onerror=()=>reject("Upload error"); xhr.send("image="+encodeURIComponent(base64));}; reader.readAsDataURL(file); }); }
 
-/* SEND button: transaction counter, push, update latest, update stats, user alert */
+/* SEND button: if message is a doubt (contains keywords) assign serial & status; else just push as normal message */
 document.getElementById("sendBtn").addEventListener("click",async ()=>{
   const nameEl=document.getElementById("username"); const msgEl=document.getElementById("message"); const photoEl=document.getElementById("photoInput");
   const name=(nameEl.value||"").trim(); const msg=(msgEl.value||"").trim();
@@ -227,23 +250,32 @@ document.getElementById("sendBtn").addEventListener("click",async ()=>{
 
   let photoURL=""; if(photoEl.files[0]){ try{ photoURL=await uploadToImgbb(photoEl.files[0]); photoEl.value=""; }catch(e){ alert("Image upload failed: "+e); return; } }
 
-  // Get next serial safely
-  db.ref("counter").transaction(current => (current || 0) + 1).then(result => {
-    const serial = result.snapshot.val();
-    const data={serial, name: name||"Guest", message: msg || (photoURL ? "(photo)" : ""), time: Date.now(), photoURL: photoURL||"", status: "pending"};
+  // Determine if this message qualifies as a doubt (contains keywords)
+  const qualifiesAsDoubt = isDoubtMessage(msg);
+
+  if(qualifiesAsDoubt){
+    // Get next serial safely and treat as doubt
+    db.ref("counter").transaction(current => (current || 0) + 1).then(result => {
+      const serial = result.snapshot.val();
+      const data={serial, name: name||"Guest", message: msg || (photoURL ? "(photo)" : ""), time: Date.now(), photoURL: photoURL||"", status: "pending"};
+      db.ref("shoutbox").push(data);
+      msgEl.value="";
+
+      // update latest text & stats (only for doubts)
+      const updateText = `🟢 New Doubt #${serial} received from ${data.name}`;
+      db.ref("updates/latest").set(updateText);
+      updateDoubtStats();
+
+      // alert token to user
+      alert("Your doubt has been submitted. Your doubt number is #"+String(serial).padStart(2,'0'));
+    }).catch(err=>{ console.error(err); alert("Could not assign serial. Try again."); });
+  } else {
+    // Normal message (no serial, no status)
+    const data={ name: name||"Guest", message: msg || (photoURL ? "(photo)" : ""), time: Date.now(), photoURL: photoURL||"" };
     db.ref("shoutbox").push(data);
     msgEl.value="";
-
-    // update latest text
-    const updateText = `🟢 New Doubt #${serial} received from ${data.name}`;
-    db.ref("updates/latest").set(updateText);
-
-    // update stats
-    updateDoubtStats();
-
-    // alert token to user
-    alert("Your doubt has been submitted. Your doubt number is #"+String(serial).padStart(2,'0'));
-  }).catch(err=>{ console.error(err); alert("Could not assign serial. Try again."); });
+    alert("Your message has been submitted.");
+  }
 });
 
 /* Clear / Delete / Logout */
@@ -256,10 +288,11 @@ updateAdminUI();
 window.markStatus = function(key, status){
   if(!isAdminAuthenticated()){ alert("Admin only"); return; }
   db.ref("shoutbox/"+key+"/status").set(status).then(()=>{
-    // update latest & stats
+    // update latest & stats (only for doubts — messages with serial)
     db.ref("shoutbox/"+key).once("value").then(snap=>{
       const d = snap.val();
       if(!d) return;
+      if(typeof d.serial === 'undefined') return; // ignore if not a doubt
       if(status === "solved") db.ref("updates/latest").set(`✅ Doubt #${d.serial} solved by Admin`);
       else if(status === "working") db.ref("updates/latest").set(`🟡 Working on Doubt #${d.serial} from ${d.name}`);
       else db.ref("updates/latest").set(`🔄 Doubt #${d.serial} status changed to ${status}`);
@@ -268,15 +301,17 @@ window.markStatus = function(key, status){
   }).catch(err=>{ console.error(err); alert("Could not update status"); });
 };
 
-/* Stats updater function */
+/* Stats updater function (count only items that have serial -> these are doubts) */
 function updateDoubtStats(){
   db.ref("shoutbox").once("value", snap => {
     let total = 0, solved = 0, working = 0;
     snap.forEach(child => {
-      const s = child.val() && child.val().status;
-      total++;
-      if (s === "solved") solved++;
-      if (s === "working") working++;
+      const val = child.val() || {};
+      if(typeof val.serial !== 'undefined'){
+        total++;
+        if (val.status === "solved") solved++;
+        if (val.status === "working") working++;
+      }
     });
     db.ref("updates/stats").set({ total, solved, working });
   });
@@ -364,4 +399,5 @@ body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-
 `;
 document.head.appendChild(style);
 </script></body>
-                                                     </html>
+</html>
+  
