@@ -179,38 +179,62 @@ function formatDateTime(ts){
   return `${day}/${month}/${year} ${hrs}:${mins} ${ampm}`;
 }
 
-async function addMessageToDOM(key,data){
-  const div=document.createElement("div"); div.classList.add("msg"); div.setAttribute("data-key",key);
-  let checkboxHtml=""; if(isAdminAuthenticated()){ checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;}
+async function addMessageToDOM(key, data) {
+  const div = document.createElement("div");
+  div.classList.add("msg");
+  div.setAttribute("data-key", key);
 
-  let adminMeta="";
-  if(isAdminAuthenticated()){
-    try{ const res=await fetch('https://ipapi.co/json/'); const info=await res.json();
-      adminMeta=` | IP: ${info.ip} | Location: ${info.city}, ${info.region}, ${info.country_name}`;
-    }catch(e){ adminMeta=""; }
+  let checkboxHtml = "";
+  if (isAdminAuthenticated()) {
+    checkboxHtml = `<input type="checkbox" class="msgCheck" data-key="${key}"> `;
+  }
+
+  let adminMeta = "";
+  if (isAdminAuthenticated()) {
+    try {
+      const res = await fetch("https://ipapi.co/json/");
+      const info = await res.json();
+      adminMeta = ` | IP: ${info.ip} | Location: ${info.city}, ${info.region}, ${info.country_name}`;
+    } catch (e) {
+      adminMeta = "";
+    }
   }
 
   let usernameClass = "username";
-if(data.name.toLowerCase() === "admin") usernameClass += " admin";
+  if (data.name.toLowerCase() === "admin") usernameClass += " admin";
 
-let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}`;
-  if(data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;}
-  content+=`<div class='meta'>${formatDateTime(data.time)}${adminMeta}</div>`;
-  div.innerHTML=content;
+  let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(
+    data.name
+  )}</b>: ${escapeHtml(data.message)}`;
+
+  if (data.photoURL) {
+    content += `<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;
+  }
+
+  content += `<div class='meta'>${formatDateTime(data.time)}${adminMeta}</div>`;
+
   // === Admin buttons for doubts ===
   if (isAdminAuthenticated()) {
     const lowerMsg = data.message.toLowerCase();
     if (lowerMsg.includes("doubt") || lowerMsg.includes("solve")) {
       content += `
         <div class="admin-btns" style="margin-top:5px;">
-          <button class="mark-working" data-key="${key}" style="background:#ffc107;border:none;padding:4px 6px;border-radius:4px;cursor:pointer;">Mark Working</button>
-          <button class="mark-solved" data-key="${key}" style="background:#28a745;border:none;padding:4px 6px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>
+          <button class="mark-working" data-key="${key}" 
+            style="background:#ffc107;border:none;padding:4px 6px;border-radius:4px;cursor:pointer;">
+            Mark Working
+          </button>
+          <button class="mark-solved" data-key="${key}" 
+            style="background:#28a745;border:none;padding:4px 6px;border-radius:4px;color:#fff;cursor:pointer;">
+            Mark Solved
+          </button>
         </div>`;
     }
   }
-  if (data.status) div.dataset.status = data.status;
-updateDoubtStats();  // refresh stats whenever message added
-  document.getElementById("messages").prepend(div);
+
+  // 👇 ab content sab ready hone ke baad div me daalo
+  div.innerHTML = content;
+
+  document.getElementById("messages").appendChild(div);
 }
 // === Detect Doubt Messages and Number Them ===
 let doubtList = [];
