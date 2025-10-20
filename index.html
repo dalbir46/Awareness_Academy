@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -76,7 +77,7 @@ body.dark .msg b.username.admin * {
   <div class="section-title"><u>Notice Board</u> :-</div>
 </div><div class="box-welcome">
   This website is specially designed for Students of class 6 to class 12 to clear their Maths problem in simple way यह वेबसाइट विशेष रूप से कक्षा 6 से कक्षा 12 तक के विद्यार्थियों के लिए आसान तरीके से गणित की समस्याओं को हल करने हेतु डिज़ाइन की गई है।   
-  <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ。
+  <b>Notes, NCERT Solutions, Practice Tests और Formula Sheets</b> के साथ।
 </div><!-- Shoutbox --><div class="section-title title-shout">Shoutbox</div>
 <div class="box" id="shoutbox">
   <div id="adminStatus">✅ Admin login successful</div>
@@ -90,10 +91,8 @@ body.dark .msg b.username.admin * {
   <div class="send-wrapper"><button id="deleteSelectedBtn">Delete Selected</button></div>
   <div class="send-wrapper"><button id="logoutBtn">Admin Logout</button></div>
 </div><!-- Updates --><div class="section-title title-updates" id="updates">Latest Updates</div>
-<div class="box">
-  • <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>
-  • <b>Sample Paper 2024–25</b> — Solutions added<br>
-  • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
+<div class="box" id="latestUpdates">
+  🔄 Waiting for new doubts...
 </div><!-- Classes --><div class="section-title title-class">Select Your Class</div>
 <div class="box class-grid">
   <button class="btn btn6" onclick="location.href='class6.html'">Class 6</button>
@@ -159,7 +158,15 @@ function formatDateTime(ts){
   return `${day}/${month}/${year} ${hrs}:${mins} ${ampm}`;
 }
 
+/* --- new: remove and re-render to avoid duplicates --- */
+function removeMessageDOM(key){
+  const el=document.querySelector('.msg[data-key="'+key+'"]');
+  if(el) el.remove();
+}
+
+/* enhanced addMessageToDOM: keep same look but include serial+status (non-intrusive) */
 async function addMessageToDOM(key,data){
+  removeMessageDOM(key);
   const div=document.createElement("div"); div.classList.add("msg"); div.setAttribute("data-key",key);
   let checkboxHtml=""; if(isAdminAuthenticated()){ checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;}
 
@@ -171,11 +178,25 @@ async function addMessageToDOM(key,data){
   }
 
   let usernameClass = "username";
-if(data.name.toLowerCase() === "admin") usernameClass += " admin";
+  if(data && data.name && data.name.toLowerCase() === "admin") usernameClass += " admin";
 
-let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}`;
-  if(data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;}
-  content+=`<div class='meta'>${formatDateTime(data.time)}${adminMeta}</div>`;
+  // non-intrusive serial/status display
+  const serialHtml = (data && data.serial) ? `<span class="serial-b" style="font-weight:700;color:#333;margin-left:6px;">[#${String(data.serial).padStart(2,'0')}]</span>` : '';
+  const statusHtml = (data && data.status) ? `<span class="status-b" style="font-weight:700;color:#666;margin-right:6px;">${escapeHtml(data.status)}</span>` : '';
+
+  let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(data && data.name ? data.name : 'Guest')}</b>: ${escapeHtml(data && data.message ? data.message : '')} ${serialHtml}`;
+  if(data && data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;}
+  content+=`<div class='meta'>${statusHtml}${formatDateTime(data && data.time ? data.time : Date.now())}${adminMeta}</div>`;
+
+  // admin controls appended, visible only when admin logged in
+  if(isAdminAuthenticated()){
+    content += `<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap;">`;
+    content += `<button onclick="markStatus('${key}','working')" style="padding:6px 10px;border-radius:4px;background:#f59e0b;color:#fff;border:none;cursor:pointer;">Mark Working</button>`;
+    content += `<button onclick="markStatus('${key}','solved')" style="padding:6px 10px;border-radius:4px;background:#10b981;color:#fff;border:none;cursor:pointer;">Mark Solved</button>`;
+    content += `<button onclick="markStatus('${key}','pending')" style="padding:6px 10px;border-radius:4px;background:#3b82f6;color:#fff;border:none;cursor:pointer;">Mark Pending</button>`;
+    content += `</div>`;
+  }
+
   div.innerHTML=content;
   document.getElementById("messages").prepend(div);
 }
@@ -189,29 +210,88 @@ function updateCheckboxes(){
   });
 }
 
-db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added",snap=>{ addMessageToDOM(snap.key,snap.val()); });
+/* Listen for additions and changes (keeps existing order behaviour) */
+db.ref("shoutbox").orderByChild("time").limitToLast(200).on("child_added",snap=>{ addMessageToDOM(snap.key,snap.val()); updateDoubtStats(); });
+db.ref("shoutbox").on("child_changed",snap=>{ addMessageToDOM(snap.key,snap.val()); updateDoubtStats(); });
 
 async function uploadToImgbb(file){ return new Promise((resolve,reject)=>{ const reader=new FileReader(); reader.onloadend=()=>{ const base64=reader.result.split(",")[1]; const xhr=new XMLHttpRequest(); xhr.open("POST","https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY); xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded"); xhr.upload.onprogress=function(e){if(e.lengthComputable){const percent=(e.loaded/e.total)*100;document.getElementById("uploadProgress").style.display="block";document.getElementById("uploadBar").style.width=percent+"%";}}; xhr.onload=function(){document.getElementById("uploadProgress").style.display="none"; if(xhr.status===200){resolve(JSON.parse(xhr.responseText).data.url);} else reject("Upload failed");}; xhr.onerror=()=>reject("Upload error"); xhr.send("image="+encodeURIComponent(base64));}; reader.readAsDataURL(file); }); }
 
+/* SEND button: transaction counter, push, update latest, update stats, user alert */
 document.getElementById("sendBtn").addEventListener("click",async ()=>{
   const nameEl=document.getElementById("username"); const msgEl=document.getElementById("message"); const photoEl=document.getElementById("photoInput");
-  const name=nameEl.value.trim(); const msg=msgEl.value.trim();
-  if(!name && !photoEl.files[0]) return alert("Enter message or photo.");
-  
+  const name=(nameEl.value||"").trim(); const msg=(msgEl.value||"").trim();
+  if(!name && !msg && (!photoEl.files || !photoEl.files[0])) return alert("Enter name or message or photo.");
+
+  // Admin quick-login via name 'admin'
   if(name.toLowerCase()==="admin" && !isAdminAuthenticated()){ const pwd=prompt("Enter admin password:"); if(pwd===ADMIN_PASSWORD){setAdminAuthenticated(true);} else {alert("Incorrect password."); return;} }
 
   let photoURL=""; if(photoEl.files[0]){ try{ photoURL=await uploadToImgbb(photoEl.files[0]); photoEl.value=""; }catch(e){ alert("Image upload failed: "+e); return; } }
 
-  const data={name:name||"Guest",message:msg,time:Date.now(),photoURL};
-  db.ref("shoutbox").push(data); msgEl.value="";
+  // Get next serial safely
+  db.ref("counter").transaction(current => (current || 0) + 1).then(result => {
+    const serial = result.snapshot.val();
+    const data={serial, name: name||"Guest", message: msg || (photoURL ? "(photo)" : ""), time: Date.now(), photoURL: photoURL||"", status: "pending"};
+    db.ref("shoutbox").push(data);
+    msgEl.value="";
+
+    // update latest text
+    const updateText = `🟢 New Doubt #${serial} received from ${data.name}`;
+    db.ref("updates/latest").set(updateText);
+
+    // update stats
+    updateDoubtStats();
+
+    // alert token to user
+    alert("Your doubt has been submitted. Your doubt number is #"+String(serial).padStart(2,'0'));
+  }).catch(err=>{ console.error(err); alert("Could not assign serial. Try again."); });
 });
 
-document.getElementById("clearBtn").addEventListener("click",()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; } else { alert("Admin only"); } });
-document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key=chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); document.querySelector(".msg[data-key='"+key+"']").remove(); }); } });
+/* Clear / Delete / Logout */
+document.getElementById("clearBtn").addEventListener("click",()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; db.ref('counter').set(0); db.ref('updates').remove(); } else { alert("Admin only"); } });
+document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key=chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); const el=document.querySelector(".msg[data-key='"+key+"']"); if(el) el.remove(); }); updateDoubtStats(); } });
 document.getElementById("logoutBtn").addEventListener("click",()=>{ setAdminAuthenticated(false); });
 updateAdminUI();
 
-// ===== Theme Dropdown (Center Version with Same Dark Style) =====
+/* Admin status change function (exposed globally for inline onclick) */
+window.markStatus = function(key, status){
+  if(!isAdminAuthenticated()){ alert("Admin only"); return; }
+  db.ref("shoutbox/"+key+"/status").set(status).then(()=>{
+    // update latest & stats
+    db.ref("shoutbox/"+key).once("value").then(snap=>{
+      const d = snap.val();
+      if(!d) return;
+      if(status === "solved") db.ref("updates/latest").set(`✅ Doubt #${d.serial} solved by Admin`);
+      else if(status === "working") db.ref("updates/latest").set(`🟡 Working on Doubt #${d.serial} from ${d.name}`);
+      else db.ref("updates/latest").set(`🔄 Doubt #${d.serial} status changed to ${status}`);
+      updateDoubtStats();
+    });
+  }).catch(err=>{ console.error(err); alert("Could not update status"); });
+};
+
+/* Stats updater function */
+function updateDoubtStats(){
+  db.ref("shoutbox").once("value", snap => {
+    let total = 0, solved = 0, working = 0;
+    snap.forEach(child => {
+      const s = child.val() && child.val().status;
+      total++;
+      if (s === "solved") solved++;
+      if (s === "working") working++;
+    });
+    db.ref("updates/stats").set({ total, solved, working });
+  });
+}
+
+/* Live homepage updates display (option 1: only doubts) */
+db.ref("updates").on("value", snap => {
+  const data = snap.val() || {};
+  const latest = data.latest || "🔄 Waiting for new doubts...";
+  const stats = data.stats || {};
+  const updatesDiv = document.getElementById("latestUpdates");
+  updatesDiv.innerHTML = `<b>${escapeHtml(latest)}</b><br><br>Total Doubts: ${stats.total||0} &nbsp; | &nbsp; Solved: ${stats.solved||0} &nbsp; | &nbsp; Currently Working: ${stats.working||0}`;
+});
+
+/* ===== Theme Dropdown (Center Version with Same Dark Style) ===== */
 const themeSelect = document.getElementById("themeSelect");
 const savedTheme = localStorage.getItem('theme') || 'light';
 
