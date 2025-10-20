@@ -208,6 +208,8 @@ let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(data.name
         </div>`;
     }
   }
+  if (data.status) div.dataset.status = data.status;
+updateDoubtStats();  // refresh stats whenever message added
   document.getElementById("messages").prepend(div);
 }
 // === Detect Doubt Messages and Number Them ===
@@ -264,6 +266,7 @@ document.getElementById("sendBtn").addEventListener("click",async ()=>{
 
 document.getElementById("clearBtn").addEventListener("click",()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; } else { alert("Admin only"); } });
 document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key=chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); document.querySelector(".msg[data-key='"+key+"']").remove(); }); } });
+  updateDoubtStats(); // refresh after delete
 document.getElementById("logoutBtn").addEventListener("click",()=>{ setAdminAuthenticated(false); });
 updateAdminUI();
 
@@ -344,7 +347,7 @@ document.addEventListener("click", async (e) => {
   if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
     const key = e.target.getAttribute("data-key");
     const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
-    
+    updateDoubtStats(); // refresh after status change
     // Update Firebase (assuming your message structure has a 'status' field)
     await update(ref(db, "messages/" + key), { status });
     alert(`Doubt marked as ${status}`);
