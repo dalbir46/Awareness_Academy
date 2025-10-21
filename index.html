@@ -6,33 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 0; color: #000; }/* Header & Footer */ .header-wrapper, .footer-wrapper { background: linear-gradient(135deg, #6a11cb, #2575fc); padding: 12px; } .header, .footer-inner { background: #FFFFCC; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; border: 2px solid #333; border-radius: 10px; text-shadow: 2px 2px 4px #888888; max-width: 600px; margin: auto; } .header div { margin: 5px 0; }
-.admin-btns {
-  margin-top: 8px;
-}
 
-.btn {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: none;
-  margin-right: 6px;
-  cursor: pointer;
-  color: #fff;
-  font-weight: 700;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  opacity: 0.85;
-  transform: scale(1.05);
-}
-
-.btn-working {
-  background: #2196F3; /* same as Edit */
-}
-
-.btn-solved {
-  background: #4CAF50; /* same as Save */
-}
 /* Section Titles */ .section-title { text-align: center; color: #fff; padding: 10px; font-weight: bold; font-size: 16px; } .title-class   { background: #2196F3; } .title-updates { background: #2F4F4F; } .title-practice{ background: #9C27B0; } .title-res     { background: #009688; } .title-shout   { background: #F44336; } .title-contact { background: #4B0082; }
 
 /* Boxes */ .box { border: 1px solid #999; margin: 5px; padding: 10px; background: #F9F9F9; font-size: 14px; } .box-welcome { border: 2px solid #9C27B0; margin: 10px; padding: 20px; font-size: 16px; background: #F3E5F5; text-align: center; border-radius: 8px; }
@@ -198,15 +172,7 @@ function escapeHtml(str){
     .replace(/'/g,"&#039;");
 }
 
-if (name.toLowerCase() === "admin" && !isAdminAuthenticated()) {
-  const password = prompt("Enter admin password:");
-  if (password !== ADMIN_PASSWORD) {
-    alert("Incorrect password!");
-    return;
-  }
-  setAdminAuthenticated(true);
-  alert("✅ Admin login successful");
-}
+function isAdminAuthenticated(){ return sessionStorage.getItem("isAdmin")==="true"; }
 function setAdminAuthenticated(flag){
   if(flag) sessionStorage.setItem("isAdmin","true");
   else sessionStorage.removeItem("isAdmin");
@@ -280,9 +246,9 @@ async function addMessageToDOM(key, data){
       btns.className = "admin-btns";
       btns.style.marginTop = "8px";
       btns.innerHTML = `
-  <button class="btn btn-working mark-working" data-key="${key}">Mark Working</button>
-  <button class="btn btn-solved mark-solved" data-key="${key}">Mark Solved</button>
-`;
+        <button class="mark-working" data-key="${key}" style="background:#ffc107;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;margin-right:6px;">Mark Working</button>
+        <button class="mark-solved" data-key="${key}" style="background:#28a745;border:none;padding:6px 8px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>
+      `;
       div.appendChild(btns);
     }
     // if admin, prepend a checkbox to the header
@@ -432,92 +398,92 @@ document.getElementById("sendBtn").addEventListener("click", async () => {
 const messageText = document.getElementById("message").value.trim();
 const fileInput = document.getElementById("photoInput");
 
-  // agar empty message aur image dono nahi hain to error
-  if (!messageText && fileInput.files.length === 0) {
-    alert("Please enter a message or select an image.");
-    return;
-  }
+  // agar empty message aur image dono nahi hain to
+   if (!messageText && fileInput.files.length === 0) {
+   alert("Please enter a message or select an image.");
+   return;
+ }
 
-  // agar admin likha hai to password check
-  if (name.toLowerCase() === "admin" && !isAdmin) {
-    const password = prompt("Enter admin password:");
-    if (password !== ADMIN_PASSWORD) {
-      alert("Incorrect password!");
-      return;
-    }
-    isAdmin = true;
-    document.getElementById("adminLogout").style.display = "inline-block";
-  }
+ // agar admin likha hai to password check
+ if (name.toLowerCase() === "admin" && !isAdmin) {
+   const password = prompt("Enter admin password:");
+   if (password !== ADMIN_PASSWORD) {
+     alert("Incorrect password!");
+     return;
+   }
+   isAdmin = true;
+   document.getElementById("adminLogout").style.display = "inline-block";
+ }
 
-  // image upload
-  let imageUrl = "";
-  if (fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append("image", file);
-    try {
-      const response = await fetch("https://api.imgbb.com/1/upload?key=" + IMGBB_API_KEY, {
-        method: "POST",
-        body: formData
-      });
-      const data = await response.json();
-      imageUrl = data.data.url;
-    } catch (err) {
-      console.error("Image upload failed:", err);
-      alert("Image upload failed. Please try again.");
-      return;
-    }
-  }
+ // image upload
+ let imageUrl = "";
+ if (fileInput.files.length > 0) {
+   const file = fileInput.files[0];
+   const formData = new FormData();
+   formData.append("image", file);
+   try {
+     const response = await fetch("https://api.imgbb.com/1/upload?key=" + IMGBB_API_KEY, {
+       method: "POST",
+       body: formData
+     });
+     const data = await response.json();
+     imageUrl = data.data.url;
+   } catch (err) {
+     console.error("Image upload failed:", err);
+     alert("Image upload failed. Please try again.");
+     return;
+   }
+ }
 
-  // message push to Firebase
-  const timestamp = new Date().toLocaleString();
-  db.ref("messages").push({
-    name: name || "Anonymous",
-    text: messageText,
-    imageUrl: imageUrl,
-    timestamp,
-    status: "pending"
-  });
+ // message push to Firebase
+ const timestamp = new Date().toLocaleString();
+ db.ref("messages").push({
+   name: name || "Anonymous",
+   text: messageText,
+   imageUrl: imageUrl,
+   timestamp,
+   status: "pending"
+ });
 
-  // clear input
-  document.getElementById("message").value = "";
-  document.getElementById("image").value = "";
+ // clear input
+ document.getElementById("message").value = "";
+ document.getElementById("image").value = "";
 });
 // Clear shoutbox (admin only)
 document.getElementById("clearBtn").addEventListener("click", ()=>{
-  if (isAdminAuthenticated()){
-    if (confirm("Clear all messages?")) {
-      db.ref("shoutbox").remove();
-      const messagesEl = document.getElementById("messages");
-      if (messagesEl) messagesEl.innerHTML = "";
-      refreshDoubtNumbers();
-      updateDoubtStats();
-    }
-  } else {
-    alert("Admin only");
-  }
+ if (isAdminAuthenticated()){
+   if (confirm("Clear all messages?")) {
+     db.ref("shoutbox").remove();
+     const messagesEl = document.getElementById("messages");
+     if (messagesEl) messagesEl.innerHTML = "";
+     refreshDoubtNumbers();
+     updateDoubtStats();
+   }
+ } else {
+   alert("Admin only");
+ }
 });
 
 // Delete selected (admin)
 document.getElementById("deleteSelectedBtn").addEventListener("click", ()=>{
-  if (!isAdminAuthenticated()) return alert("Admin only");
-  const checked = document.querySelectorAll(".msgCheck:checked");
-  if (!checked.length) return alert("Select messages to delete.");
-  if (!confirm(`Delete ${checked.length} selected message(s)?`)) return;
-  checked.forEach(chk=>{
-    const key = chk.getAttribute("data-key");
-    if (key) db.ref("shoutbox/"+key).remove();
-    const el = document.querySelector(`.msg[data-key='${key}']`);
-    if (el) el.remove();
-  });
-  refreshDoubtNumbers();
-  updateDoubtStats();
+ if (!isAdminAuthenticated()) return alert("Admin only");
+ const checked = document.querySelectorAll(".msgCheck:checked");
+ if (!checked.length) return alert("Select messages to delete.");
+ if (!confirm(`Delete ${checked.length} selected message(s)?`)) return;
+ checked.forEach(chk=>{
+   const key = chk.getAttribute("data-key");
+   if (key) db.ref("shoutbox/"+key).remove();
+   const el = document.querySelector(`.msg[data-key='${key}']`);
+   if (el) el.remove();
+ });
+ refreshDoubtNumbers();
+ updateDoubtStats();
 });
 
 // Logout
 document.getElementById("logoutBtn").addEventListener("click", ()=>{
-  setAdminAuthenticated(false);
-  alert("Admin logged out.");
+ setAdminAuthenticated(false);
+ alert("Admin logged out.");
 });
 
 // initial UI update
@@ -530,92 +496,92 @@ const themeSelect = document.getElementById("themeSelect");
 const savedTheme = localStorage.getItem('theme') || 'light';
 
 if (savedTheme === 'dark') {
-  document.body.classList.add('dark');
-  if (themeSelect) themeSelect.value = 'dark';
+ document.body.classList.add('dark');
+ if (themeSelect) themeSelect.value = 'dark';
 } else {
-  if (themeSelect) themeSelect.value = 'light';
+ if (themeSelect) themeSelect.value = 'light';
 }
 
 if (themeSelect) {
-  themeSelect.addEventListener('change', function() {
-    const mode = this.value;
-    if (mode === 'dark') document.body.classList.add('dark');
-    else document.body.classList.remove('dark');
-    localStorage.setItem('theme', mode);
-  });
+ themeSelect.addEventListener('change', function() {
+   const mode = this.value;
+   if (mode === 'dark') document.body.classList.add('dark');
+   else document.body.classList.remove('dark');
+   localStorage.setItem('theme', mode);
+ });
 }
 
 // Dark mode CSS injection (fixed: use template literal)
 const style = document.createElement("style");
 style.innerHTML = `
-  body.dark { background:#0f1724; color:#d1d5db; }
-  body.dark .msg { background:#07203a; color:#d1d5db; border-color:#12324a; }
-  body.dark .box, body.dark .box-welcome { background:#1e293b; color:#d1d5db; border-color:#334155; }
-  body.dark .header, body.dark .footer-inner {
-    background:#1e293b;
-    color:#e2e8f0;
-    border-color:#334155;
-    text-shadow:none;
-    font-size:21px;
-    font-weight:700;
-    padding:16px;
-  }
-  /* Dark Mode Notice Board */
-  body.dark .welcome-cover {
-    background: linear-gradient(90deg,#1e1b4b,#3b0764);
-    border: 2px solid #8b5cf6;
-    border-radius: 8px;
-    padding: 6px;
-    box-shadow:0 6px 18px rgba(11,6,34,0.6),0 0 12px rgba(139,92,246,0.08) inset;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  body.dark .welcome-cover .section-title { color: #facc15; font-weight:700; text-shadow:0 1px 0 rgba(0,0,0,0.6),0 6px 18px rgba(250,204,21,0.06); }
-  body.dark .welcome-cover .section-title::after {
-    content:"";
-    display:block;
-    margin:8px auto 0;
-    width:54px;
-    height:3px;
-    border-radius:3px;
-    background: linear-gradient(90deg,rgba(250,204,21,0.9),rgba(139,92,246,0.8));
-    box-shadow:0 6px 18px rgba(139,92,246,0.12);
-  }
-  body.dark .welcome-cover .section-title u { text-decoration: none; }
-  body.dark button, body.dark .btn { filter: brightness(1.2); }
-  body.dark #shoutbox { background:#1e293b; color:#d1d5db; border-color:#334155; }
-  body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-color:#1e293b; }
+ body.dark { background:#0f1724; color:#d1d5db; }
+ body.dark .msg { background:#07203a; color:#d1d5db; border-color:#12324a; }
+ body.dark .box, body.dark .box-welcome { background:#1e293b; color:#d1d5db; border-color:#334155; }
+ body.dark .header, body.dark .footer-inner {
+   background:#1e293b;
+   color:#e2e8f0;
+   border-color:#334155;
+   text-shadow:none;
+   font-size:21px;
+   font-weight:700;
+   padding:16px;
+ }
+ /* Dark Mode Notice Board */
+ body.dark .welcome-cover {
+   background: linear-gradient(90deg,#1e1b4b,#3b0764);
+   border: 2px solid #8b5cf6;
+   border-radius: 8px;
+   padding: 6px;
+   box-shadow:0 6px 18px rgba(11,6,34,0.6),0 0 12px rgba(139,92,246,0.08) inset;
+   transition: transform 0.25s ease, box-shadow 0.25s ease;
+   position: relative;
+   overflow: hidden;
+ }
+ body.dark .welcome-cover .section-title { color: #facc15; font-weight:700; text-shadow:0 1px 0 rgba(0,0,0,0.6),0 6px 18px rgba(250,204,21,0.06); }
+ body.dark .welcome-cover .section-title::after {
+   content:"";
+   display:block;
+   margin:8px auto 0;
+   width:54px;
+   height:3px;
+   border-radius:3px;
+   background: linear-gradient(90deg,rgba(250,204,21,0.9),rgba(139,92,246,0.8));
+   box-shadow:0 6px 18px rgba(139,92,246,0.12);
+ }
+ body.dark .welcome-cover .section-title u { text-decoration: none; }
+ body.dark button, body.dark .btn { filter: brightness(1.2); }
+ body.dark #shoutbox { background:#1e293b; color:#d1d5db; border-color:#334155; }
+ body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-color:#1e293b; }
 `;
 document.head.appendChild(style);
 
 // === Handle Admin Mark Buttons (delegated) ===
 document.addEventListener("click", async (e) => {
-  if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
-    if (!isAdminAuthenticated()) return alert("Admin only");
+ if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
+   if (!isAdminAuthenticated()) return alert("Admin only");
 
-    const key = e.target.getAttribute("data-key");
-    const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
+   const key = e.target.getAttribute("data-key");
+   const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
 
-    try {
-      await db.ref("shoutbox/" + key).update({ status });
-      // update DOM element if exists
-      const el = document.querySelector(`.msg[data-key='${key}']`);
-      if (el) el.dataset.status = status;
-      alert(`Doubt marked as ${status}`);
-    } catch(err) {
-      alert("Failed to update status: " + err);
-    }
+   try {
+     await db.ref("shoutbox/" + key).update({ status });
+     // update DOM element if exists
+     const el = document.querySelector(`.msg[data-key='${key}']`);
+     if (el) el.dataset.status = status;
+     alert(`Doubt marked as ${status}`);
+   } catch(err) {
+     alert("Failed to update status: " + err);
+   }
 
-    updateDoubtStats();
-    refreshDoubtNumbers();
-  }
+   updateDoubtStats();
+   refreshDoubtNumbers();
+ }
 });
 
 // Make sure to keep stats in sync when overall DB changes
 db.ref("shoutbox").on("value", () => {
-  refreshDoubtNumbers();
-  updateDoubtStats();
+ refreshDoubtNumbers();
+ updateDoubtStats();
 });
 </script>
 </body>
