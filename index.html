@@ -272,9 +272,9 @@ async function addMessageToDOM(key, data){
       btns.className = "admin-btns";
       btns.style.marginTop = "8px";
       btns.innerHTML = `
-        <button class="mark-working" data-key="${key}" style="background:#ffc107;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;margin-right:6px;">Mark Working</button>
-        <button class="mark-solved" data-key="${key}" style="background:#28a745;border:none;padding:6px 8px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>
-      `;
+  <button class="btn btn-working mark-working" data-key="${key}">Mark Working</button>
+  <button class="btn btn-solved mark-solved" data-key="${key}">Mark Solved</button>
+`;
       div.appendChild(btns);
     }
     // if admin, prepend a checkbox to the header
