@@ -33,9 +33,6 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
   color: #3366CC !important;   /* blue for normal users */
   font-weight: 700 !important; /* bold */
 }
-  #totalDoubts { color: red; font-weight: bold; }
-#workingDoubts { color: yellow; font-weight: bold; }
-#solvedDoubts { color: green; font-weight: bold; }
 /* Admin name (light + dark mode) */
 .msg b.username.admin,
 .msg b.username.admin * {
@@ -97,6 +94,9 @@ body.dark .msg b.username.admin * {
   <div id="doubtStats" style="font-weight:bold; color:#2F4F4F;">
     Total Doubts: 0 | Solved: 0 | Working: 0
   </div>
+  <div id="workingUpdates" style="margin:10px 0; font-weight:bold; color:gold;">
+  No active working doubts.
+  </div>
   • <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>
   • <b>Sample Paper 2024–25</b> — Solutions added<br>
   • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
@@ -146,7 +146,28 @@ var db=firebase.database();
 const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
-function updateDoubtStats() {
+function updateWorkingSection() {
+  const container = document.getElementById("workingUpdates");
+  if (!container) return;
+
+  const working = document.querySelectorAll(".msg[data-status='Working']");
+  if (working.length === 0) {
+    container.textContent = "No active working doubts.";
+    return;
+  }
+
+  // Show first 2 working doubts only
+  container.innerHTML = "<u>🟡 Working on Doubts:</u><br>" +
+    Array.from(working)
+      .slice(0, 2)
+      .map(el => el.textContent.trim().split('\n')[0])
+      .join("<br>");
+}
+
+// Har update ke baad call kar
+updateWorkingSection();
+  
+  function updateDoubtStats() {
   let total = 0, solved = 0, working = 0;
 
   document.querySelectorAll(".msg").forEach(msg => {
@@ -277,6 +298,7 @@ async function addMessageToDOM(key, data){
   updateDoubtStats();
   refreshDoubtNumbers();
   updateCheckboxes();
+  updateWorkingSection();
 }
 
 // === Detect Doubt Messages and Number Them ===
@@ -359,6 +381,7 @@ db.ref("shoutbox").on("child_removed", snap => {
   if (el) el.remove();
   refreshDoubtNumbers();
   updateDoubtStats();
+  updateWorkingSection();
 });
 
 // Image upload to imgbb
@@ -445,6 +468,7 @@ if (isAdminAuthenticated()){
     if (messagesEl) messagesEl.innerHTML = "";
     refreshDoubtNumbers();
     updateDoubtStats();
+    updateWorkingSection();
   }
 } else {
   alert("Admin only");
@@ -465,6 +489,7 @@ checked.forEach(chk=>{
 });
 refreshDoubtNumbers();
 updateDoubtStats();
+  updateWorkingSection();
 });
 
 // Logout
@@ -477,6 +502,7 @@ alert("Admin logged out.");
 refreshDoubtNumbers();
 updateDoubtStats();
 updateAdminUI();
+  updateWorkingSection();
 
 // ===== Theme Dropdown handling (preserve earlier code) =====
 const themeSelect = document.getElementById("themeSelect");
@@ -563,6 +589,7 @@ if (e.target.classList.contains("mark-working") || e.target.classList.contains("
 
   updateDoubtStats();
   refreshDoubtNumbers();
+  updateWorkingSection();
 }
 });
 
@@ -570,6 +597,7 @@ if (e.target.classList.contains("mark-working") || e.target.classList.contains("
 db.ref("shoutbox").on("value", () => {
 refreshDoubtNumbers();
 updateDoubtStats();
+  updateWorkingSection();
 });
 </script>
 </body>
