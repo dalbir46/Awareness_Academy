@@ -266,7 +266,7 @@ document.getElementById("sendBtn").addEventListener("click",async ()=>{
 document.getElementById("clearBtn").addEventListener("click",()=>{ if(isAdminAuthenticated() && confirm("Clear all messages?")){ db.ref("shoutbox").remove(); document.getElementById("messages").innerHTML=""; } else { alert("Admin only"); } });
 document.getElementById("deleteSelectedBtn").addEventListener("click",()=>{ if(isAdminAuthenticated()){ document.querySelectorAll(".msgCheck:checked").forEach(chk=>{ const key=chk.getAttribute("data-key"); db.ref("shoutbox/"+key).remove(); document.querySelector(".msg[data-key='"+key+"']").remove(); }); } });
   refreshDoubtNumbers();
-updateStats();
+updateDoubtStats();
 document.getElementById("logoutBtn").addEventListener("click",()=>{ setAdminAuthenticated(false); });
 updateAdminUI();
 
