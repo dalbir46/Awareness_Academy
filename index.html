@@ -393,43 +393,62 @@ function uploadToImgbb(file){
 }
 
 // Send button
-document.getElementById("sendBtn").addEventListener("click", async ()=>{
-  const nameEl = document.getElementById("username");
-  const msgEl = document.getElementById("message");
-  const photoEl = document.getElementById("photoInput");
+document.getElementById("sendBtn").addEventListener("click", async () => {
+  const name = document.getElementById("name").value.trim();
+  const messageText = document.getElementById("message").value.trim();
+  const fileInput = document.getElementById("image");
 
-  const name = (nameEl && nameEl.value) ? nameEl.value.trim() : "";
-  const msg = (msgEl && msgEl.value) ? msgEl.value.trim() : "";
-
-  if (!name && !msg && (!photoEl || !photoEl.files[0])) return alert("Enter message or photo.");
-
-  // Admin login shortcut if someone enters name "admin"
-  if (name.toLowerCase() === "admin" && !isAdminAuthenticated()){
-    const pwd = prompt("Enter admin password:");
-    if (pwd === ADMIN_PASSWORD){
-      setAdminAuthenticated(true);
-    } else {
-      alert("Incorrect password.");
-      return;
-    }
+  // agar empty message aur image dono nahi hain to error
+  if (!messageText && fileInput.files.length === 0) {
+    alert("Please enter a message or select an image.");
+    return;
   }
 
-  let photoURL = "";
-  if (photoEl && photoEl.files[0]){
+  // agar admin likha hai to password check
+  if (name.toLowerCase() === "admin" && !isAdmin) {
+    const password = prompt("Enter admin password:");
+    if (password !== ADMIN_PASSWORD) {
+      alert("Incorrect password!");
+      return;
+    }
+    isAdmin = true;
+    document.getElementById("adminLogout").style.display = "inline-block";
+  }
+
+  // image upload
+  let imageUrl = "";
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
     try {
-      photoURL = await uploadToImgbb(photoEl.files[0]);
-      photoEl.value = "";
-    } catch(e){
-      alert("Image upload failed: " + e);
+      const response = await fetch("https://api.imgbb.com/1/upload?key=" + IMGBB_API_KEY, {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      imageUrl = data.data.url;
+    } catch (err) {
+      console.error("Image upload failed:", err);
+      alert("Image upload failed. Please try again.");
       return;
     }
   }
 
-  const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL };
-  db.ref("shoutbox").push(data);
-  if (msgEl) msgEl.value = "";
-});
+  // message push to Firebase
+  const timestamp = new Date().toLocaleString();
+  db.ref("messages").push({
+    name: name || "Anonymous",
+    text: messageText,
+    imageUrl: imageUrl,
+    timestamp,
+    status: "pending"
+  });
 
+  // clear input
+  document.getElementById("message").value = "";
+  document.getElementById("image").value = "";
+});
 // Clear shoutbox (admin only)
 document.getElementById("clearBtn").addEventListener("click", ()=>{
   if (isAdminAuthenticated()){
