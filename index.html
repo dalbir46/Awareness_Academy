@@ -305,7 +305,7 @@ const key = e.target.getAttribute("data-key");
 const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
 updateDoubtStats(); // refresh after status change
 // Update Firebase (assuming your message structure has a 'status' field)
-await update(ref(db, "messages/" + key), { status });
+await db.ref("shoutbox/" + key).update({ status });
 alert(Doubt marked as ${status});
 refreshDoubtNumbers(); // re-number after status change
 }
