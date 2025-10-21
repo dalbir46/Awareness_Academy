@@ -160,8 +160,12 @@ function updateDoubtStats() {
 
   const statsEl = document.getElementById("doubtStats");
   if (statsEl)
-    statsEl.textContent = `Total Doubts: ${total} | Solved: ${solved} | Working: ${working}`;
-}
+    statsEl.innerHTML = `
+  <span style="color:red;">Total Doubts: ${total}</span> |
+  <span style="color:green;">Solved: ${solved}</span> |
+  <span style="color:blue;">Working: ${working}</span>
+`;
+  }
 
 // Simple HTML-escape helper
 function escapeHtml(str){
