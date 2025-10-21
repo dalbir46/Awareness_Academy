@@ -33,7 +33,9 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
   color: #3366CC !important;   /* blue for normal users */
   font-weight: 700 !important; /* bold */
 }
-
+  #totalDoubts { color: red; font-weight: bold; }
+#workingDoubts { color: yellow; font-weight: bold; }
+#solvedDoubts { color: green; font-weight: bold; }
 /* Admin name (light + dark mode) */
 .msg b.username.admin,
 .msg b.username.admin * {
@@ -493,9 +495,6 @@ themeSelect.addEventListener('change', function() {
 }
 
 // Dark mode CSS injection (fixed: use template literal)
-  #totalDoubts { color: red; font-weight: bold; }
-#workingDoubts { color: yellow; font-weight: bold; }
-#solvedDoubts { color: green; font-weight: bold; }
 const style = document.createElement("style");
 style.innerHTML = `
 body.dark { background:#0f1724; color:#d1d5db; }
