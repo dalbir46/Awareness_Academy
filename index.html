@@ -536,6 +536,23 @@ body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-
 `;
 document.head.appendChild(style);
 
+  // === Doubt Serial Number (Oldest = 01) ===
+function refreshDoubtNumbers() {
+  const messagesEl = document.getElementById("messages");
+  if (!messagesEl) return;
+
+  const msgs = Array.from(messagesEl.querySelectorAll(".msg"));
+  msgs.sort((a, b) => {
+    const timeA = parseInt(a.dataset.time || 0);
+    const timeB = parseInt(b.dataset.time || 0);
+    return timeA - timeB;
+  });
+  msgs.forEach((msg, index) => {
+    const serialEl = msg.querySelector(".serial");
+    if (serialEl) serialEl.textContent = String(index + 1).padStart(2, '0');
+  });
+}
+  
 // === Handle Admin Mark Buttons (delegated) ===
 document.addEventListener("click", async (e) => {
 if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
