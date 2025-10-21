@@ -160,8 +160,13 @@ function updateWorkingSection() {
 
   Array.from(working).slice(0, 3).forEach(msg => {
     const serial = msg.querySelector(".serial") ? msg.querySelector(".serial").textContent.replace("Doubt ", "").trim() : "";
-    const name = msg.querySelector("strong") ? msg.querySelector("strong").textContent.trim() : "Guest";
-    const text = msg.querySelector("strong") ? msg.innerHTML.split("</strong>:")[1]?.split("<")[0]?.trim() || "" : "";
+    
+    const nameEl = msg.querySelector("b.username");
+    const name = nameEl ? nameEl.textContent.trim() : "Guest";
+
+    const textEl = msg.querySelector("div:nth-child(2)");
+    const text = textEl ? textEl.textContent.trim() : "";
+
     const img = msg.querySelector("img") ? msg.querySelector("img").outerHTML : "";
 
     html += `
