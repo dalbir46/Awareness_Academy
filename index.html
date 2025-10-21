@@ -184,19 +184,18 @@ async function addMessageToDOM(key,data){
   let checkboxHtml=""; if(isAdminAuthenticated()){ checkboxHtml=`<input type="checkbox" class="msgCheck" data-key="${key}"> `;}
 
   let adminMeta="";
-  if(isAdminAuthenticated()){
-    try{ const res=await fetch('https://ipapi.co/json/'); const info=await res.json();
-      adminMeta=` | IP: ${info.ip} | Location: ${info.city}, ${info.region}, ${info.country_name}`;
-    }catch(e){ adminMeta=""; }
+  if (isAdminAuthenticated()) {
+  const lowerMsg = data.message.toLowerCase();
+  if (lowerMsg.includes("doubt") || lowerMsg.includes("solve")) {
+    const btns = document.createElement("div");
+    btns.className = "admin-btns";
+    btns.style.marginTop = "5px";
+    btns.innerHTML = `
+      <button class="mark-working" data-key="${key}" style="background:#ffc107;border:none;padding:4px 6px;border-radius:4px;cursor:pointer;">Mark Working</button>
+      <button class="mark-solved" data-key="${key}" style="background:#28a745;border:none;padding:4px 6px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>`;
+    div.appendChild(btns);
   }
-
-  let usernameClass = "username";
-if(data.name.toLowerCase() === "admin") usernameClass += " admin";
-
-let content = `<b class="${usernameClass}">${checkboxHtml}${escapeHtml(data.name)}</b>: ${escapeHtml(data.message)}`;
-  if(data.photoURL){content+=`<br><img src="${data.photoURL}" style="max-width:150px;border-radius:4px;margin-top:4px;">`;}
-  content+=`<div class='meta'>${formatDateTime(data.time)}${adminMeta}</div>`;
-  div.innerHTML=content;
+}
   // === Admin buttons for doubts ===
   if (isAdminAuthenticated()) {
     const lowerMsg = data.message.toLowerCase();
