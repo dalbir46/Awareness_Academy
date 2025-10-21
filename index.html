@@ -198,7 +198,15 @@ function escapeHtml(str){
     .replace(/'/g,"&#039;");
 }
 
-function isAdminAuthenticated(){ return sessionStorage.getItem("isAdmin")==="true"; }
+if (name.toLowerCase() === "admin" && !isAdminAuthenticated()) {
+  const password = prompt("Enter admin password:");
+  if (password !== ADMIN_PASSWORD) {
+    alert("Incorrect password!");
+    return;
+  }
+  setAdminAuthenticated(true);
+  alert("✅ Admin login successful");
+}
 function setAdminAuthenticated(flag){
   if(flag) sessionStorage.setItem("isAdmin","true");
   else sessionStorage.removeItem("isAdmin");
