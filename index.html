@@ -298,11 +298,15 @@ const style = document.createElement("style");
 style.innerHTML =   body.dark { background:#0f1724; color:#d1d5db; }   body.dark .msg { background:#07203a; color:#d1d5db; border-color:#12324a; }   body.dark .box, body.dark .box-welcome { background:#1e293b; color:#d1d5db; border-color:#334155; }   body.dark .header, body.dark .footer-inner{   background:#1e293b;   color:#e2e8f0;   border-color:#334155;   text-shadow:none;   font-size:21px;   font-weight:700;   padding:16px;   }   /* Dark Mode Notice Board: Modern Neon Style */   body.dark .welcome-cover {   background: linear-gradient(90deg,#1e1b4b,#3b0764);   border: 2px solid #8b5cf6;   border-radius: 8px;   padding: 6px;   box-shadow:0 6px 18px rgba(11,6,34,0.6),0 0 12px rgba(139,92,246,0.08) inset;   transition: transform 0.25s ease, box-shadow 0.25s ease;   position: relative;   overflow: hidden;   }   body.dark .welcome-cover .section-title {   color: #facc15;   font-weight:700;   text-shadow:0 1px 0 rgba(0,0,0,0.6),0 6px 18px rgba(250,204,21,0.06);   }   body.dark .welcome-cover .section-title::after {   content:"";   display:block;   margin:8px auto 0;   width:54px;   height:3px;   border-radius:3px;   background: linear-gradient(90deg,rgba(250,204,21,0.9),rgba(139,92,246,0.8));   box-shadow:0 6px 18px rgba(139,92,246,0.12);   }   body.dark .welcome-cover .section-title u {   text-decoration: none;   }   body.dark button, body.dark .btn { filter: brightness(1.2); }   body.dark #shoutbox { background:#1e293b; color:#d1d5db; border-color:#334155; }   body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-color:#1e293b; }  ;
 document.head.appendChild(style);
 // === Handle Admin Mark Buttons ===
+// === Handle Admin Mark Buttons ===
 document.addEventListener("click", async (e) => {
   if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
     const key = e.target.getAttribute("data-key");
     const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
+
     await db.ref("shoutbox/" + key).update({ status });
+    document.querySelector(`.msg[data-key='${key}']`).dataset.status = status;
+
     alert(`Doubt marked as ${status}`);
     updateDoubtStats();
     refreshDoubtNumbers();
