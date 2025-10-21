@@ -299,10 +299,16 @@ style.innerHTML =   body.dark { background:#0f1724; color:#d1d5db; }   body.dark
 document.head.appendChild(style);
 // === Handle Admin Mark Buttons ===
 document.addEventListener("click", async (e) => {
-if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
-const key = e.target.getAttribute("data-key");
-const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
-updateDoubtStats(); // refresh after status change
+  if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
+    const key = e.target.getAttribute("data-key");
+    const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
+    await db.ref("shoutbox/" + key).update({ status });
+    alert(`Doubt marked as ${status}`);
+    updateDoubtStats();
+    refreshDoubtNumbers();
+  }
+});
+  // refresh after status change
 // Update Firebase (assuming your message structure has a 'status' field)
 await db.ref("shoutbox/" + key).update({ status });
 alert(Doubt marked as ${status});
