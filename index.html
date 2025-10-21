@@ -394,9 +394,9 @@ function uploadToImgbb(file){
 
 // Send button
 document.getElementById("sendBtn").addEventListener("click", async () => {
-  const name = document.getElementById("name").value.trim();
-  const messageText = document.getElementById("message").value.trim();
-  const fileInput = document.getElementById("image");
+  const name = document.getElementById("username").value.trim();
+const messageText = document.getElementById("message").value.trim();
+const fileInput = document.getElementById("photoInput");
 
   // agar empty message aur image dono nahi hain to error
   if (!messageText && fileInput.files.length === 0) {
