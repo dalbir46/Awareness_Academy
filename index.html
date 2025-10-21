@@ -282,7 +282,7 @@ function refreshDoubtNumbers() {
       doubtList.push(msg);
     }
   });
-
+doubtList.reverse(); // 👈 Add this line to make oldest = 01
   // Numbering
   doubtList.forEach((msg, i) => {
     let serialTag = msg.querySelector(".serial");
