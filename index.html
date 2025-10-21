@@ -159,15 +159,15 @@ function updateWorkingSection() {
   let html = "<u>🟡 Working on Doubts:</u><br>";
 
   Array.from(working).slice(0, 3).forEach(msg => {
-    const serial = msg.querySelector(".serial") ? msg.querySelector(".serial").textContent : "";
-    const name = msg.querySelector("strong") ? msg.querySelector("strong").textContent : "Guest";
-    const text = msg.querySelector("strong") ? msg.innerHTML.split("</strong>:")[1].split("<")[0] : "";
+    const serial = msg.querySelector(".serial") ? msg.querySelector(".serial").textContent.replace("Doubt ", "").trim() : "";
+    const name = msg.querySelector("strong") ? msg.querySelector("strong").textContent.trim() : "Guest";
+    const text = msg.querySelector("strong") ? msg.innerHTML.split("</strong>:")[1]?.split("<")[0]?.trim() || "" : "";
     const img = msg.querySelector("img") ? msg.querySelector("img").outerHTML : "";
 
     html += `
       <div style="margin:6px 0; border-left:3px solid gold; padding-left:6px;">
-        <b style="color:gold;">Doubt ${serial}</b> by <span style="color:#ffcc00;">${name}</span><br>
-        <span style="color:#e2e2e2;">${text.trim()}</span><br>
+        Doubt <b style="color:gold;">${serial}</b> from <span style="color:#ffcc00;">${name}</span><br>
+        ${text ? `<span style="color:#e2e2e2;">${text}</span><br>` : ""}
         ${img ? `<div style="margin-top:4px;">${img}</div>` : ""}
       </div>
     `;
