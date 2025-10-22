@@ -181,12 +181,12 @@ function updateWorkingSection() {
 
     container.innerHTML += `
       <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${golden};color:${golden};line-height:1.5;border-radius:8px;">
-        Doubt <span class="update-doubt-number" style="color:${golden};font-weight:700;">#${serial}</span> from 
+        Doubt <span class="update-doubt-number" style="color:${golden};font-weight:700;">${serial}</span> from 
         <span class="update-username" style="color:${document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF"};font-weight:700;">${escapeHtml(name)}</span><br>
         ${ text ? `<div style="margin-top:6px;color:${golden};">${escapeHtml(text)}</div>` : "" }
-        ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
         ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${golden};font-size:13px;opacity:0.9;">${dateTime}</div>` : "" }
-      </div>
+        ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
+             </div>
     `;
   });
 }
