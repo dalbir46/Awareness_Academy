@@ -157,7 +157,7 @@ function updateWorkingSection() {
   }
 
   // 🔶 Golden heading (instead of red)
-  container.innerHTML = `<div class="update-label" style="color:#FFD700;font-weight:700;"> 🟡  Working on Doubts:</div>`;
+  container.innerHTML = `<div class="update-label" style="color:golden;font-weight:700;">🔶 Working on Doubts:</div>`;
 
   Array.from(working).slice(0, 3).forEach(msg => {
     const serialEl = msg.querySelector(".serial");
