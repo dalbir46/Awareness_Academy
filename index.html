@@ -157,7 +157,7 @@ function updateWorkingSection() {
   }
 
   // 🔶 Golden heading (instead of red)
-  container.innerHTML = `<div class="update-label" style="color:orange;font-weight:700;">🔶 Working on Doubts:</div>`;
+  container.innerHTML = `<div class="update-label" style="color: purple;font-weight:700;">🔶 Working on Doubts:</div>`;
 
   Array.from(working).slice(0, 3).forEach(msg => {
     const serialEl = msg.querySelector(".serial");
@@ -208,7 +208,7 @@ function updateWorkingSection() {
     statsEl.innerHTML = `
   <span style="color:red;">Total Doubts: ${total}</span> |
   <span style="color:green;">Solved: ${solved}</span> |
-  <span style="color:orange;">Working: ${working}</span>
+  <span style="color:purple;">Working: ${working}</span>
 `;
   }
 
