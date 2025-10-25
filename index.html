@@ -157,7 +157,17 @@ function updateWorkingSection() {
   }
 
   // 🔶 Golden heading (instead of red)
-  container.innerHTML = `<div class="update-label" style="color:orange;font-weight:700;">🔶 Working on Doubts:</div>`;
+ // Define colors for light and dark mode
+const goldenText = document.body.classList.contains("dark-mode") ? "#FFD54F" : "#FFC107";  // for text
+const goldenIcon = document.body.classList.contains("dark-mode") ? "#FFEB3B" : "#FBC02D";  // for symbol
+
+// Insert the styled line
+container.innerHTML = `
+  <div class="update-label" style="font-weight:700;">
+    <span style="color:${goldenIcon};">🔶</span>
+    <span style="color:${goldenText};"> Working on Doubts:</span>
+  </div>
+`;
 
   Array.from(working).slice(0, 3).forEach(msg => {
     const serialEl = msg.querySelector(".serial");
