@@ -176,9 +176,7 @@ function updateWorkingSection() {
     const metaEl = msg.querySelector(".meta");
     const dateTime = metaEl ? metaEl.textContent.trim() : "";
 
-    // Golden color for entire line except username
-    const golden = document.body.classList.contains("dark-mode") ? "yellow" : "yellow";
-
+    const golden = document.body.classList.contains("dark-mode") ? "#FFD54F" : "#FFC107";
     container.innerHTML += `
       <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${golden};color:${golden};line-height:1.5;border-radius:8px;">
         Doubt <span class="update-doubt-number" style="color:${golden};font-weight:700;">${serial}</span> from 
