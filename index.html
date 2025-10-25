@@ -147,7 +147,6 @@ const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
 function updateWorkingSection() {
-function updateWorkingSection() {
   const container = document.getElementById("workingUpdates");
   if (!container) return;
 
@@ -157,20 +156,18 @@ function updateWorkingSection() {
     return;
   }
 
-  // Dynamic colors for light/dark mode
-  const isDark = document.body.classList.contains("dark");
-  const iconColor = isDark ? "#FFEB3B" : "#FBC02D";   // 🔶 color
-  const textColor = isDark ? "#FFEB3B" : "#FFC107";   // "Working on Doubts:" text
-  const borderColor = isDark ? "#FFD54F" : "#FFC107"; // border + text for each doubt
-  const usernameColor = isDark ? "#66B2FF" : "#007BFF";
+  // 🔶 Golden heading (instead of red)
+ // Define colors for light and dark mode
+const goldenText = document.body.classList.contains("dark-mode") ? "#FFD54F" : "#FFC107";  // for text
+const goldenIcon = document.body.classList.contains("dark-mode") ? "#FFEB3B" : "#FBC02D";  // for symbol
 
-  // Header line
-  container.innerHTML = `
-    <div class="update-label" style="font-weight:700;margin-bottom:6px;">
-      <span style="color:${iconColor};">🔶</span>
-      <span style="color:${textColor};"> Working on Doubts:</span>
-    </div>
-  `;
+// Insert the styled line
+container.innerHTML = `
+  <div class="update-label" style="font-weight:700;">
+    <span style="color:${goldenIcon};">🔶</span>
+    <span style="color:${goldenText};"> Working on Doubts:</span>
+  </div>
+`;
 
   Array.from(working).slice(0, 3).forEach(msg => {
     const serialEl = msg.querySelector(".serial");
@@ -179,29 +176,25 @@ function updateWorkingSection() {
     const nameEl = msg.querySelector("b.username");
     const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
-    const textEl = msg.querySelector(".msg-content");
+    // main text (ignore meta to prevent duplicate date)
+    const textEl = msg.querySelector(".msg-content"); // use only message text div
     const text = textEl ? textEl.textContent.trim() : "";
 
     const img = msg.querySelector("img") ? msg.querySelector("img").outerHTML : "";
 
+    // date & time (only once)
     const metaEl = msg.querySelector(".meta");
     const dateTime = metaEl ? metaEl.textContent.trim() : "";
 
+    const golden = document.body.classList.contains("dark-mode") ? "#FFD54F" : "#FFC107";
     container.innerHTML += `
-      <div class="update-item" style="
-        margin:8px 0;
-        padding:6px 10px;
-        border-left:3px solid ${borderColor};
-        color:${borderColor};
-        border-radius:8px;
-        line-height:1.5;
-      ">
-        Doubt <span class="update-doubt-number" style="color:${borderColor};font-weight:700;">${serial}</span> from 
-        <span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
-        ${ text ? `<div style="margin-top:6px;color:${borderColor};">${escapeHtml(text)}</div>` : "" }
-        ${ dateTime ? `<div style="margin-top:6px;font-size:13px;opacity:0.9;color:${borderColor};">${dateTime}</div>` : "" }
+      <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${golden};color:${golden};line-height:1.5;border-radius:8px;">
+        Doubt <span class="update-doubt-number" style="color:${golden};font-weight:700;">${serial}</span> from 
+        <span class="update-username" style="color:${document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF"};font-weight:700;">${escapeHtml(name)}</span><br>
+        ${ text ? `<div style="margin-top:6px;color:${golden};">${escapeHtml(text)}</div>` : "" }
+        ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${golden};font-size:13px;opacity:0.9;">${dateTime}</div>` : "" }
         ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
-      </div>
+             </div>
     `;
   });
 }
