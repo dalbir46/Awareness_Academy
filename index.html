@@ -164,7 +164,7 @@ const goldenIcon = document.body.classList.contains("dark-mode") ? "#FFEB3B" : "
 // Insert the styled line
 container.innerHTML = `
   <div class="update-label" style="font-weight:700;">
-    <span style="color:${goldenIcon};">🔶</span>
+    <span style="color:${goldenIcon};">🟨</span>
     <span style="color:${goldenText};"> Working on Doubts:</span>
   </div>
 `;
@@ -216,7 +216,7 @@ container.innerHTML = `
     statsEl.innerHTML = `
   <span style="color:red;">Total Doubts: ${total}</span> |
   <span style="color:green;">Solved: ${solved}</span> |
-  <span style="color:orange;">Working: ${working}</span>
+  <span style="color:#FFD54F;">Working: ${working}</span>
 `;
   }
 
