@@ -25,7 +25,7 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
 
 /* Elegant Outer cover for Notice Board */ .welcome-cover { background: #F3E5F5; padding: 6px; border-radius: 8px; margin: 12px; border: 6px solid #9C27B0; } .welcome-cover .section-title { margin: 0; font-size: 18px; background: transparent; color: black; border-radius: 6px; } .welcome-cover .section-title u { text-decoration: underline; }
 
-/* Shoutbox */ #shoutbox { background: #fff; border: 2px solid #F44336; border-radius: 6px; padding: 10px; margin: 10px; } #messages { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column-reverse; margin-bottom: 8px; } .msg { border-bottom: 1px solid #ddd; padding: 4px 0; } .meta { font-size: 12px; color: gray; } #shoutbox input[type=text], #shoutbox input[type=file] { padding: 6px; width: 100%; border: 1px solid #FFA500; border-radius: 4px; margin-bottom: 6px; box-sizing: border-box; }
+/* Shoutbox */ #shoutbox { background: #fff; border: 2px solid #F44336; border-radius: 6px; padding: 10px; margin: 10px; } #messages { max-height: 700px; overflow-y: auto; display: flex; flex-direction: column-reverse; margin-bottom: 8px; } .msg { border-bottom: 1px solid #ddd; padding: 4px 0; } .meta { font-size: 12px; color: gray; } #shoutbox input[type=text], #shoutbox input[type=file] { padding: 6px; width: 100%; border: 1px solid #FFA500; border-radius: 4px; margin-bottom: 6px; box-sizing: border-box; }
 /* ===== Only username/admin colors — safe, won't touch buttons or layout ===== */
 /* Normal user name (light + dark mode) */
 .msg b.username,
@@ -33,9 +33,6 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
   color: #3366CC !important;   /* blue for normal users */
   font-weight: 700 !important; /* bold */
 }
-  #totalDoubts { color: red; font-weight: bold; }
-#workingDoubts { color: yellow; font-weight: bold; }
-#solvedDoubts { color: green; font-weight: bold; }
 /* Admin name (light + dark mode) */
 .msg b.username.admin,
 .msg b.username.admin * {
@@ -97,6 +94,9 @@ body.dark .msg b.username.admin * {
   <div id="doubtStats" style="font-weight:bold; color:#2F4F4F;">
     Total Doubts: 0 | Solved: 0 | Working: 0
   </div>
+  <div id="workingUpdates" style="margin:10px 0; font-weight:bold; color:gold;">
+  No active working doubts.
+  </div>
   • <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>
   • <b>Sample Paper 2024–25</b> — Solutions added<br>
   • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
@@ -146,7 +146,60 @@ var db=firebase.database();
 const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
-function updateDoubtStats() {
+function updateWorkingSection() {
+  const container = document.getElementById("workingUpdates");
+  if (!container) return;
+
+  const working = document.querySelectorAll(".msg[data-status='Working']");
+  if (working.length === 0) {
+    container.textContent = "No active working doubts.";
+    return;
+  }
+
+  // 🔶 Golden heading (instead of red)
+ // Define colors for light and dark mode
+const goldenText = document.body.classList.contains("dark-mode") ? "#FFD54F" : "#FFC107";  // for text
+const goldenIcon = document.body.classList.contains("dark-mode") ? "#FFEB3B" : "#FBC02D";  // for symbol
+
+// Insert the styled line
+container.innerHTML = `
+  <div class="update-label" style="font-weight:700;">
+    <span style="color:${goldenIcon};">🔶</span>
+    <span style="color:${goldenText};"> Working on Doubts:</span>
+  </div>
+`;
+
+  Array.from(working).slice(0, 3).forEach(msg => {
+    const serialEl = msg.querySelector(".serial");
+    const serial = serialEl ? serialEl.textContent.replace("Doubt ", "").trim() : "";
+
+    const nameEl = msg.querySelector("b.username");
+    const name = nameEl ? nameEl.textContent.trim() : "Guest";
+
+    // main text (ignore meta to prevent duplicate date)
+    const textEl = msg.querySelector(".msg-content"); // use only message text div
+    const text = textEl ? textEl.textContent.trim() : "";
+
+    const img = msg.querySelector("img") ? msg.querySelector("img").outerHTML : "";
+
+    // date & time (only once)
+    const metaEl = msg.querySelector(".meta");
+    const dateTime = metaEl ? metaEl.textContent.trim() : "";
+
+    const golden = document.body.classList.contains("dark-mode") ? "#FFD54F" : "#FFC107";
+    container.innerHTML += `
+      <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${golden};color:${golden};line-height:1.5;border-radius:8px;">
+        Doubt <span class="update-doubt-number" style="color:${golden};font-weight:700;">${serial}</span> from 
+        <span class="update-username" style="color:${document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF"};font-weight:700;">${escapeHtml(name)}</span><br>
+        ${ text ? `<div style="margin-top:6px;color:${golden};">${escapeHtml(text)}</div>` : "" }
+        ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${golden};font-size:13px;opacity:0.9;">${dateTime}</div>` : "" }
+        ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
+             </div>
+    `;
+  });
+}
+  
+  function updateDoubtStats() {
   let total = 0, solved = 0, working = 0;
 
   document.querySelectorAll(".msg").forEach(msg => {
@@ -163,7 +216,7 @@ function updateDoubtStats() {
     statsEl.innerHTML = `
   <span style="color:red;">Total Doubts: ${total}</span> |
   <span style="color:green;">Solved: ${solved}</span> |
-  <span style="color:purple;">Working: ${working}</span>
+  <span style="color:orange;">Working: ${working}</span>
 `;
   }
 
@@ -277,6 +330,7 @@ async function addMessageToDOM(key, data){
   updateDoubtStats();
   refreshDoubtNumbers();
   updateCheckboxes();
+  updateWorkingSection();
 }
 
 // === Detect Doubt Messages and Number Them ===
@@ -359,47 +413,48 @@ db.ref("shoutbox").on("child_removed", snap => {
   if (el) el.remove();
   refreshDoubtNumbers();
   updateDoubtStats();
+  updateWorkingSection();
 });
 
 // Image upload to imgbb
 function uploadToImgbb(file){
-  return new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-    reader.onloadend = ()=>{
-      try {
-        const base64 = reader.result.split(",")[1];
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST","https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY);
-        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-        xhr.upload.onprogress = function(e){
-          if(e.lengthComputable){
-            const percent = (e.loaded/e.total)*100;
-            document.getElementById("uploadProgress").style.display = "block";
-            document.getElementById("uploadBar").style.width = percent + "%";
-          }
-        };
-        xhr.onload = function(){
-          document.getElementById("uploadProgress").style.display = "none";
-          if(xhr.status === 200){
-            try {
-              const res = JSON.parse(xhr.responseText);
-              resolve(res.data.url);
-            } catch(err) { reject("Invalid response from imgbb"); }
-          } else reject("Upload failed");
-        };
-        xhr.onerror = ()=> reject("Upload error");
-        xhr.send("image="+encodeURIComponent(base64));
-      } catch(err) {
-        reject("Image read failed");
-      }
-    };
-    reader.onerror = ()=> reject("FileReader error");
-    reader.readAsDataURL(file);
-  });
+ return new Promise((resolve,reject)=>{
+   const reader = new FileReader();
+   reader.onloadend = ()=>{
+     try {
+       const base64 = reader.result.split(",")[1];
+       const xhr = new XMLHttpRequest();
+       xhr.open("POST","https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY);
+       xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       xhr.upload.onprogress = function(e){
+         if(e.lengthComputable){
+           const percent = (e.loaded/e.total)*100;
+           document.getElementById("uploadProgress").style.display = "block";
+           document.getElementById("uploadBar").style.width = percent + "%";
+         }
+       };
+       xhr.onload = function(){
+         document.getElementById("uploadProgress").style.display = "none";
+         if(xhr.status === 200){
+           try {
+             const res = JSON.parse(xhr.responseText);
+             resolve(res.data.url);
+           } catch(err) { reject("Invalid response from imgbb"); }
+         } else reject("Upload failed");
+       };
+       xhr.onerror = ()=> reject("Upload error");
+       xhr.send("image="+encodeURIComponent(base64));
+     } catch(err) {
+       reject("Image read failed");
+     }
+   };
+   reader.onerror = ()=> reject("FileReader error");
+   reader.readAsDataURL(file);
+ });
 }
 
 // Send button
-  document.getElementById("sendBtn").addEventListener("click", async ()=>{
+document.getElementById("sendBtn").addEventListener("click", async ()=>{
 const nameEl = document.getElementById("username");
 const msgEl = document.getElementById("message");
 const photoEl = document.getElementById("photoInput");
@@ -411,24 +466,24 @@ if (!name && !msg && (!photoEl || !photoEl.files[0])) return alert("Enter messag
 
 // Admin login shortcut if someone enters name "admin"
 if (name.toLowerCase() === "admin" && !isAdminAuthenticated()){
-const pwd = prompt("Enter admin password:");
-if (pwd === ADMIN_PASSWORD){
-setAdminAuthenticated(true);
-} else {
-alert("Incorrect password.");
-return;
-}
+ const pwd = prompt("Enter admin password:");
+ if (pwd === ADMIN_PASSWORD){
+   setAdminAuthenticated(true);
+ } else {
+   alert("Incorrect password.");
+   return;
+ }
 }
 
 let photoURL = "";
 if (photoEl && photoEl.files[0]){
-try {
-photoURL = await uploadToImgbb(photoEl.files[0]);
-photoEl.value = "";
-} catch(e){
-alert("Image upload failed: " + e);
-return;
-}
+ try {
+   photoURL = await uploadToImgbb(photoEl.files[0]);
+   photoEl.value = "";
+ } catch(e){
+   alert("Image upload failed: " + e);
+   return;
+ }
 }
 
 const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL };
@@ -439,15 +494,16 @@ if (msgEl) msgEl.value = "";
 // Clear shoutbox (admin only)
 document.getElementById("clearBtn").addEventListener("click", ()=>{
 if (isAdminAuthenticated()){
-if (confirm("Clear all messages?")) {
-db.ref("shoutbox").remove();
-const messagesEl = document.getElementById("messages");
-if (messagesEl) messagesEl.innerHTML = "";
-refreshDoubtNumbers();
-updateDoubtStats();
-}
+ if (confirm("Clear all messages?")) {
+   db.ref("shoutbox").remove();
+   const messagesEl = document.getElementById("messages");
+   if (messagesEl) messagesEl.innerHTML = "";
+   refreshDoubtNumbers();
+   updateDoubtStats();
+   updateWorkingSection();
+ }
 } else {
-alert("Admin only");
+ alert("Admin only");
 }
 });
 
@@ -458,13 +514,14 @@ const checked = document.querySelectorAll(".msgCheck:checked");
 if (!checked.length) return alert("Select messages to delete.");
 if (!confirm(`Delete ${checked.length} selected message(s)?`)) return;
 checked.forEach(chk=>{
-const key = chk.getAttribute("data-key");
-if (key) db.ref("shoutbox/"+key).remove();
-const el = document.querySelector(`.msg[data-key='${key}']`);
-if (el) el.remove();
+ const key = chk.getAttribute("data-key");
+ if (key) db.ref("shoutbox/"+key).remove();
+ const el = document.querySelector(`.msg[data-key='${key}']`);
+ if (el) el.remove();
 });
 refreshDoubtNumbers();
 updateDoubtStats();
+ updateWorkingSection();
 });
 
 // Logout
@@ -477,6 +534,7 @@ alert("Admin logged out.");
 refreshDoubtNumbers();
 updateDoubtStats();
 updateAdminUI();
+ updateWorkingSection();
 
 // ===== Theme Dropdown handling (preserve earlier code) =====
 const themeSelect = document.getElementById("themeSelect");
@@ -491,10 +549,10 @@ if (themeSelect) themeSelect.value = 'light';
 
 if (themeSelect) {
 themeSelect.addEventListener('change', function() {
-const mode = this.value;
-if (mode === 'dark') document.body.classList.add('dark');
-else document.body.classList.remove('dark');
-localStorage.setItem('theme', mode);
+ const mode = this.value;
+ if (mode === 'dark') document.body.classList.add('dark');
+ else document.body.classList.remove('dark');
+ localStorage.setItem('theme', mode);
 });
 }
 
@@ -505,35 +563,82 @@ body.dark { background:#0f1724; color:#d1d5db; }
 body.dark .msg { background:#07203a; color:#d1d5db; border-color:#12324a; }
 body.dark .box, body.dark .box-welcome { background:#1e293b; color:#d1d5db; border-color:#334155; }
 body.dark .header, body.dark .footer-inner {
-background:#1e293b;
-color:#e2e8f0;
-border-color:#334155;
-text-shadow:none;
-font-size:21px;
-font-weight:700;
-padding:16px;
+ background:#1e293b;
+ color:#e2e8f0;
+ border-color:#334155;
+ text-shadow:none;
+ font-size:21px;
+ font-weight:700;
+ padding:16px;
 }
+/* ---------- Latest Updates Styling (matches shoutbox colors) ---------- */
+
+/* container item — let it inherit normal message color (black in light, light in dark) */
+.update-item {
+  margin: 8px 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  line-height: 1.5;
+  font-size: 14px;
+  color: inherit; /* important: inherit from parent (.box or body) so it matches shoutbox text color */
+}
+
+/* Username (exact same blue as shoutbox) */
+.update-username {
+  color: #3366CC !important; /* same as .msg b.username */
+  font-weight: 700;
+}
+
+/* Label like 'Working on Doubts:' (bright yellow, visible in both modes) */
+.update-label {
+  color: #FFD700;
+  font-weight: 700;
+}
+
+/* Doubt number (use same yellow) */
+.update-doubt-number {
+  color: #FFD700;
+  font-weight: 700;
+}
+
+/* Date & time styling (subtle) */
+.update-datetime {
+  opacity: 0.85;
+  font-size: 13px;
+}
+
+/* Dark-mode tweaks (inherit will already make text light, but ensure username & yellows look good) */
+body.dark .update-username {
+  color: #66B2FF !important; /* optional: slightly lighter blue in dark mode */
+}
+body.dark .update-label,
+body.dark .update-doubt-number {
+  color: #FFDD55;
+}
+body.dark .update-datetime {
+  color: #d1d5db;
+  }
 /* Dark Mode Notice Board */
 body.dark .welcome-cover {
-background: linear-gradient(90deg,#1e1b4b,#3b0764);
-border: 2px solid #8b5cf6;
-border-radius: 8px;
-padding: 6px;
-box-shadow:0 6px 18px rgba(11,6,34,0.6),0 0 12px rgba(139,92,246,0.08) inset;
-transition: transform 0.25s ease, box-shadow 0.25s ease;
-position: relative;
-overflow: hidden;
+ background: linear-gradient(90deg,#1e1b4b,#3b0764);
+ border: 2px solid #8b5cf6;
+ border-radius: 8px;
+ padding: 6px;
+ box-shadow:0 6px 18px rgba(11,6,34,0.6),0 0 12px rgba(139,92,246,0.08) inset;
+ transition: transform 0.25s ease, box-shadow 0.25s ease;
+ position: relative;
+ overflow: hidden;
 }
 body.dark .welcome-cover .section-title { color: #facc15; font-weight:700; text-shadow:0 1px 0 rgba(0,0,0,0.6),0 6px 18px rgba(250,204,21,0.06); }
 body.dark .welcome-cover .section-title::after {
-content:"";
-display:block;
-margin:8px auto 0;
-width:54px;
-height:3px;
-border-radius:3px;
-background: linear-gradient(90deg,rgba(250,204,21,0.9),rgba(139,92,246,0.8));
-box-shadow:0 6px 18px rgba(139,92,246,0.12);
+ content:"";
+ display:block;
+ margin:8px auto 0;
+ width:54px;
+ height:3px;
+ border-radius:3px;
+ background: linear-gradient(90deg,rgba(250,204,21,0.9),rgba(139,92,246,0.8));
+ box-shadow:0 6px 18px rgba(139,92,246,0.12);
 }
 body.dark .welcome-cover .section-title u { text-decoration: none; }
 body.dark button, body.dark .btn { filter: brightness(1.2); }
@@ -542,27 +647,28 @@ body.dark input, body.dark textarea { background:#334155; color:#d1d5db; border-
 `;
 document.head.appendChild(style);
 
-
+ 
 // === Handle Admin Mark Buttons (delegated) ===
 document.addEventListener("click", async (e) => {
 if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
-if (!isAdminAuthenticated()) return alert("Admin only");
+ if (!isAdminAuthenticated()) return alert("Admin only");
 
-const key = e.target.getAttribute("data-key");
-const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
+ const key = e.target.getAttribute("data-key");
+ const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
 
-try {
-await db.ref("shoutbox/" + key).update({ status });
-// update DOM element if exists
-const el = document.querySelector(`.msg[data-key='${key}']`);
-if (el) el.dataset.status = status;
-alert(`Doubt marked as ${status}`);
-} catch(err) {
-alert("Failed to update status: " + err);
-}
+ try {
+   await db.ref("shoutbox/" + key).update({ status });
+   // update DOM element if exists
+   const el = document.querySelector(`.msg[data-key='${key}']`);
+   if (el) el.dataset.status = status;
+   alert(`Doubt marked as ${status}`);
+ } catch(err) {
+   alert("Failed to update status: " + err);
+ }
 
-updateDoubtStats();
-refreshDoubtNumbers();
+ updateDoubtStats();
+ refreshDoubtNumbers();
+ updateWorkingSection();
 }
 });
 
@@ -570,6 +676,7 @@ refreshDoubtNumbers();
 db.ref("shoutbox").on("value", () => {
 refreshDoubtNumbers();
 updateDoubtStats();
+ updateWorkingSection();
 });
 </script>
 </body>
