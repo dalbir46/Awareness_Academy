@@ -33,6 +33,9 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
   color: #3366CC !important;   /* blue for normal users */
   font-weight: 700 !important; /* bold */
 }
+  #totalDoubts { color: red; font-weight: bold; }
+#workingDoubts { color: yellow; font-weight: bold; }
+#solvedDoubts { color: green; font-weight: bold; }
 /* Admin name (light + dark mode) */
 .msg b.username.admin,
 .msg b.username.admin * {
@@ -94,9 +97,6 @@ body.dark .msg b.username.admin * {
   <div id="doubtStats" style="font-weight:bold; color:#2F4F4F;">
     Total Doubts: 0 | Solved: 0 | Working: 0
   </div>
-  <div id="workingUpdates" style="margin:10px 0; font-weight:bold; color:gold;">
-  No active working doubts.
-  </div>
   • <b>Formula Sheet (6–12)</b> — Download PDF (Updated Aug 2025)<br>
   • <b>Sample Paper 2024–25</b> — Solutions added<br>
   • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
@@ -146,42 +146,7 @@ var db=firebase.database();
 const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
-function updateWorkingSection() {
-  const container = document.getElementById("workingUpdates");
-  if (!container) return;
-
-  const working = document.querySelectorAll(".msg[data-status='Working']");
-  if (working.length === 0) {
-    container.textContent = "No active working doubts.";
-    return;
-  }
-
-  let html = "<u>🟡 Working on Doubts:</u><br>";
-
-  Array.from(working).slice(0, 3).forEach(msg => {
-    const serial = msg.querySelector(".serial") ? msg.querySelector(".serial").textContent.replace("Doubt ", "").trim() : "";
-    
-    const nameEl = msg.querySelector("b.username");
-    const name = nameEl ? nameEl.textContent.trim() : "Guest";
-
-    const textEl = msg.querySelector("div:nth-child(2)");
-    const text = textEl ? textEl.textContent.trim() : "";
-
-    const img = msg.querySelector("img") ? msg.querySelector("img").outerHTML : "";
-
-    html += `
-      <div style="margin:6px 0; border-left:3px solid gold; padding-left:6px;">
-        Doubt <b style="color:gold;">${serial}</b> from <span style="color:#ffcc00;">${name}</span><br>
-        ${text ? `<span style="color:#e2e2e2;">${text}</span><br>` : ""}
-        ${img ? `<div style="margin-top:4px;">${img}</div>` : ""}
-      </div>
-    `;
-  });
-
-  container.innerHTML = html;
-}
-  
-  function updateDoubtStats() {
+function updateDoubtStats() {
   let total = 0, solved = 0, working = 0;
 
   document.querySelectorAll(".msg").forEach(msg => {
@@ -198,7 +163,7 @@ function updateWorkingSection() {
     statsEl.innerHTML = `
   <span style="color:red;">Total Doubts: ${total}</span> |
   <span style="color:green;">Solved: ${solved}</span> |
-  <span style="color:gold;">Working: ${working}</span>
+  <span style="color:purple;">Working: ${working}</span>
 `;
   }
 
@@ -312,7 +277,6 @@ async function addMessageToDOM(key, data){
   updateDoubtStats();
   refreshDoubtNumbers();
   updateCheckboxes();
-  updateWorkingSection();
 }
 
 // === Detect Doubt Messages and Number Them ===
@@ -395,10 +359,116 @@ db.ref("shoutbox").on("child_removed", snap => {
   if (el) el.remove();
   refreshDoubtNumbers();
   updateDoubtStats();
-  updateWorkingSection();
 });
 
 // Image upload to imgbb
+function uploadToImgbb(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onloadend = ()=>{
+      try {
+        const base64 = reader.result.split(",")[1];
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST","https://api.imgbb.com/1/upload?key="+IMGBB_API_KEY);
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        xhr.upload.onprogress = function(e){
+          if(e.lengthComputable){
+            const percent = (e.loaded/e.total)*100;
+            document.getElementById("uploadProgress").style.display = "block";
+            document.getElementById("uploadBar").style.width = percent + "%";
+          }
+        };
+        xhr.onload = function(){
+          document.getElementById("uploadProgress").style.display = "none";
+          if(xhr.status === 200){
+            try {
+              const res = JSON.parse(xhr.responseText);
+              resolve(res.data.url);
+            } catch(err) { reject("Invalid response from imgbb"); }
+          } else reject("Upload failed");
+        };
+        xhr.onerror = ()=> reject("Upload error");
+        xhr.send("image="+encodeURIComponent(base64));
+      } catch(err) {
+        reject("Image read failed");
+      }
+    };
+    reader.onerror = ()=> reject("FileReader error");
+    reader.readAsDataURL(file);
+  });
+}
+
+// Send button
+  document.getElementById("sendBtn").addEventListener("click", async ()=>{
+const nameEl = document.getElementById("username");
+const msgEl = document.getElementById("message");
+const photoEl = document.getElementById("photoInput");
+
+const name = (nameEl && nameEl.value) ? nameEl.value.trim() : "";
+const msg = (msgEl && msgEl.value) ? msgEl.value.trim() : "";
+
+if (!name && !msg && (!photoEl || !photoEl.files[0])) return alert("Enter message or photo.");
+
+// Admin login shortcut if someone enters name "admin"
+if (name.toLowerCase() === "admin" && !isAdminAuthenticated()){
+const pwd = prompt("Enter admin password:");
+if (pwd === ADMIN_PASSWORD){
+setAdminAuthenticated(true);
+} else {
+alert("Incorrect password.");
+return;
+}
+}
+
+let photoURL = "";
+if (photoEl && photoEl.files[0]){
+try {
+photoURL = await uploadToImgbb(photoEl.files[0]);
+photoEl.value = "";
+} catch(e){
+alert("Image upload failed: " + e);
+return;
+}
+}
+
+const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL };
+db.ref("shoutbox").push(data);
+if (msgEl) msgEl.value = "";
+});
+
+// Clear shoutbox (admin only)
+document.getElementById("clearBtn").addEventListener("click", ()=>{
+if (isAdminAuthenticated()){
+if (confirm("Clear all messages?")) {
+db.ref("shoutbox").remove();
+const messagesEl = document.getElementById("messages");
+if (messagesEl) messagesEl.innerHTML = "";
+refreshDoubtNumbers();
+updateDoubtStats();
+}
+} else {
+alert("Admin only");
+}
+});
+
+// Delete selected (admin)
+document.getElementById("deleteSelectedBtn").addEventListener("click", ()=>{
+if (!isAdminAuthenticated()) return alert("Admin only");
+const checked = document.querySelectorAll(".msgCheck:checked");
+if (!checked.length) return alert("Select messages to delete.");
+if (!confirm(`Delete ${checked.length} selected message(s)?`)) return;
+checked.forEach(chk=>{
+const key = chk.getAttribute("data-key");
+if (key) db.ref("shoutbox/"+key).remove();
+const el = document.querySelector(`.msg[data-key='${key}']`);
+if (el) el.remove();
+});
+refreshDoubtNumbers();
+updateDoubtStats();
+});
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
 setAdminAuthenticated(false);
 alert("Admin logged out.");
 });
@@ -407,7 +477,6 @@ alert("Admin logged out.");
 refreshDoubtNumbers();
 updateDoubtStats();
 updateAdminUI();
-updateWorkingSection();
 
 // ===== Theme Dropdown handling (preserve earlier code) =====
 const themeSelect = document.getElementById("themeSelect");
@@ -494,7 +563,6 @@ alert("Failed to update status: " + err);
 
 updateDoubtStats();
 refreshDoubtNumbers();
-updateWorkingSection();
 }
 });
 
@@ -502,7 +570,6 @@ updateWorkingSection();
 db.ref("shoutbox").on("value", () => {
 refreshDoubtNumbers();
 updateDoubtStats();
-updateWorkingSection();
 });
 </script>
 </body>
