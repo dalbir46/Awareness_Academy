@@ -150,7 +150,9 @@ function updateWorkingSection() {
   const container = document.getElementById("workingUpdates");
   if (!container) return;
 
-  const working = document.querySelectorAll(".msg[data-status='Working']");
+  const allMsgs = Array.from(document.querySelectorAll(".msg"));
+  const working = allMsgs.filter(m => (m.dataset.status || "").toLowerCase() === "working");
+
   if (working.length === 0) {
     container.textContent = "No active working doubts.";
     return;
@@ -166,22 +168,27 @@ function updateWorkingSection() {
     </div>
   `;
 
-  Array.from(working).slice(0, 3).forEach(msg => {
+  working.slice(0, 3).forEach(msg => {
     const serialEl = msg.querySelector(".serial");
     const serial = serialEl ? serialEl.textContent.replace("Doubt ", "").trim() : "";
 
     const nameEl = msg.querySelector("b.username");
     const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
-    // ✅ Text message (avoid duplicate date/meta)
+    // ✅ Text message — fix: handle innerHTML and nested tags safely
     const textEl = msg.querySelector(".msg-content");
-    const text = textEl ? textEl.textContent.trim() : "";
+    let text = "";
+    if (textEl) {
+      // remove meta/info spans if any
+      const clone = textEl.cloneNode(true);
+      clone.querySelectorAll(".meta, .info, br").forEach(e => e.remove());
+      text = clone.textContent.trim();
+    }
 
-    const img = msg.querySelector("img")
-      ? msg.querySelector("img").outerHTML
-      : "";
+    const imgEl = msg.querySelector("img");
+    const img = imgEl ? imgEl.outerHTML : "";
 
-    // ✅ Extract and format Date & Time cleanly
+    // ✅ Extract Date & Time
     const metaEl = msg.querySelector(".meta");
     let dateTime = metaEl ? metaEl.textContent.trim() : "";
     if (dateTime.includes(" ")) {
@@ -193,16 +200,18 @@ function updateWorkingSection() {
       dateTime = `Date: ${dateTime}`;
     }
 
-    // ✅ Colors
-    const usernameColor = document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF";
-    const messageColor = document.body.classList.contains("dark-mode") ? "#E0E0E0" : "#000000";
+    // ✅ Colors (dark/light mode check fixed)
+    const usernameColor = document.body.classList.contains("dark") ? "#66B2FF" : "#007BFF";
+    const messageColor  = document.body.classList.contains("dark") ? "#E0E0E0" : "#000000";
 
     // ✅ Final Output
     container.innerHTML += `
       <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};color:${red};line-height:1.5;border-radius:8px;">
         Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">${serial}</span> from 
         <span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
-        ${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : `<div style="margin-top:6px;color:${messageColor};opacity:0.7;">(No text message)</div>` }
+        ${ text 
+            ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` 
+            : `<div style="margin-top:6px;color:${messageColor};opacity:0.7;">(No text message)</div>` }
         ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;">${dateTime}</div>` : "" }
         ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
       </div>
