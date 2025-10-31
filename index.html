@@ -174,7 +174,7 @@ const nameEl = msg.querySelector("b.username");
 const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
 // ✅ Text message (avoid duplicate date/meta)
-const textEl = msg.querySelector(".msg-content");
+const textEl = msg.querySelector("div"); // pehla div jo msgContent hai
 const text = textEl ? textEl.textContent.trim() : "";
 
 const img = msg.querySelector("img")
