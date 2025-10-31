@@ -347,9 +347,7 @@ function updateWorkingSection() {
     const messageColor = document.body.classList.contains("dark-mode") ? "#E0E0E0" : "#000000";
 
     container.innerHTML += `
-      <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};color:${red};line-height:1.5;border-radius:8px;">
-        Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">#${serial}</span> from 
-        <span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
+      
         ${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : `<div style="margin-top:6px;color:${messageColor};opacity:0.7;">(No text message)</div>` }
         ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;">${dateTime}</div>` : "" }
         ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
