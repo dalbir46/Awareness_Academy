@@ -197,7 +197,7 @@ const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 
     container.innerHTML += `
       <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid red;color:red;line-height:1.5;border-radius:8px;">
-        Doubt <span class="update-doubt-number" style="color:red;font-weight:700;">#${serial}</span> from 
+        Doubt <span class="update-doubt-number" style="color:red;font-weight:700;">${serial}</span> from 
         <span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
 
         ${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : "" }
@@ -315,8 +315,8 @@ async function addMessageToDOM(key, data){
       btns.className = "admin-btns";
       btns.style.marginTop = "8px";
       btns.innerHTML = `
-        <button class="mark-working" data-key="${key}" style="background:#ffc107;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;margin-right:6px;">Mark Working</button>
-        <button class="mark-solved" data-key="${key}" style="background:#28a745;border:none;padding:6px 8px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>
+        <button class="mark-working" data-key="${key}" style="background:#FFB300;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;margin-right:6px;">Mark Working</button>
+        <button class="mark-solved" data-key="${key}" style="background:#2E8B57;border:none;padding:6px 8px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>
       `;
       div.appendChild(btns);
     }
