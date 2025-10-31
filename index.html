@@ -169,27 +169,19 @@ function updateWorkingSection() {
 
   working.slice(0, 3).forEach(msg => {
     const serialEl = msg.querySelector(".serial");
-    const serial = serialEl ? serialEl.textContent.replace("Doubt ", "").trim() : "";
+    const serial = serialEl ? serialEl.textContent.replace("Doubt", "").trim() : "";
 
     const nameEl = msg.querySelector("b.username");
     const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
-    // ✅ Text Extraction — safest possible method
+    // ✅ Actual user message extraction (strong fallback)
     let text = "";
-    // try 1: msg-content
-    const textEl = msg.querySelector(".msg-content");
+    const textEl = msg.querySelector(".msg-content, .text, .content, p, span, div");
     if (textEl && textEl.textContent.trim() !== "") {
       text = textEl.textContent.trim();
     }
-    // try 2: paragraph or span (fallback)
-    else {
-      const alt = msg.querySelector("p, span, div");
-      if (alt && alt.textContent.trim() !== "") {
-        text = alt.textContent.trim();
-      }
-    }
 
-    // ✅ remove unnecessary meta/date words from message if mixed
+    // Remove weird leftover labels like "Date:" etc.
     text = text.replace(/\b(Date|Time):.*$/gi, "").trim();
 
     const imgEl = msg.querySelector("img");
@@ -206,13 +198,15 @@ function updateWorkingSection() {
       dateTime = `Date: ${dateTime}`;
     }
 
-    const usernameColor = document.body.classList.contains("dark") ? "#66B2FF" : "#007BFF";
-    const messageColor  = document.body.classList.contains("dark") ? "#FFFFFF" : "#000000";
+    // ✅ Color logic (white for dark, black for light)
+    const isDark = document.body.classList.contains("dark");
+    const usernameColor = isDark ? "#66B2FF" : "#007BFF";
+    const messageColor = isDark ? "#FFFFFF" : "#000000";
 
     container.innerHTML += `
-      <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};color:${red};line-height:1.5;border-radius:8px;">
-        Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">${serial}</span> from 
-        <span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
+      <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};line-height:1.5;border-radius:8px;">
+        <div style="color:${red};font-weight:700;">Doubt ${serial}</div>
+        <div style="color:${usernameColor};font-weight:700;">From: ${escapeHtml(name)}</div>
         ${
           text
             ? `<div class="update-message" style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>`
@@ -227,7 +221,14 @@ function updateWorkingSection() {
       </div>
     `;
   });
-  }
+}
+
+// ✅ helper to prevent XSS (keep if not already defined)
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
   function updateDoubtStats() {
   let total = 0, solved = 0, working = 0;
 
