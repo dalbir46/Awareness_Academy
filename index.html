@@ -156,7 +156,7 @@ function updateWorkingSection() {
     return;
   }
 
-  let html = `
+  container.innerHTML = `
     <div class="update-label" style="font-weight:700; color:red; margin-bottom:8px;">
       🔴 Working Doubts
     </div>
@@ -165,53 +165,42 @@ function updateWorkingSection() {
   working.forEach((msgElem, index) => {
     const serial = msgElem.getAttribute("data-serial") || index + 1;
     const username = msgElem.getAttribute("data-username") || "Unknown User";
-
-    // ✅ Try to get the actual user message text
-    let text = "";
     const textElem = msgElem.querySelector(".text");
-    if (textElem) {
-      text = textElem.innerText?.trim() || textElem.textContent?.trim() || "";
-    }
 
-    // ✅ Fallback check — look for data-text attribute if innerText not found
-    if (!text) {
-      text = msgElem.getAttribute("data-text")?.trim() || "";
-    }
+    // 🩵 FIXED LINE: now fetches actual text properly
+    const text =
+      (textElem && textElem.innerText.trim()) ||
+      msgElem.getAttribute("data-text") ||
+      "(No text message)";
 
-    // ✅ If still empty, then show "No text message"
-    const displayText = text ? text : "(No text message)";
+    const datetimeElem = msgElem.querySelector(".datetime");
+    const datetime = datetimeElem ? datetimeElem.innerText.trim() : "";
 
-    // ✅ Date-Time fetch (optional if present)
-    const datetime = msgElem.querySelector(".datetime")?.innerText?.trim() || "";
+    const item = document.createElement("div");
+    item.className = "update-item";
+    item.style.marginBottom = "6px";
+    item.style.padding = "6px 8px";
+    item.style.borderRadius = "10px";
+    item.style.boxShadow = "0 0 4px rgba(0,0,0,0.1)";
 
-    html += `
-      <div class="update-item" 
-           style="margin-bottom:6px; padding:6px 8px; border-radius:10px; background-color:var(--update-bg, #fff); box-shadow:0 0 4px rgba(0,0,0,0.1);">
-        <div style="font-weight:600;">
-          <span style="color:red;">Doubt ${serial}:</span> 
-          <span style="color:blue;">${username}</span>
-        </div>
-        <div style="margin-top:4px;">${displayText}</div>
-        ${datetime ? `<div style="margin-top:3px; color:purple; font-size:0.85em;">${datetime}</div>` : ""}
+    item.innerHTML = `
+      <div style="font-weight:600;">
+        <span style="color:red;">Doubt ${serial}:</span> 
+        <span style="color:blue;">${username}</span>
       </div>
+      <div style="margin-top:4px;">${text}</div>
+      ${datetime ? `<div style="margin-top:3px; color:purple; font-size:0.85em;">${datetime}</div>` : ""}
     `;
+
+    container.appendChild(item);
   });
 
-  container.innerHTML = html;
-
-  // ✅ Dark mode text color fix (only for dark mode)
+  // Dark mode fix — only color adjust (no functional change)
   const isDark = document.body.classList.contains("dark-mode");
-  if (isDark) {
-    container.querySelectorAll(".update-item").forEach((item) => {
-      item.style.color = "white";
-      item.style.backgroundColor = "#222"; // dark background
-    });
-  } else {
-    container.querySelectorAll(".update-item").forEach((item) => {
-      item.style.color = "black";
-      item.style.backgroundColor = "#fff"; // light background
-    });
-  }
+  container.querySelectorAll(".update-item").forEach((item) => {
+    item.style.color = isDark ? "white" : "black";
+    item.style.backgroundColor = isDark ? "#222" : "#fff";
+  });
   }
 function updateDoubtStats() {
 let total = 0, solved = 0, working = 0;
