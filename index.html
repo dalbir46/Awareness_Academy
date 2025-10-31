@@ -169,11 +169,21 @@ function updateWorkingSection() {
     const nameEl = msg.querySelector("b.username");
     const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
-    // ✅ pick the first div that contains the main text (ignore serial & meta)
-    let textEl = Array.from(msg.querySelectorAll("div")).find(
-      d => !d.classList.contains("serial") && !d.classList.contains("meta")
+    // ✅ Get main text correctly (ignore serial, meta, username)
+    let textEl = Array.from(msg.querySelectorAll("div")).find(d =>
+      !d.classList.contains("serial") &&
+      !d.classList.contains("meta") &&
+      !d.querySelector("b.username")
     );
-    const text = textEl ? textEl.textContent.trim() : "";
+
+    // If still not found, try last fallback: plain text inside msg
+    let text = textEl ? textEl.textContent.trim() : "";
+    if (!text && msg.childNodes.length > 0) {
+      const lastDiv = Array.from(msg.querySelectorAll("div")).pop();
+      if (lastDiv && !lastDiv.classList.contains("meta")) {
+        text = lastDiv.textContent.trim();
+      }
+    }
 
     const metaEl = msg.querySelector(".meta");
     const dateTime = metaEl ? metaEl.textContent.trim() : "";
@@ -196,7 +206,7 @@ function updateWorkingSection() {
       </div>
     `;
   });
-                                          }
+  }                                          }
   
   function updateDoubtStats() {
   let total = 0, solved = 0, working = 0;
