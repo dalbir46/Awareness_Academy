@@ -147,68 +147,72 @@ const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
 function updateWorkingSection() {
-const container = document.getElementById("workingUpdates");
-if (!container) return;
+  const container = document.getElementById("workingUpdates");
+  if (!container) return;
 
-const working = document.querySelectorAll(".msg[data-status='Working']");
-if (working.length === 0) {
-container.textContent = "No active working doubts.";
-return;
-}
+  const working = document.querySelectorAll(".msg[data-status='Working']");
+  if (working.length === 0) {
+    container.textContent = "No active working doubts.";
+    return;
+  }
 
-// 🔴 Heading - Red theme
-const red = "red";
+  let html = `
+    <div class="update-label" style="font-weight:700; color:red; margin-bottom:8px;">
+      🔴 Working Doubts
+    </div>
+  `;
 
-container.innerHTML = `
-<div class="update-label" style="font-weight:700;">
-<span style="color:${red};">🔴</span>
-<span style="color:${red};"> Working on Doubts:</span>
-</div>
-`;
+  working.forEach((msgElem, index) => {
+    const serial = msgElem.getAttribute("data-serial") || index + 1;
+    const username = msgElem.getAttribute("data-username") || "Unknown User";
 
-Array.from(working).slice(0, 3).forEach(msg => {
-const serialEl = msg.querySelector(".serial");
-const serial = serialEl ? serialEl.textContent.replace("Doubt ", "").trim() : "";
+    // ✅ Try to get the actual user message text
+    let text = "";
+    const textElem = msgElem.querySelector(".text");
+    if (textElem) {
+      text = textElem.innerText?.trim() || textElem.textContent?.trim() || "";
+    }
 
-const nameEl = msg.querySelector("b.username");
-const name = nameEl ? nameEl.textContent.trim() : "Guest";
+    // ✅ Fallback check — look for data-text attribute if innerText not found
+    if (!text) {
+      text = msgElem.getAttribute("data-text")?.trim() || "";
+    }
 
-// ✅ Text message (avoid duplicate date/meta)
-const textEl = msg.querySelector(".msg-content");
-const text = textEl ? textEl.textContent.trim() : "";
+    // ✅ If still empty, then show "No text message"
+    const displayText = text ? text : "(No text message)";
 
-const img = msg.querySelector("img")
-? msg.querySelector("img").outerHTML
-: "";
+    // ✅ Date-Time fetch (optional if present)
+    const datetime = msgElem.querySelector(".datetime")?.innerText?.trim() || "";
 
-// ✅ Extract and format Date & Time cleanly
-const metaEl = msg.querySelector(".meta");
-let dateTime = metaEl ? metaEl.textContent.trim() : "";
-if (dateTime.includes(" ")) {
-const parts = dateTime.split(" ");
-const datePart = parts[0] || "";
-const timePart = parts.slice(1).join(" ") || "";
-dateTime = `Date: ${datePart} , Time: ${timePart}`;
-} else if (dateTime) {
-dateTime = `Date: ${dateTime}`;
-}
+    html += `
+      <div class="update-item" 
+           style="margin-bottom:6px; padding:6px 8px; border-radius:10px; background-color:var(--update-bg, #fff); box-shadow:0 0 4px rgba(0,0,0,0.1);">
+        <div style="font-weight:600;">
+          <span style="color:red;">Doubt ${serial}:</span> 
+          <span style="color:blue;">${username}</span>
+        </div>
+        <div style="margin-top:4px;">${displayText}</div>
+        ${datetime ? `<div style="margin-top:3px; color:purple; font-size:0.85em;">${datetime}</div>` : ""}
+      </div>
+    `;
+  });
 
-// ✅ Colors
-const usernameColor = document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF";
-const messageColor = document.body.classList.contains("dark-mode") ? "#E0E0E0" : "#000000";
+  container.innerHTML = html;
 
-// ✅ Final Output
-container.innerHTML += `
-<div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};color:${red};line-height:1.5;border-radius:8px;">
-Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">${serial}</span> from
-<span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
-${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : `<div style="margin-top:6px;color:${messageColor};opacity:0.7;">(No text message)</div>` }
-${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;">${dateTime}</div>` : "" }
-${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
-</div>
-`;
-});
-}
+  // ✅ Dark mode text color fix (only for dark mode)
+  const isDark = document.body.classList.contains("dark-mode");
+  if (isDark) {
+    container.querySelectorAll(".update-item").forEach((item) => {
+      item.style.color = "white";
+      item.style.backgroundColor = "#222"; // dark background
+    });
+  } else {
+    container.querySelectorAll(".update-item").forEach((item) => {
+      item.style.color = "black";
+      item.style.backgroundColor = "#fff"; // light background
+    });
+  }
+  }
 function updateDoubtStats() {
 let total = 0, solved = 0, working = 0;
 
