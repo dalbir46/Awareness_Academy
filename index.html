@@ -146,7 +146,7 @@ var db=firebase.database();
 const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
-    function updateWorkingSection() {
+function updateWorkingSection() {
   const container = document.getElementById("workingUpdates");
   if (!container) return;
 
@@ -156,9 +156,13 @@ const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
     return;
   }
 
+  // 🔴 Heading - Red theme
+  const red = "red";
+
   container.innerHTML = `
     <div class="update-label" style="font-weight:700;">
-      🔴 <span style="color:red;">Latest Working Doubts</span>
+      <span style="color:${red};">🔴</span>
+      <span style="color:${red};"> Working on Doubts:</span>
     </div>
   `;
 
@@ -169,46 +173,40 @@ const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
     const nameEl = msg.querySelector("b.username");
     const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
-    // ✅ get the correct text div (ignore serial & meta)
-    let textEl = Array.from(msg.querySelectorAll("div")).find(d =>
-      !d.classList.contains("serial") &&
-      !d.classList.contains("meta") &&
-      !d.querySelector(".serial") &&
-      !d.querySelector(".meta")
-    );
+    // ✅ Fixed text fetch (multiple fallback)
+    const textEl =
+      msg.querySelector(".msg-content") ||
+      msg.querySelector(".text") ||
+      msg.querySelector(".msg-text") ||
+      msg.querySelector(".message-text") ||
+      msg.querySelector(".body") ||
+      msg;
+    const text = textEl ? textEl.textContent.trim() : "";
 
-    // ✅ fallback: if not found, try direct text nodes
-    let text = textEl ? textEl.textContent.trim() : "";
-    if (!text) {
-      const allDivs = Array.from(msg.querySelectorAll("div"));
-      const lastDiv = allDivs[allDivs.length - 1];
-      if (lastDiv && !lastDiv.classList.contains("meta")) {
-        text = lastDiv.textContent.trim();
-      }
-    }
+    const img = msg.querySelector("img")
+      ? msg.querySelector("img").outerHTML
+      : "";
 
+    // Date & time
     const metaEl = msg.querySelector(".meta");
     const dateTime = metaEl ? metaEl.textContent.trim() : "";
 
-    const img = msg.querySelector("img") ? msg.querySelector("img").outerHTML : "";
-
-    const usernameColor = document.body.classList.contains("dark") ? "#66B2FF" : "#007BFF";
-    const messageColor = document.body.classList.contains("dark") ? "#E0E0E0" : "#000000";
+    // ✅ Colors: Red (border/date), Blue (username), Black (message)
+    const usernameColor = document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF";
+    const messageColor = document.body.classList.contains("dark-mode") ? "#E0E0E0" : "#000000";
 
     container.innerHTML += `
-      <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid red;color:red;line-height:1.5;border-radius:8px;">
-        Doubt <span class="update-doubt-number" style="color:red;font-weight:700;">#${serial}</span> from 
+      <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};color:${red};line-height:1.5;border-radius:8px;">
+        Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">${serial}</span> from 
         <span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
-
         ${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : "" }
-
-        ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:red;font-size:13px;opacity:0.9;">${dateTime}</div>` : "" }
-
+        ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;opacity:0.9;">${dateTime}</div>` : "" }
         ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
       </div>
     `;
   });
-    }                                            
+      }
+  
   function updateDoubtStats() {
   let total = 0, solved = 0, working = 0;
 
@@ -396,7 +394,7 @@ function updateCheckboxes(){
   });
 }
 // Firebase lis
-  db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snap => {
+db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snap => {
 addMessageToDOM(snap.key, snap.val());
 });
 
