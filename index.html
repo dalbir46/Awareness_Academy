@@ -174,7 +174,8 @@ const nameEl = msg.querySelector("b.username");
 const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
 // ✅ Text message (avoid duplicate date/meta)
-const textEl = msg.querySelector("div"); // pehla div jo msgContent hai
+// pick the first div inside msg that is NOT serial
+let textEl = Array.from(msg.querySelectorAll("div")).find(d => !d.classList.contains("serial"));
 const text = textEl ? textEl.textContent.trim() : "";
 
 const img = msg.querySelector("img")
