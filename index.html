@@ -322,9 +322,12 @@ function updateWorkingSection() {
 
     // ✅ Clean text fetch
     const textEl =
+      const textEl =
+      msg.querySelector(".msg-content") ||
       msg.querySelector(".text") ||
       msg.querySelector(".msg-text") ||
       msg.querySelector(".message-text") ||
+      msg.querySelector(".body") ||
       msg;
     const text = textEl ? textEl.textContent.trim() : "";
 
