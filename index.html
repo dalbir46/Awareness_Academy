@@ -146,69 +146,46 @@ var db=firebase.database();
 const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
-  function updateWorkingSection() {
-const container = document.getElementById("workingUpdates");
-if (!container) return;
+// Updated updateWorkingSection() - carefully fixed selectors and dark-mode check // Changes: // 1) Accept multiple possible classes for the message text: .text, .message, .msg-text // 2) Use the same dark-mode class name as CSS ("dark") // 3) Preserve existing formatting, escaping and image handling
 
-const working = document.querySelectorAll(".msg[data-status='Working']");
-if (working.length === 0) {
-container.textContent = "No active working doubts.";
-return;
-}
+function updateWorkingSection() { const container = document.getElementById("workingUpdates"); if (!container) return;
 
-// 🔴 Heading - Red theme
-const red = "red";
+const working = document.querySelectorAll(".msg[data-status='Working']"); if (working.length === 0) { container.textContent = "No active working doubts."; return; }
 
-container.innerHTML = `
-<div class="update-label" style="font-weight:700;">
-<span style="color:${red};">🔴</span>
-<span style="color:${red};"> Working on Doubts:</span>
-</div>
-`;
+// color constants const red = "red"; // NOTE: CSS uses body.dark so JS should check for 'dark' class const messageColor = document.body.classList.contains("dark") ? "#E0E0E0" : "#000000"; const usernameColor = document.body.classList.contains("dark") ? "#66B2FF" : "#007BFF";
 
-Array.from(working).slice(0, 3).forEach(msg => {
-const serialEl = msg.querySelector(".serial");
-const serial = serialEl ? serialEl.textContent.replace("Doubt ", "").trim() : "";
+// header container.innerHTML = \n    <div class="update-label" style="font-weight:700;">\n      <span style="color:${red};">🔴</span>\n      <span style="color:${red};"> Working on Doubts:</span>\n    </div>\n  ;
 
-const nameEl = msg.querySelector("b.username");
+// iterate and render up to 3 working doubts (oldest first) Array.from(working).slice(0, 3).forEach(msg => { // try to pick up an existing serial number if present const serialEl = msg.querySelector(".serial"); const serial = serialEl ? serialEl.textContent.replace(/Doubt\s*#?/i, "").trim() : "";
+
+// username (supports markup used elsewhere: <b class="username">...)</n    const nameEl = msg.querySelector("b.username, .username");
 const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
-// ✅ Text message (avoid duplicate date/meta)
-const textEl = msg.querySelector(".msg-content");
+// --- Accept multiple class names for message text ---
+const textEl = msg.querySelector('.text, .message, .msg-text');
 const text = textEl ? textEl.textContent.trim() : "";
 
-const img = msg.querySelector("img")
-? msg.querySelector("img").outerHTML
-: "";
+// image if present
+const img = msg.querySelector("img") ? msg.querySelector("img").outerHTML : "";
 
-// ✅ Extract and format Date & Time cleanly
-const metaEl = msg.querySelector(".meta");
+// meta / datetime
+const metaEl = msg.querySelector('.meta, .time');
 let dateTime = metaEl ? metaEl.textContent.trim() : "";
-if (dateTime.includes(" ")) {
-const parts = dateTime.split(" ");
-const datePart = parts[0] || "";
-const timePart = parts.slice(1).join(" ") || "";
-dateTime = `Date: ${datePart} , Time: ${timePart}`;
-} else if (dateTime) {
-dateTime = `Date: ${dateTime}`;
+if (dateTime && dateTime.includes(" ")) {
+  const parts = dateTime.split(/\s+/);
+  const datePart = parts[0] || "";
+  const timePart = parts.slice(1).join(" ") || "";
+  dateTime = `Date: ${datePart} , Time: ${timePart}`;
 }
 
-// ✅ Colors
-const usernameColor = document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF";
-const messageColor = document.body.classList.contains("dark-mode") ? "#E0E0E0" : "#000000";
+// final HTML (use existing escapeHtml / escapeHTML available in main script)
+container.innerHTML += `\n      <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};line-height:1.5;border-radius:8px;">\n        Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">${escapeHtml(serial)}</span> from\n        <span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>\n        ${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : `<div style="margin-top:6px;color:${messageColor};opacity:0.7;">(No text message)</div>` }\n        ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;">${escapeHtml(dateTime)}</div>` : "" }\n        ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }\n      </div>\n    `;
 
-// ✅ Final Output
-container.innerHTML += `
-<div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};color:${red};line-height:1.5;border-radius:8px;">
-Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">${serial}</span> from
-<span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
-${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : `<div style="margin-top:6px;color:${messageColor};opacity:0.7;">(No text message)</div>` }
-${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;">${dateTime}</div>` : "" }
-${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
-</div>
-`;
-});
-}
+}); }
+
+// Note: This function expects escapeHtml (or escapeHTML) to be defined globally as in your original script. // If you used a different name, rename the calls accordingly. // Carefully replace the older function with this one in your page; no other changes required.
+
+
 function updateDoubtStats() {
 let total = 0, solved = 0, working = 0;
 
