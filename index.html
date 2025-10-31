@@ -173,40 +173,42 @@ function updateWorkingSection() {
     const nameEl = msg.querySelector("b.username");
     const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
-    // ✅ Fixed text fetch (multiple fallback)
-    const textEl =
-      msg.querySelector(".msg-content") ||
-      msg.querySelector(".text") ||
-      msg.querySelector(".msg-text") ||
-      msg.querySelector(".message-text") ||
-      msg.querySelector(".body") ||
-      msg;
+    // ✅ Text message (avoid duplicate date/meta)
+    const textEl = msg.querySelector(".msg-content");
     const text = textEl ? textEl.textContent.trim() : "";
 
     const img = msg.querySelector("img")
       ? msg.querySelector("img").outerHTML
       : "";
 
-    // Date & time
+    // ✅ Extract and format Date & Time cleanly
     const metaEl = msg.querySelector(".meta");
-    const dateTime = metaEl ? metaEl.textContent.trim() : "";
+    let dateTime = metaEl ? metaEl.textContent.trim() : "";
+    if (dateTime.includes(" ")) {
+      const parts = dateTime.split(" ");
+      const datePart = parts[0] || "";
+      const timePart = parts.slice(1).join(" ") || "";
+      dateTime = `Date: ${datePart} , Time: ${timePart}`;
+    } else if (dateTime) {
+      dateTime = `Date: ${dateTime}`;
+    }
 
-    // ✅ Colors: Red (border/date), Blue (username), Black (message)
+    // ✅ Colors
     const usernameColor = document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF";
     const messageColor = document.body.classList.contains("dark-mode") ? "#E0E0E0" : "#000000";
 
+    // ✅ Final Output
     container.innerHTML += `
       <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};color:${red};line-height:1.5;border-radius:8px;">
         Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">${serial}</span> from 
         <span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
-        ${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : "" }
-        ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;opacity:0.9;">${dateTime}</div>` : "" }
+        ${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : `<div style="margin-top:6px;color:${messageColor};opacity:0.7;">(No text message)</div>` }
+        ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;">${dateTime}</div>` : "" }
         ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
       </div>
     `;
   });
-      }
-  
+  }
   function updateDoubtStats() {
   let total = 0, solved = 0, working = 0;
 
