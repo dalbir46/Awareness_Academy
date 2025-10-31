@@ -146,7 +146,7 @@ var db=firebase.database();
 const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
-function updateWorkingSection() {
+    function updateWorkingSection() {
   const container = document.getElementById("workingUpdates");
   if (!container) return;
 
@@ -169,17 +169,19 @@ function updateWorkingSection() {
     const nameEl = msg.querySelector("b.username");
     const name = nameEl ? nameEl.textContent.trim() : "Guest";
 
-    // ✅ Get main text correctly (ignore serial, meta, username)
+    // ✅ get the correct text div (ignore serial & meta)
     let textEl = Array.from(msg.querySelectorAll("div")).find(d =>
       !d.classList.contains("serial") &&
       !d.classList.contains("meta") &&
-      !d.querySelector("b.username")
+      !d.querySelector(".serial") &&
+      !d.querySelector(".meta")
     );
 
-    // If still not found, try last fallback: plain text inside msg
+    // ✅ fallback: if not found, try direct text nodes
     let text = textEl ? textEl.textContent.trim() : "";
-    if (!text && msg.childNodes.length > 0) {
-      const lastDiv = Array.from(msg.querySelectorAll("div")).pop();
+    if (!text) {
+      const allDivs = Array.from(msg.querySelectorAll("div"));
+      const lastDiv = allDivs[allDivs.length - 1];
       if (lastDiv && !lastDiv.classList.contains("meta")) {
         text = lastDiv.textContent.trim();
       }
@@ -206,8 +208,7 @@ function updateWorkingSection() {
       </div>
     `;
   });
-  }                                          }
-  
+    }                                            
   function updateDoubtStats() {
   let total = 0, solved = 0, working = 0;
 
