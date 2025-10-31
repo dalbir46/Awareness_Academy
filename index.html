@@ -147,257 +147,254 @@ const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
 function updateWorkingSection() {
-const container = document.getElementById("workingUpdates");
-if (!container) return;
+  const container = document.getElementById("workingUpdates");
+  if (!container) return;
 
-const working = document.querySelectorAll(".msg[data-status='Working']");
-if (working.length === 0) {
-container.textContent = "No active working doubts.";
-return;
-}
-
-// 🔴 Heading - Red theme
-const red = "red";
-
-container.innerHTML = `
-<div class="update-label" style="font-weight:700;">
-<span style="color:${red};">🔴</span>
-<span style="color:${red};"> Working on Doubts:</span>
-</div>
-`;
-
-Array.from(working).slice(0, 3).forEach(msg => {
-const serialEl = msg.querySelector(".serial");
-const serial = serialEl ? serialEl.textContent.replace("Doubt ", "").trim() : "";
-
-const nameEl = msg.querySelector("b.username");
-const name = nameEl ? nameEl.textContent.trim() : "Guest";
-
-// ✅ Text message (avoid duplicate date/meta)
-// pick the first div inside msg that is NOT serial
-let textEl = Array.from(msg.querySelectorAll("div")).find(d => !d.classList.contains("serial"));
-const text = textEl ? textEl.textContent.trim() : "";
-
-const img = msg.querySelector("img")
-? msg.querySelector("img").outerHTML
-: "";
-
-// ✅ Extract and format Date & Time cleanly
-const metaEl = msg.querySelector(".meta");
-let dateTime = metaEl ? metaEl.textContent.trim() : "";
-if (dateTime.includes(" ")) {
-const parts = dateTime.split(" ");
-const datePart = parts[0] || "";
-const timePart = parts.slice(1).join(" ") || "";
-dateTime = `Date: ${datePart} , Time: ${timePart}`;
-} else if (dateTime) {
-dateTime = `Date: ${dateTime}`;
-}
-
-// ✅ Colors
-const usernameColor = document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF";
-const messageColor = document.body.classList.contains("dark-mode") ? "#E0E0E0" : "#000000";
-
-// ✅ Final Output
-container.innerHTML += `
-<div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};color:${red};line-height:1.5;border-radius:8px;">
-Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">${serial}</span> from
-<span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
-${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : `<div style="margin-top:6px;color:${messageColor};opacity:0.7;">(No text message)</div>` }
-${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;">${dateTime}</div>` : "" }
-${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
-</div>
-`;
-});
+  const working = document.querySelectorAll(".msg[data-status='Working']");
+  if (working.length === 0) {
+    container.textContent = "No active working doubts.";
+    return;
   }
-function updateDoubtStats() {
-let total = 0, solved = 0, working = 0;
 
-document.querySelectorAll(".msg").forEach(msg => {
-const text = (msg.dataset.message || msg.textContent || "").toLowerCase();
-if (text.includes("doubt") || text.includes("solve")) {
-total++;
-if (msg.dataset.status === "Solved") solved++;
-else if (msg.dataset.status === "Working") working++;
-}
-});
+  // 🔴 Heading - Red theme
+  const red = "red";
 
-const statsEl = document.getElementById("doubtStats");
-if (statsEl)
-statsEl.innerHTML = `
-<span style="color:red;">Total Doubts: ${total}</span> |
-<span style="color:green;">Solved: ${solved}</span> |
-<span style="color:orange;">Working: ${working}</span>
+  container.innerHTML = `
+    <div class="update-label" style="font-weight:700;">
+      <span style="color:${red};">🔴</span>
+      <span style="color:${red};"> Working on Doubts:</span>
+    </div>
+  `;
+
+  Array.from(working).slice(0, 3).forEach(msg => {
+    const serialEl = msg.querySelector(".serial");
+    const serial = serialEl ? serialEl.textContent.replace("Doubt ", "").trim() : "";
+
+    const nameEl = msg.querySelector("b.username");
+    const name = nameEl ? nameEl.textContent.trim() : "Guest";
+
+    // ✅ Fixed text fetch (multiple fallback)
+    const textEl =
+      msg.querySelector(".msg-content") ||
+      msg.querySelector(".text") ||
+      msg.querySelector(".msg-text") ||
+      msg.querySelector(".message-text") ||
+      msg.querySelector(".body") ||
+      msg;
+    const text = textEl ? textEl.textContent.trim() : "";
+
+    const img = msg.querySelector("img")
+      ? msg.querySelector("img").outerHTML
+      : "";
+
+    // Date & time
+    const metaEl = msg.querySelector(".meta");
+    const dateTime = metaEl ? metaEl.textContent.trim() : "";
+
+    // ✅ Colors: Red (border/date), Blue (username), Black (message)
+    const usernameColor = document.body.classList.contains("dark-mode") ? "#66B2FF" : "#007BFF";
+    const messageColor = document.body.classList.contains("dark-mode") ? "#E0E0E0" : "#000000";
+
+    container.innerHTML += `
+      <div class="update-item" style="margin:8px 0;padding:6px 10px;border-left:3px solid ${red};color:${red};line-height:1.5;border-radius:8px;">
+        Doubt <span class="update-doubt-number" style="color:${red};font-weight:700;">${serial}</span> from 
+        <span class="update-username" style="color:${usernameColor};font-weight:700;">${escapeHtml(name)}</span><br>
+        ${ text ? `<div style="margin-top:6px;color:${messageColor};">${escapeHtml(text)}</div>` : "" }
+        ${ dateTime ? `<div class="update-datetime" style="margin-top:6px;color:${red};font-size:13px;opacity:0.9;">${dateTime}</div>` : "" }
+        ${ img ? `<div style="margin-top:6px;">${img}</div>` : "" }
+      </div>
+    `;
+  });
+      }
+  
+  function updateDoubtStats() {
+  let total = 0, solved = 0, working = 0;
+
+  document.querySelectorAll(".msg").forEach(msg => {
+    const text = (msg.dataset.message || msg.textContent || "").toLowerCase();
+    if (text.includes("doubt") || text.includes("solve")) {
+      total++;
+      if (msg.dataset.status === "Solved") solved++;
+      else if (msg.dataset.status === "Working") working++;
+    }
+  });
+
+  const statsEl = document.getElementById("doubtStats");
+  if (statsEl)
+    statsEl.innerHTML = `
+  <span style="color:red;">Total Doubts: ${total}</span> |
+  <span style="color:green;">Solved: ${solved}</span> |
+  <span style="color:orange;">Working: ${working}</span>
 `;
-}
+  }
 
 // Simple HTML-escape helper
 function escapeHtml(str){
-if (str === null || str === undefined) return "";
-return String(str)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 function isAdminAuthenticated(){ return sessionStorage.getItem("isAdmin")==="true"; }
 function setAdminAuthenticated(flag){
-if(flag) sessionStorage.setItem("isAdmin","true");
-else sessionStorage.removeItem("isAdmin");
-updateAdminUI();
+  if(flag) sessionStorage.setItem("isAdmin","true");
+  else sessionStorage.removeItem("isAdmin");
+  updateAdminUI();
 }
 
 function updateAdminUI(){
-const adminStatusEl = document.getElementById("adminStatus");
-if(adminStatusEl) adminStatusEl.style.display = isAdminAuthenticated() ? "block" : "none";
+  const adminStatusEl = document.getElementById("adminStatus");
+  if(adminStatusEl) adminStatusEl.style.display = isAdminAuthenticated() ? "block" : "none";
 
-const logoutBtn = document.getElementById("logoutBtn");
-const deleteSelectedBtn = document.getElementById("deleteSelectedBtn");
-if(logoutBtn) logoutBtn.style.display = isAdminAuthenticated() ? "inline-block" : "none";
-if(deleteSelectedBtn) deleteSelectedBtn.style.display = isAdminAuthenticated() ? "inline-block" : "none";
+  const logoutBtn = document.getElementById("logoutBtn");
+  const deleteSelectedBtn = document.getElementById("deleteSelectedBtn");
+  if(logoutBtn) logoutBtn.style.display = isAdminAuthenticated() ? "inline-block" : "none";
+  if(deleteSelectedBtn) deleteSelectedBtn.style.display = isAdminAuthenticated() ? "inline-block" : "none";
 
-updateCheckboxes();
+  updateCheckboxes();
 }
 
 // format timestamp
 function formatDateTime(ts){
-const d = new Date(ts);
-let hrs = d.getHours(), mins = d.getMinutes().toString().padStart(2,'0'), ampm = hrs >= 12 ? 'PM' : 'AM';
-hrs = hrs % 12 || 12;
-let day = d.getDate().toString().padStart(2,'0'), month = (d.getMonth()+1).toString().padStart(2,'0'), year = d.getFullYear();
-return `${day}/${month}/${year} ${hrs}:${mins} ${ampm}`;
+  const d = new Date(ts);
+  let hrs = d.getHours(), mins = d.getMinutes().toString().padStart(2,'0'), ampm = hrs >= 12 ? 'PM' : 'AM';
+  hrs = hrs % 12 || 12;
+  let day = d.getDate().toString().padStart(2,'0'), month = (d.getMonth()+1).toString().padStart(2,'0'), year = d.getFullYear();
+  return `${day}/${month}/${year} ${hrs}:${mins} ${ampm}`;
 }
 
 // add single message to DOM
 async function addMessageToDOM(key, data){
-// create container
-const div = document.createElement("div");
-div.classList.add("msg");
-div.setAttribute("data-key", key);
+  // create container
+  const div = document.createElement("div");
+  div.classList.add("msg");
+  div.setAttribute("data-key", key);
 
-// store original message text in dataset for searching/stats
-div.dataset.message = data.message || "";
+  // store original message text in dataset for searching/stats
+  div.dataset.message = data.message || "";
 
-if (data.status) div.dataset.status = data.status;
+  if (data.status) div.dataset.status = data.status;
 
-// checkbox for admin
-if (isAdminAuthenticated()) {
-const input = document.createElement("input");
-input.type = "checkbox";
-input.className = "msgCheck";
-input.setAttribute("data-key", key);
-input.style.marginRight = "6px";
-// prepend later
-}
+  // checkbox for admin
+  if (isAdminAuthenticated()) {
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.className = "msgCheck";
+    input.setAttribute("data-key", key);
+    input.style.marginRight = "6px";
+    // prepend later
+  }
 
-// build content safely
-const nameHtml = `<b class="${escapeHtml((data.name||"Guest")) === "admin" ? "username admin" : "username"}">${escapeHtml(data.name || "Guest")}</b>`;
-const timeHtml = `<span class="meta" style="margin-left:8px;font-size:12px;color:gray;">${formatDateTime(data.time || Date.now())}</span>`;
-const messageHtml = `<div style="margin-top:6px;">${escapeHtml(data.message || "")}</div>`;
-const photoHtml = data.photoURL ? `<div style="margin-top:6px;"><img src="${escapeHtml(data.photoURL)}" alt="image" style="max-width:90%;border-radius:6px;border:1px solid #ddd;"></div>` : "";
+  // build content safely
+  const nameHtml = `<b class="${escapeHtml((data.name||"Guest")) === "admin" ? "username admin" : "username"}">${escapeHtml(data.name || "Guest")}</b>`;
+  const timeHtml = `<span class="meta" style="margin-left:8px;font-size:12px;color:gray;">${formatDateTime(data.time || Date.now())}</span>`;
+  const messageHtml = `<div style="margin-top:6px;">${escapeHtml(data.message || "")}</div>`;
+  const photoHtml = data.photoURL ? `<div style="margin-top:6px;"><img src="${escapeHtml(data.photoURL)}" alt="image" style="max-width:90%;border-radius:6px;border:1px solid #ddd;"></div>` : "";
 
-// header row
-const header = document.createElement("div");
-header.innerHTML = `${nameHtml} ${timeHtml}`;
+  // header row
+  const header = document.createElement("div");
+  header.innerHTML = `${nameHtml} ${timeHtml}`;
 
-// combine
-div.appendChild(header);
-const msgContent = document.createElement("div");
-msgContent.innerHTML = messageHtml + photoHtml;
-div.appendChild(msgContent);
+  // combine
+  div.appendChild(header);
+  const msgContent = document.createElement("div");
+  msgContent.innerHTML = messageHtml + photoHtml;
+  div.appendChild(msgContent);
 
-// admin buttons only if admin and message contains doubt/solve
-if (isAdminAuthenticated()) {
-const lowerMsg = (data.message || "").toLowerCase();
-if (lowerMsg.includes("doubt") || lowerMsg.includes("solve")) {
-const btns = document.createElement("div");
-btns.className = "admin-btns";
-btns.style.marginTop = "8px";
-btns.innerHTML = `
-<button class="mark-working" data-key="${key}" style="background:#ffc107;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;margin-right:6px;">Mark Working</button>
-<button class="mark-solved" data-key="${key}" style="background:#28a745;border:none;padding:6px 8px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>
-`;
-div.appendChild(btns);
-}
-// if admin, prepend a checkbox to the header
-const chk = document.createElement("input");
-chk.type = "checkbox";
-chk.className = "msgCheck";
-chk.setAttribute("data-key", key);
-chk.style.marginRight = "8px";
-header.prepend(chk);
-}
+  // admin buttons only if admin and message contains doubt/solve
+  if (isAdminAuthenticated()) {
+    const lowerMsg = (data.message || "").toLowerCase();
+    if (lowerMsg.includes("doubt") || lowerMsg.includes("solve")) {
+      const btns = document.createElement("div");
+      btns.className = "admin-btns";
+      btns.style.marginTop = "8px";
+      btns.innerHTML = `
+        <button class="mark-working" data-key="${key}" style="background:#ffc107;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;margin-right:6px;">Mark Working</button>
+        <button class="mark-solved" data-key="${key}" style="background:#28a745;border:none;padding:6px 8px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>
+      `;
+      div.appendChild(btns);
+    }
+    // if admin, prepend a checkbox to the header
+    const chk = document.createElement("input");
+    chk.type = "checkbox";
+    chk.className = "msgCheck";
+    chk.setAttribute("data-key", key);
+    chk.style.marginRight = "8px";
+    header.prepend(chk);
+  }
 
-// set dataset status class for styling if needed
-if(div.dataset.status === "Solved") div.style.opacity = "0.9";
+  // set dataset status class for styling if needed
+  if(div.dataset.status === "Solved") div.style.opacity = "0.9";
 
-// add to DOM (prepend to show latest first)
-const messagesEl = document.getElementById("messages");
-if (messagesEl) messagesEl.prepend(div);
+  // add to DOM (prepend to show latest first)
+  const messagesEl = document.getElementById("messages");
+  if (messagesEl) messagesEl.prepend(div);
 
-// update UI
-updateDoubtStats();
-refreshDoubtNumbers();
-updateCheckboxes();
-updateWorkingSection();
+  // update UI
+  updateDoubtStats();
+  refreshDoubtNumbers();
+  updateCheckboxes();
+  updateWorkingSection();
 }
 
 // === Detect Doubt Messages and Number Them ===
 function refreshDoubtNumbers() {
-const doubtList = [];
-document.querySelectorAll(".msg").forEach((msg) => {
-const text = (msg.dataset.message || "").toLowerCase();
-if (text.includes("doubt") || text.includes("solve")) {
-doubtList.push(msg);
-}
-});
+  const doubtList = [];
+  document.querySelectorAll(".msg").forEach((msg) => {
+    const text = (msg.dataset.message || "").toLowerCase();
+    if (text.includes("doubt") || text.includes("solve")) {
+      doubtList.push(msg);
+    }
+  });
 doubtList.reverse(); // 👈 Add this line to make oldest = 01
-// Numbering
-doubtList.forEach((msg, i) => {
-let serialTag = msg.querySelector(".serial");
-if (!serialTag) {
-serialTag = document.createElement("div");
-serialTag.className = "serial";
-serialTag.style.color = "red";
-serialTag.style.fontWeight = "bold";
-serialTag.style.fontSize = "12px";
-msg.prepend(serialTag);
-}
-serialTag.textContent = "Doubt #" + (i + 1);
-});
+  // Numbering
+  doubtList.forEach((msg, i) => {
+    let serialTag = msg.querySelector(".serial");
+    if (!serialTag) {
+      serialTag = document.createElement("div");
+      serialTag.className = "serial";
+      serialTag.style.color = "red";
+      serialTag.style.fontWeight = "bold";
+      serialTag.style.fontSize = "12px";
+      msg.prepend(serialTag);
+    }
+    serialTag.textContent = "Doubt #" + (i + 1);
+  });
 
-// remove serial tags from those that are no longer doubts
-document.querySelectorAll(".msg .serial").forEach(s => {
-const parent = s.parentElement;
-const text = (parent.dataset.message || "").toLowerCase();
-if (!(text.includes("doubt") || text.includes("solve"))) s.remove();
-});
+  // remove serial tags from those that are no longer doubts
+  document.querySelectorAll(".msg .serial").forEach(s => {
+    const parent = s.parentElement;
+    const text = (parent.dataset.message || "").toLowerCase();
+    if (!(text.includes("doubt") || text.includes("solve"))) s.remove();
+  });
 }
 
 function updateCheckboxes(){
-document.querySelectorAll(".msg").forEach(msg=>{
-let chk = msg.querySelector(".msgCheck");
-if(isAdminAuthenticated()){
-if(!chk){
-const key = msg.getAttribute("data-key");
-const input = document.createElement("input");
-input.type = "checkbox";
-input.className = "msgCheck";
-input.setAttribute("data-key", key);
-input.style.marginRight = "8px";
-const firstB = msg.querySelector("b");
-if(firstB) firstB.prepend(input);
-else msg.prepend(input);
+  document.querySelectorAll(".msg").forEach(msg=>{
+    let chk = msg.querySelector(".msgCheck");
+    if(isAdminAuthenticated()){
+      if(!chk){
+        const key = msg.getAttribute("data-key");
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.className = "msgCheck";
+        input.setAttribute("data-key", key);
+        input.style.marginRight = "8px";
+        const firstB = msg.querySelector("b");
+        if(firstB) firstB.prepend(input);
+        else msg.prepend(input);
+      }
+    } else {
+      if(chk) chk.remove();
+    }
+  });
 }
-} else {
-if(chk) chk.remove();
-}
-});
-}
-// Firebase listeners
-db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snap => {
+// Firebase lis
+  db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snap => {
 addMessageToDOM(snap.key, snap.val());
 });
 
