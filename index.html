@@ -562,6 +562,7 @@ const mode = this.value;
 if (mode === 'dark') document.body.classList.add('dark');
 else document.body.classList.remove('dark');
 localStorage.setItem('theme', mode);
+updateWorkingSection();
 });
 }
 
@@ -687,7 +688,6 @@ refreshDoubtNumbers();
 updateDoubtStats();
 updateWorkingSection();
 });
-  window.addEventListener("load", () => updateWorkingSection());
 </script>
 </body>
 </html>
