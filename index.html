@@ -272,6 +272,7 @@ function formatDateTime(ts){
 // add single message to DOM
 async function addMessageToDOM(key, data){
   // create container
+  data.message = (data.message || "").replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color:#3366CC;font-weight:600;">$1</a>');
   const div = document.createElement("div");
   div.classList.add("msg");
   div.setAttribute("data-key", key);
