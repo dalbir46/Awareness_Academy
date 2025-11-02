@@ -294,7 +294,10 @@ async function addMessageToDOM(key, data){
   // build content safely
   const nameHtml = `<b class="${escapeHtml((data.name||"Guest")) === "admin" ? "username admin" : "username"}">${escapeHtml(data.name || "Guest")}</b>`;
   const timeHtml = `<span class="meta" style="margin-left:8px;font-size:12px;color:gray;">${formatDateTime(data.time || Date.now())}</span>`;
-  const messageHtml = `<div style="margin-top:6px;">${escapeHtml(data.message || "")}</div>`;
+  const messageHtml = `<div style="margin-top:6px;">${(data.message || "").replace(/((https?:\/\/|www\.)[^\s]+)/g, function(url){
+  let href = url.startsWith('http') ? url : 'http://' + url;
+  return `<a href="${href}" target="_blank" style="color:#3366CC;">${url}</a>`;
+})}</div>`;
   const photoHtml = data.photoURL ? `<div style="margin-top:6px;"><img src="${escapeHtml(data.photoURL)}" alt="image" style="max-width:90%;border-radius:6px;border:1px solid #ddd;"></div>` : "";
 
   // header row
