@@ -5,8 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Class 12 — Mathematics Hub</title>
 <style>
-body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 0; color: #000; }
-
+/* ---------- Base (Light) ---------- */
+body { 
+  font-family: Arial, sans-serif; 
+  background: #f0f8ff; 
+  margin: 0; 
+  padding: 0; 
+  color: #000; 
+  transition: background 0.25s ease, color 0.25s ease; 
+}
 /* Header & Footer */
 .header-wrapper, .footer-wrapper { 
   background: linear-gradient(135deg, #6a11cb, #2575fc); 
@@ -24,20 +31,38 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
   max-width: 600px; 
   margin: auto; 
 }
-.header small { display:block; font-size:13px; font-weight:normal; margin-top:6px; color:#333; }
-
+.header small { 
+  display:block; 
+  font-size:13px; 
+  font-weight:normal; 
+  margin-top:6px; 
+  color:#333; 
+}
+/* Wrapper */
 .wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
-
 /* Chapters */
 h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
-.chapter { background:#F9F9F9; border:1px solid #999; padding:12px; margin:10px; border-radius:8px; transition:all .2s; }
+.chapter { 
+  background:#F9F9F9; 
+  border:1px solid #999; 
+  padding:12px; 
+  margin:10px; 
+  border-radius:8px; 
+  transition:all .2s; 
+}
 .chapter:hover { background:#e9e9e9; }
-.chapter a { color:#0b2447; text-decoration:none; font-weight:600; display:block; }
-.chapter a:hover { text-decoration:underline; }
-
-.back-home { margin:15px 10px; font-weight:bold; }
-.back-home a { text-decoration:none; color:#2575fc; }
-.back-home a:hover { text-decoration:underline; }
+/* ---- Light mode chapter links ---- */
+.chapter a { 
+  color:#0645AD; 
+  text-decoration:none; 
+  font-weight:600; 
+  display:block; 
+}
+.chapter a:hover { 
+  color:#0b0080; 
+  text-decoration:underline; 
+}
+/* Back to home button */
 .b18 {
   padding: 12px 20px;
   background: #ff5722;
@@ -49,46 +74,98 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   display: inline-block;
   transition: background 0.3s ease;
 }
-.b18::before {
-  content: "🏠 ";  /* Home emoji */
+.b18::before { content: "🏠 "; }
+.b18:hover { background: #e64a19; }
+/* Theme selector (center) */
+.theme-wrap { display:flex; justify-content:center; margin:18px 0; }
+#themeSelect {
+  padding:8px 16px;
+  border-radius:6px;
+  font-weight:bold;
+  background-color:#555;
+  color:#fff;
+  border:none;
+  cursor:pointer;
 }
-.b18:hover {
-  background: #e64a19;
+/* Responsive */
+@media(max-width:520px){
+  .header, .footer { font-size:18px; padding:12px; max-width:92%; }
+  #themeSelect { padding:8px 12px; }
 }
-  </style>
+/* ---------- Dark mode ---------- */
+body.dark { background:#0f1724; color:#d1d5db; }
+body.dark .header-wrapper, body.dark .footer-wrapper {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+}
+body.dark .header, body.dark .footer {
+  background:#1e293b;
+  color:#e2e8f0;
+  border-color:#334155;
+  text-shadow:none;
+  font-size:21px;
+  font-weight:700;
+  padding:16px;
+}
+body.dark .header small {
+  color: #94a3b8;
+  font-size:13px;
+  font-weight:400;
+  margin-top:8px;
+}
+body.dark h2 { color:#facc15; }
+body.dark .chapter { background:#1e293b; border-color:#334155; }
+body.dark .chapter:hover { background:#162233; }
+body.dark .chapter a { color:#facc15; }
+body.dark .chapter a:hover { color:#fde047; text-decoration:underline; }
+body.dark .b18 { background: #2563eb; color: #fff; }
+body.dark .b18:hover { background:#1d4ed8; }
+body.dark #themeSelect {
+  background-color:#334155;
+  color:#d1d5db;
+  border: 1px solid #475569;
+}
+.header, .footer, .chapter, .b18, #themeSelect { transition: all 0.18s ease; }
+</style>
 </head>
 <body>
-
   <!-- Header -->
   <div class="header-wrapper">
     <div class="header">
       Mathematics Hub — Class 12
-      <small>Notes • NCERT Solutions • Practice Papers</small>
+      <small> Notes • NCERT Solutions • Practice Papers </small>
     </div>
   </div>
 
+  <!-- Theme selector -->
+  <div class="theme-wrap">
+    <select id="themeSelect" aria-label="Theme select">
+      <option value="light">🌞 Light Mode</option>
+      <option value="dark">🌙 Dark Mode</option>
+    </select>
+  </div>
+
   <div class="wrap">
-
-    <!-- Chapters -->
     <h2>📘 Chapters</h2>
-    <div class="chapter"><a href="class12ex1_1.html">Chapter 1: Relations and Functions</a></div>
-    <div class="chapter"><a href="class12ex2_1.html">Chapter 2: Inverse Trigonometric Functions</a></div>
-    <div class="chapter"><a href="class12ex3_1.html">Chapter 3: Matrices</a></div>
-    <div class="chapter"><a href="class12ex4_1.html">Chapter 4: Determinants</a></div>
-    <div class="chapter"><a href="class12ex5_1.html">Chapter 5: Continuity and Differentiability</a></div>
-    <div class="chapter"><a href="class12ex6_1.html">Chapter 6: Applications of Derivatives</a></div>
-    <div class="chapter"><a href="class12ex7_1.html">Chapter 7: Integrals</a></div>
-    <div class="chapter"><a href="class12ex8_1.html">Chapter 8: Applications of Integrals</a></div>
-    <div class="chapter"><a href="class12ex9_1.html">Chapter 9: Differential Equations</a></div>
-    <div class="chapter"><a href="class12ex10_1.html">Chapter 10: Vector Algebra</a></div>
-    <div class="chapter"><a href="class12ex11_1.html">Chapter 11: Three Dimensional Geometry</a></div>
-    <div class="chapter"><a href="class12ex12_1.html">Chapter 12: Linear Programming</a></div>
-    <div class="chapter"><a href="class12ex13_1.html">Chapter 13: Probability</a></div>
 
-    <!-- Back to home -->
-  <div style="text-align:center; margin:20px 0;">
-  <a href="index.html" class="b18">Back to Home</a>
-</div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex1_1.html">Chapter 1: Relations and Functions</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex2_1.html">Chapter 2: Inverse Trigonometric Functions</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex3_1.html">Chapter 3: Matrices</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex4_1.html">Chapter 4: Determinants</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex5_1.html">Chapter 5: Continuity and Differentiability</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex6_1.html">Chapter 6: Applications of Derivatives</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex7_1.html">Chapter 7: Integrals</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex8_1.html">Chapter 8: Applications of Integrals</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex9_1.html">Chapter 9: Differential Equations</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex10_1.html">Chapter 10: Vector Algebra</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex11_1.html">Chapter 11: Three Dimensional Geometry</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex12_1.html">Chapter 12: Linear Programming</a></div>
+    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex13_1.html">Chapter 13: Probability</a></div>
+
+    <div style="text-align:center; margin:20px 0;">
+      <a href="https://dalbir46.github.io/Awareness_Academy/" class="b18">Back to Home</a>
+    </div>
+  </div>
+
   <!-- Footer -->
   <div class="footer-wrapper">
     <div class="footer">
@@ -96,5 +173,25 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
     </div>
   </div>
 
+<script>
+const themeSelect = document.getElementById('themeSelect');
+const savedTheme = localStorage.getItem('theme') || 'light';
+if (savedTheme === 'dark') {
+  document.body.classList.add('dark');
+  themeSelect.value = 'dark';
+} else {
+  document.body.classList.remove('dark');
+  themeSelect.value = 'light';
+}
+themeSelect.addEventListener('change', function() {
+  const mode = this.value;
+  if (mode === 'dark') {
+    document.body.classList.add('dark');
+  } else {
+    document.body.classList.remove('dark');
+  }
+  localStorage.setItem('theme', mode);
+});
+</script>
 </body>
-    </html>
+  </html>
