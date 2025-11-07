@@ -700,5 +700,21 @@ updateDoubtStats();
 updateWorkingSection();
 });
 </script>
+  <script>
+// 🔍 Shoutbox Search Filter
+document.addEventListener('DOMContentLoaded', function(){
+  const searchBox = document.getElementById('searchBox');
+  if (!searchBox) return;
+
+  searchBox.addEventListener('input', function(e){
+    const term = e.target.value.trim().toLowerCase();
+
+    document.querySelectorAll('.msg').forEach(function(m){
+      const text = ((m.dataset.message || '') + ' ' + (m.innerText || '')).toLowerCase();
+      m.style.display = text.includes(term) ? 'block' : 'none';
+    });
+  });
+});
+</script>
 </body>
 </html>
