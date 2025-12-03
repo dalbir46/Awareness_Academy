@@ -52,12 +52,11 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   margin:10px; 
   border-radius:8px; 
   transition:all .2s; 
-  position:relative; /* ← ADDED */
-  padding-bottom:40px; /* space for button */
+  position:relative;
+  padding-bottom:40px;
 }
 .chapter:hover { background:#e9e9e9; }
 
-/* ---- Light mode chapter links ---- */
 .chapter a.mainlink { 
   color:#0645AD;
   text-decoration:none; 
@@ -80,7 +79,7 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   font-weight:600;
   text-decoration:none;
 
-  /* RIGHT BOTTOM FIX */
+  /* RIGHT BOTTOM */
   position:absolute;
   right:10px;
   bottom:10px;
@@ -117,12 +116,8 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   display: inline-block;
   transition: background 0.3s ease;
 }
-.b18::before {
-  content: "🏠 ";
-}
-.b18:hover {
-  background: #e64a19;
-}
+.b18::before { content: "🏠 "; }
+.b18:hover { background: #e64a19; }
 
 /* Theme selector */
 .theme-wrap { display:flex; justify-content:center; margin:18px 0; }
@@ -136,12 +131,6 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   cursor:pointer;
 }
 
-/* Responsive */
-@media(max-width:520px){
-  .header, .footer { font-size:18px; padding:12px; max-width:92%; }
-  #themeSelect { padding:8px 12px; }
-}
-
 /* ---------- Dark mode ---------- */
 body.dark { background:#0f1724; color:#d1d5db; }
 body.dark .header, body.dark .footer {
@@ -149,9 +138,6 @@ body.dark .header, body.dark .footer {
   color:#e2e8f0;
   border-color:#334155;
   text-shadow:none;
-  font-size:21px;
-  font-weight:700;
-  padding:16px;
 }
 body.dark .header small { color:#94a3b8; }
 body.dark h2 { color:#facc15; }
@@ -159,21 +145,13 @@ body.dark .chapter { background:#1e293b; border-color:#334155; }
 body.dark .chapter:hover { background:#162233; }
 body.dark .chapter a.mainlink { color:#facc15; }
 body.dark .chapter a.mainlink:hover { color:#fde047; }
-
-body.dark .cyber-mini {
-  background:#000814;
-  color:#00eaff;
-  border-color:#00eaff;
-}
-body.dark .cyber-mini::after {
-  background:#00eaff;
-}
-
+body.dark .cyber-mini { background:#000814; color:#00eaff; border-color:#00eaff; }
+body.dark .cyber-mini::after { background:#00eaff; }
 body.dark .b18 { background:#2563eb; }
 body.dark .b18:hover { background:#1d4ed8; }
 body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px solid #475569; }
 
-/* Smooth transitions */
+/* Transitions */
 .header, .footer, .chapter, .b18, #themeSelect { transition: all 0.18s ease; }
 </style>
 </head>
@@ -198,75 +176,75 @@ body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px sol
 
     <h2>📘 Chapters</h2>
 
-    <!-- Chapters with BUY NOTES (unchanged content) -->
+    <!-- Every Buy Notes button now goes to buy.html?ch=chapter name -->
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex1_1.html">Chapter 1: Real Numbers</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Real Numbers" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex2_1.html">Chapter 2: Polynomials</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Polynomials" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex3_1.html">Chapter 3: Pair of Linear Equations</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Pair of Linear Equations" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex4_1.html">Chapter 4: Quadratic Equations</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Quadratic Equations" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex5_1.html">Chapter 5: Arithmetic Progressions</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Arithmetic Progressions" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex6_1.html">Chapter 6: Triangles</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Triangles" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex7_1.html">Chapter 7: Coordinate Geometry</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Coordinate Geometry" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex8_1.html">Chapter 8: Trigonometry</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Trigonometry" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex9_1.html">Chapter 9: Applications of Trigonometry</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Applications of Trigonometry" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex10_1.html">Chapter 10: Circles</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Circles" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex11_1.html">Chapter 11: Areas Related to Circles</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Areas Related to Circles" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex12_1.html">Chapter 12: Surface Areas and Volumes</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Surface Areas and Volumes" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex13_1.html">Chapter 13: Statistics</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Statistics" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex14_1.html">Chapter 14: Probability</a>
-      <a href="#" class="cyber-mini">Buy Notes</a>
+      <a href="buy.html?ch=Probability" class="cyber-mini">Buy Notes</a>
     </div>
 
     <div style="text-align:center; margin:20px 0;">
