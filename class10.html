@@ -43,22 +43,31 @@ body {
 /* Wrapper */
 .wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
 
-/* Note Box */
+/* ======================= SOFT NEON NOTE BOX (BOX 2 FIXED) ======================= */
 .note-box {
-  background: #fff3cd;
-  border: 1px solid #ffecb5;
-  padding: 12px 15px;
-  margin: 15px 10px 25px 10px;
-  font-size: 15px;
-  line-height: 1.5;
-  color: #7a5200;
-  border-radius: 8px;
-  font-weight: 600;
+  background:#102030;
+  color:#e8f8ff;
+  border:1px solid #39c9ff;          /* Border softer now */
+  padding:18px 20px;
+  margin:18px 10px 30px 10px;
+  font-size:16px;
+  line-height:1.55;
+  border-radius:14px;
+  font-weight:600;
+  box-shadow: 0 0 8px rgba(0,212,255,0.18); /* Softer glow */
+  transition:0.25s ease;
 }
-body.dark .note-box {
-  background: #3b2f0b;
-  border-color: #5c480d;
-  color: #f7e6b5;
+.note-box:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 12px rgba(0,212,255,0.28);
+}
+
+/* Dark mode version */
+body.dark .note-box{
+  background:#000814;
+  border-color:#00c8e8;
+  color:#d8f3ff;
+  box-shadow:0 0 8px rgba(0,212,255,0.18);
 }
 
 /* Chapters */
@@ -97,7 +106,6 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   font-weight:600;
   text-decoration:none;
 
-  /* RIGHT BOTTOM */
   position:absolute;
   right:10px;
   bottom:10px;
@@ -120,9 +128,6 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
 }
 
 /* Back to home button */
-.back-home { margin:15px 10px; font-weight:bold; }
-.back-home a { text-decoration:none; color:#2575fc; }
-.back-home a:hover { text-decoration:underline; }
 .b18 {
   padding: 12px 20px;
   background: #ff5722;
@@ -194,13 +199,13 @@ body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px sol
 
     <h2>📘 Chapters</h2>
 
-    <!-- NOTE BOX -->
+    <!-- UPDATED SOFT NEON NOTE BOX -->
     <div class="note-box">
-      अगर आपको ऑनलाइन पढ़ना मुश्किल लगता है या मोबाइल/कंम्पयूटर की रोशनी आंखों पर ज़्यादा असर करती है,  
-      तो आप <b>Buy Notes</b> पर क्लिक करके इन सभी chapters की सुंदर, साफ-सुथरी Notebook अपने घर मंगवा सकते हो।
+      अगर आपको ऑनलाइन पढ़ना मुश्किल लगता है या मोबाइल/कंप्यूटर की रोशनी आंखों पर असर करती है,  
+      तो आप <b>Buy Notes</b> पर क्लिक करके सभी chapters की सुंदर, साफ-सुथरी Notebook अपने घर मंगवा सकते हो।
     </div>
 
-    <!-- Every Buy Notes button now goes to buy.html?ch=chapter name -->
+    <!-- Chapters List -->
     <div class="chapter">
       <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex1_1.html">Chapter 1: Real Numbers</a>
       <a href="buy10.html?ch=Real Numbers" class="cyber-mini">Buy Notes</a>
@@ -299,5 +304,5 @@ themeSelect.addEventListener('change', function() {
 </script>
 
 </body>
-      </html>
+  </html>
         
