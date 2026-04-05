@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Class 10 — Mathematics Hub</title>
+
 <style>
 /* ---------- Base (Light) ---------- */
 body { 
@@ -43,35 +44,34 @@ body {
 /* Wrapper */
 .wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
 
-/* ======================= SOFT NEON NOTE BOX (BOX 2 FIXED) ======================= */
+/* ======================= UPDATED NOTE BOX ======================= */
 .note-box {
-  background:#102030;
-  color:#e8f8ff;
-  border:2px solid #39c9ff;          /* Border softer now */
+  background:#dcfce7;   /* light green bg */
+  color:#000;        /* dark green text */
+  border:2px solid #22c55e;
   padding:18px 20px;
   margin:18px 10px 30px 10px;
   font-size:16px;
   line-height:1.55;
   border-radius:14px;
   font-weight:600;
-  box-shadow: 0 0 8px rgba(0,212,255,0.18); /* Softer glow */
+  box-shadow: 0 0 6px rgba(250,204,21,0.2);
   transition:0.25s ease;
 }
 .note-box:hover{
   transform:translateY(-3px);
-  box-shadow:0 0 12px rgba(0,212,255,0.28);
+  box-shadow:0 0 12px rgba(250,204,21,0.35);
 }
 
-/* Dark mode version */
-body.dark .note-box{
-  background:#000814;
-  border-color:#00c8e8;
-  color:#d8f3ff;
-  box-shadow:0 0 8px rgba(0,212,255,0.18);
+/* Dark mode version */body.dark .note-box{
+  background:#020617;   /* deep dark */
+  color:#facc15;        /* yellow highlight */
+  border-color:#facc15;
+  box-shadow:0 0 10px rgba(250,204,21,0.3);
 }
-
 /* Chapters */
 h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
+
 .chapter { 
   background:#F9F9F9; 
   border:1px solid #999; 
@@ -95,7 +95,7 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   text-decoration:underline; 
 }
 
-/* ---------------------- CYBERPUNK MINI BUY BUTTON ---------------------- */
+/* Buy Button */
 .cyber-mini{
   background:#0c0f1a;
   color:#00eaff;
@@ -105,7 +105,6 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   border-radius:8px;
   font-weight:600;
   text-decoration:none;
-
   position:absolute;
   right:10px;
   bottom:10px;
@@ -127,17 +126,15 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   100%{width:100%;}
 }
 
-/* Back to home button */
+/* Back button */
 .b18 {
   padding: 12px 20px;
   background: #ff5722;
   color: #fff;
   border-radius: 25px;
-  position: relative;
   text-decoration: none;
   font-weight: bold;
   display: inline-block;
-  transition: background 0.3s ease;
 }
 .b18::before { content: "🏠 "; }
 .b18:hover { background: #e64a19; }
@@ -156,137 +153,84 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
 
 /* Dark mode */
 body.dark { background:#0f1724; color:#d1d5db; }
+
 body.dark .header, body.dark .footer {
   background:#1e293b;
   color:#e2e8f0;
   border-color:#334155;
   text-shadow:none;
 }
-body.dark .header small { color:#94a3b8; }
+
 body.dark h2 { color:#facc15; }
+
 body.dark .chapter { background:#1e293b; border-color:#334155; }
 body.dark .chapter:hover { background:#162233; }
+
 body.dark .chapter a.mainlink { color:#facc15; }
 body.dark .chapter a.mainlink:hover { color:#fde047; }
+
 body.dark .cyber-mini { background:#000814; color:#00eaff; border-color:#00eaff; }
-body.dark .cyber-mini::after { background:#00eaff; }
+
 body.dark .b18 { background:#2563eb; }
 body.dark .b18:hover { background:#1d4ed8; }
+
 body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px solid #475569; }
 
-/* Transitions */
-.header, .footer, .chapter, .b18, #themeSelect { transition: all 0.18s ease; }
 </style>
 </head>
 
 <body>
 
-  <div class="header-wrapper">
-    <div class="header">
-      Mathematics Hub — Class 10
-      <small> Notes • NCERT Solutions • Practice Papers </small>
-    </div>
+<div class="header-wrapper">
+  <div class="header">
+    Mathematics Hub — Class 10
+    <small> Notes • NCERT Solutions • Practice Papers </small>
   </div>
+</div>
 
-  <div class="theme-wrap">
-    <select id="themeSelect">
-      <option value="light">🌞 Light Mode</option>
-      <option value="dark">🌙 Dark Mode</option>
-    </select>
+<div class="theme-wrap">
+  <select id="themeSelect">
+    <option value="light">🌞 Light Mode</option>
+    <option value="dark">🌙 Dark Mode</option>
+  </select>
+</div>
+
+<div class="wrap">
+
+<h2>📘 Chapters</h2>
+
+<div class="note-box">
+  अगर आपको ऑनलाइन पढ़ना मुश्किल लगता है या मोबाइल/कंप्यूटर की रोशनी आंखों पर असर करती है,  
+  तो आप <b>Buy Notes</b> पर क्लिक करके सभी chapters की सुंदर, साफ-सुथरी Notebook अपने घर मंगवा सकते हो।
+</div>
+
+<!-- ALL CHAPTERS SAME -->
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex1_1.html">Chapter 1: Real Numbers</a><a href="buy10.html?ch=Real Numbers" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex2_1.html">Chapter 2: Polynomials</a><a href="buy10.html?ch=Polynomials" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex3_1.html">Chapter 3: Pair of Linear Equations</a><a href="buy10.html?ch=Pair of Linear Equations" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex4_1.html">Chapter 4: Quadratic Equations</a><a href="buy10.html?ch=Quadratic Equations" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex5_1.html">Chapter 5: Arithmetic Progressions</a><a href="buy10.html?ch=Arithmetic Progressions" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex6_1.html">Chapter 6: Triangles</a><a href="buy10.html?ch=Triangles" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex7_1.html">Chapter 7: Coordinate Geometry</a><a href="buy10.html?ch=Coordinate Geometry" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex8_1.html">Chapter 8: Trigonometry</a><a href="buy10.html?ch=Trigonometry" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex9_1.html">Chapter 9: Applications of Trigonometry</a><a href="buy10.html?ch=Applications of Trigonometry" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex10_1.html">Chapter 10: Circles</a><a href="buy10.html?ch=Circles" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex11_1.html">Chapter 11: Areas Related to Circles</a><a href="buy10.html?ch=Areas Related to Circles" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex12_1.html">Chapter 12: Surface Areas and Volumes</a><a href="buy10.html?ch=Surface Areas and Volumes" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex13_1.html">Chapter 13: Statistics</a><a href="buy10.html?ch=Statistics" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex14_1.html">Chapter 14: Probability</a><a href="buy10.html?ch=Probability" class="cyber-mini">Buy Notes</a></div>
+
+<div style="text-align:center; margin:20px 0;">
+  <a href="https://dalbir46.github.io/Awareness_Academy/" class="b18">Back to Home</a>
+</div>
+
+</div>
+
+<div class="footer-wrapper">
+  <div class="footer">
+    © 2025 Mathematics Hub — Class 10
   </div>
-
-  <div class="wrap">
-
-    <h2>📘 Chapters</h2>
-
-    <!-- UPDATED SOFT NEON NOTE BOX -->
-    <div class="note-box">
-      अगर आपको ऑनलाइन पढ़ना मुश्किल लगता है या मोबाइल/कंप्यूटर की रोशनी आंखों पर असर करती है,  
-      तो आप <b>Buy Notes</b> पर क्लिक करके सभी chapters की सुंदर, साफ-सुथरी Notebook अपने घर मंगवा सकते हो।
-    </div>
-
-    <!-- Chapters List -->
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex1_1.html">Chapter 1: Real Numbers</a>
-      <a href="buy10.html?ch=Real Numbers" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex2_1.html">Chapter 2: Polynomials</a>
-      <a href="buy10.html?ch=Polynomials" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex3_1.html">Chapter 3: Pair of Linear Equations</a>
-      <a href="buy10.html?ch=Pair of Linear Equations" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex4_1.html">Chapter 4: Quadratic Equations</a>
-      <a href="buy10.html?ch=Quadratic Equations" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex5_1.html">Chapter 5: Arithmetic Progressions</a>
-      <a href="buy10.html?ch=Arithmetic Progressions" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex6_1.html">Chapter 6: Triangles</a>
-      <a href="buy10.html?ch=Triangles" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex7_1.html">Chapter 7: Coordinate Geometry</a>
-      <a href="buy10.html?ch=Coordinate Geometry" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex8_1.html">Chapter 8: Trigonometry</a>
-      <a href="buy10.html?ch=Trigonometry" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex9_1.html">Chapter 9: Applications of Trigonometry</a>
-      <a href="buy10.html?ch=Applications of Trigonometry" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex10_1.html">Chapter 10: Circles</a>
-      <a href="buy10.html?ch=Circles" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex11_1.html">Chapter 11: Areas Related to Circles</a>
-      <a href="buy10.html?ch=Areas Related to Circles" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex12_1.html">Chapter 12: Surface Areas and Volumes</a>
-      <a href="buy10.html?ch=Surface Areas and Volumes" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex13_1.html">Chapter 13: Statistics</a>
-      <a href="buy10.html?ch=Statistics" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div class="chapter">
-      <a class="mainlink" href="https://dalbir46.github.io/Admin/class10ex14_1.html">Chapter 14: Probability</a>
-      <a href="buy10.html?ch=Probability" class="cyber-mini">Buy Notes</a>
-    </div>
-
-    <div style="text-align:center; margin:20px 0;">
-      <a href="https://dalbir46.github.io/Awareness_Academy/" class="b18">Back to Home</a>
-    </div>
-
-  </div>
-
-  <div class="footer-wrapper">
-    <div class="footer">
-      © 2025 Mathematics Hub — Class 10
-    </div>
-  </div>
+</div>
 
 <script>
 const themeSelect = document.getElementById('themeSelect');
@@ -304,5 +248,4 @@ themeSelect.addEventListener('change', function() {
 </script>
 
 </body>
-  </html>
-        
+    </html>
