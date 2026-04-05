@@ -4,8 +4,22 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Class 7 — Mathematics Hub</title>
+
 <style>
-body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 0; color: #000; }
+body { 
+  font-family: Arial, sans-serif; 
+  background: #f0f8ff; 
+  margin: 0; 
+  padding: 0; 
+  color: #000; 
+  transition: 0.3s;
+}
+
+/* Dark Mode */
+body.dark {
+  background: #121212;
+  color: #fff;
+}
 
 /* Header & Footer */
 .header-wrapper, .footer-wrapper { 
@@ -28,76 +42,102 @@ body { font-family: Arial, sans-serif; background: #f0f8ff; margin: 0; padding: 
 
 .wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
 
-/* Chapters */
-h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
-.chapter { background:#F9F9F9; border:1px solid #999; padding:12px; margin:10px; border-radius:8px; transition:all .2s; }
-.chapter:hover { background:#e9e9e9; }
-.chapter a { color:#0b2447; text-decoration:none; font-weight:600; display:block; }
-.chapter a:hover { text-decoration:underline; }
+/* Dropdown */
+.mode-select {
+  display:block;
+  margin: 10px auto;
+  padding: 8px;
+  border-radius: 6px;
+  font-weight: bold;
+}
 
-.back-home { margin:15px 10px; font-weight:bold; }
-.back-home a { text-decoration:none; color:#2575fc; }
-.back-home a:hover { text-decoration:underline; }
+/* Part Boxes */
+.parts {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin: 20px 10px;
+}
+.part-box {
+  flex:1;
+  min-width:140px;
+  text-align:center;
+  padding:15px;
+  background:#2575fc;
+  color:#fff;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:bold;
+  transition:0.3s;
+}
+.part-box:hover {
+  background:#1a5ed8;
+}
+
+/* Back Button */
 .b18 {
   padding: 12px 20px;
   background: #ff5722;
   color: #fff;
   border-radius: 25px;
-  position: relative;
   text-decoration: none;
   font-weight: bold;
   display: inline-block;
   transition: background 0.3s ease;
 }
-.b18::before {
-  content: "🏠 ";  /* Home emoji */
-}
-.b18:hover {
-  background: #e64a19;
-}
+.b18::before { content: "🏠 "; }
+.b18:hover { background: #e64a19; }
 </style>
 </head>
+
 <body>
 
-  <!-- Header -->
-  <div class="header-wrapper">
-    <div class="header">
-      Mathematics Hub — Class 7
-      <small>Notes • NCERT Solutions • Practice Papers</small>
-    </div>
+<!-- Header -->
+<div class="header-wrapper">
+  <div class="header">
+    Mathematics Hub — Class 7
+    <small>Notes • NCERT Solutions • Practice Papers</small>
   </div>
-
-  <div class="wrap">
-
-    <!-- Chapters -->
-    <h2>📘 Chapters</h2>
-    <div class="chapter"><a href="class7ex1_1.html">Chapter 1: Integers</a></div>
-    <div class="chapter"><a href="class7ex2_1.html">Chapter 2: Fractions and Decimals</a></div>
-    <div class="chapter"><a href="class7ex3_1.html">Chapter 3: Data Handling</a></div>
-    <div class="chapter"><a href="class7ex4_1.html">Chapter 4: Simple Equations</a></div>
-    <div class="chapter"><a href="class7ex5_1.html">Chapter 5: Lines and Angles</a></div>
-    <div class="chapter"><a href="class7ex6_1.html">Chapter 6: The Triangle and its Properties</a></div>
-    <div class="chapter"><a href="class7ex7_1.html">Chapter 7: Congruence of Triangles</a></div>
-    <div class="chapter"><a href="class7ex8_1.html">Chapter 8: Comparing Quantities</a></div>
-    <div class="chapter"><a href="class7ex9_1.html">Chapter 9: Rational Numbers</a></div>
-    <div class="chapter"><a href="class7ex10_1.html">Chapter 10: Practical Geometry</a></div>
-    <div class="chapter"><a href="class7ex11_1.html">Chapter 11: Perimeter and Area</a></div>
-    <div class="chapter"><a href="class7ex12_1.html">Chapter 12: Algebraic Expressions</a></div>
-    <div class="chapter"><a href="class7ex13_1.html">Chapter 13: Exponents and Powers</a></div>
-    <div class="chapter"><a href="class7ex14_1.html">Chapter 14: Symmetry</a></div>
-    <div class="chapter"><a href="class7ex15_1.html">Chapter 15: Visualising Solid Shapes</a></div>
-
-    <!-- Back to home -->
-<div style="text-align:center; margin:20px 0;">
-  <a href="index.html" class="b18">Back to Home</a>
 </div>
 
-  <!-- Footer -->
-  <div class="footer-wrapper">
-    <div class="footer">
-      © 2025 Mathematics Hub — Class 7
-    </div>
+<div class="wrap">
+
+  <!-- Mode Dropdown -->
+  <select class="mode-select" onchange="changeMode(this.value)">
+    <option value="light">🌞 Light Mode</option>
+    <option value="dark">🌙 Dark Mode</option>
+  </select>
+
+  <!-- Part Selection -->
+  <div class="parts">
+    <a href="part1.html" class="part-box">Part 1</a>
+    <a href="part2.html" class="part-box">Part 2</a>
+    <a href="oldncert.html" class="part-box">Old NCERT</a>
   </div>
 
+  <!-- Back to home -->
+  <div style="text-align:center; margin:30px 0;">
+    <a href="index.html" class="b18">Back to Home</a>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer-wrapper">
+  <div class="footer">
+    © 2025 Mathematics Hub — Class 7
+  </div>
+</div>
+
+<script>
+function changeMode(mode){
+  if(mode === "dark"){
+    document.body.classList.add("dark");
+  } else {
+    document.body.classList.remove("dark");
+  }
+}
+</script>
+
 </body>
-</html>
+      </html>
