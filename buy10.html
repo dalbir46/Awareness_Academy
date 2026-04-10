@@ -6,7 +6,7 @@
 <title>Buy Notes — Mathematics Hub</title>
 
 <style>
-/* Same styling as main page */
+/* ---------- Base ---------- */
 body { 
   font-family: Arial, sans-serif; 
   background: #f0f8ff; 
@@ -16,6 +16,7 @@ body {
   transition: background 0.25s ease, color 0.25s ease; 
 }
 
+/* Header & Footer */
 .header-wrapper, .footer-wrapper { 
   background: linear-gradient(135deg, #6a11cb, #2575fc); 
   padding: 12px; 
@@ -30,10 +31,21 @@ body {
   border-radius: 10px; 
   max-width: 600px; 
   margin: auto; 
+  text-shadow: 2px 2px 4px #888;
 }
 
+.header small{
+  display:block;
+  font-size:13px;
+  font-weight:normal;
+  margin-top:6px;
+  color:#333;
+}
+
+/* Wrapper */
 .wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
 
+/* Box */
 .box{
   background:#fff;
   border:2px solid #2575fc;
@@ -44,6 +56,7 @@ body {
 }
 .box h2{ margin-top:0; color:#0b2447; }
 
+/* Button */
 .pay-btn{
   display:block;
   background:#2575fc;
@@ -57,31 +70,60 @@ body {
   margin-top:15px;
 }
 
+/* Theme */
 .theme-wrap { display:flex; justify-content:center; margin:18px 0; }
+
 #themeSelect {
   padding:8px 16px;
   border-radius:6px;
-  background:#555;
+  font-weight:bold;
+  background-color:#555;
   color:#fff;
+  border:none;
+  cursor:pointer;
 }
 
+/* DARK MODE FULL FIX */
 body.dark{ background:#0f1724; color:#d1d5db; }
+
+body.dark .header, 
+body.dark .footer{
+  background:#1e293b;
+  color:#e2e8f0;
+  border-color:#334155;
+  text-shadow:none;
+}
+
 body.dark .box{ background:#1e293b; border-color:#334155; }
+
 body.dark .box h2{ color:#facc15; }
+
 body.dark .pay-btn{ background:#2563eb; }
+
+body.dark #themeSelect{
+  background-color:#334155;
+  color:#d1d5db;
+  border:1px solid #475569;
+}
 </style>
 
 </head>
+
 <body>
 
+<!-- ✅ FIXED HEADER -->
 <div class="header-wrapper">
-  <div class="header">Buy Notes — Class 10</div>
+  <div class="header">
+    Buy Notes — Class 10
+    <small> Notes • NCERT Solutions • Practice Papers </small>
+  </div>
 </div>
 
+<!-- ✅ THEME BUTTON -->
 <div class="theme-wrap">
   <select id="themeSelect">
-    <option value="light">🌞 Light</option>
-    <option value="dark">🌙 Dark</option>
+    <option value="light">🌞 Light Mode</option>
+    <option value="dark">🌙 Dark Mode</option>
   </select>
 </div>
 
@@ -91,57 +133,22 @@ body.dark .pay-btn{ background:#2563eb; }
     <h2 id="chapterName">Loading...</h2>
 
     <p id="priceText" style="font-size:18px; margin-bottom:15px;"></p>
-<!-- SCANNER VIEWER (BUY-NOTES STYLE) -->
-<div style="
-  margin-top:20px; 
-  padding:18px; 
-  border:2px solid #2575fc; 
-  border-radius:16px;
-  background:#0a0f1f;
-  box-shadow:0 0 25px #2575fcaa;
-">
 
-  <h3 style="
-    margin:0 0 12px; 
-    font-size:20px; 
-    color:#ffffff;
-    text-align:center;
-    text-shadow:0 0 8px #2575fc;
-  ">
-    📷 Scan & Pay Instantly
-  </h3>
+    <!-- SCANNER SAME -->
+    <div style="margin-top:20px; padding:18px; border:2px solid #2575fc; border-radius:16px; background:#0a0f1f; box-shadow:0 0 25px #2575fcaa;">
+      <h3 style="margin:0 0 12px; font-size:20px; color:#fff; text-align:center;">
+        📷 Scan & Pay Instantly
+      </h3>
 
-  <!-- DIRECT SCANNER IMAGE -->
-  <img 
-    src="https://raw.githubusercontent.com/dalbir46/Awareness_Academy/main/default.jpg"
-    alt="Scanner QR"
-    style="
-      width:100%;
-      border-radius:12px;
-      border:2px solid #2575fc;
-      box-shadow:0 0 20px #2575fcaa;
-    "
-  >
+      <img src="https://raw.githubusercontent.com/dalbir46/Awareness_Academy/main/default.jpg"
+           style="width:100%; border-radius:12px; border:2px solid #2575fc;">
 
-  <!-- PAY USING UPI -->
-  <a href="upi://pay?pa=dalbir46@pnb&pn=Awareness%20Academy&cu=INR" 
-     style="
-       display:block;
-       margin-top:18px;
-       text-align:center;
-       padding:14px;
-       font-size:18px;
-       color:white;
-       background:linear-gradient(45deg,#1e3c72,#2575fc);
-       border-radius:10px;
-       text-decoration:none;
-       font-weight:bold;
-       box-shadow:0 0 25px #2575fcaa;
-       letter-spacing:0.5px;
-     ">
-     💸 Proceed to Payment by scanner 
-  </a>
-</div>
+      <a href="upi://pay?pa=dalbir46@pnb&pn=Awareness%20Academy&cu=INR"
+         style="display:block; margin-top:18px; text-align:center; padding:14px; font-size:18px; color:white; background:linear-gradient(45deg,#1e3c72,#2575fc); border-radius:10px; text-decoration:none;">
+         💸 Proceed to Payment by scanner 
+      </a>
+    </div>
+
     <a id="payLink" class="pay-btn" target="_blank">Proceed to Pay by upi</a>
   </div>
 
@@ -151,28 +158,41 @@ body.dark .pay-btn{ background:#2563eb; }
 
 </div>
 
+<!-- ✅ FIXED FOOTER -->
 <div class="footer-wrapper">
-  <div class="footer">© 2026 Mathematics Hub</div>
+  <div class="footer">
+    © 2025 Mathematics Hub — Class 10
+  </div>
 </div>
 
 <script>
-// Theme loader
+// THEME (UNCHANGED BUT CLEAN)
 const themeSelect = document.getElementById('themeSelect');
 const savedTheme = localStorage.getItem('theme') || 'light';
-if(savedTheme==='dark'){ document.body.classList.add('dark'); themeSelect.value='dark'; }
-themeSelect.addEventListener('change', ()=>{
-  if(themeSelect.value==='dark') document.body.classList.add('dark');
-  else document.body.classList.remove('dark');
-  localStorage.setItem('theme', themeSelect.value);
+
+if (savedTheme === 'dark') {
+  document.body.classList.add('dark');
+  themeSelect.value = 'dark';
+}
+
+themeSelect.addEventListener('change', function() {
+  const mode = this.value;
+
+  if (mode === 'dark') {
+    document.body.classList.add('dark');
+  } else {
+    document.body.classList.remove('dark');
+  }
+
+  localStorage.setItem('theme', mode);
 });
 
-// GET chapter from URL
+// Chapter logic same
 const urlParams = new URLSearchParams(window.location.search);
 const chapter = urlParams.get('ch') || "Selected Chapter";
 
 document.getElementById("chapterName").innerText = "Buy Notes — " + chapter;
 
-// ---------------- CHAPTER WISE PRICE ----------------
 const priceList = {
   "Real Numbers": 41,
   "Polynomials": 34,
@@ -190,18 +210,15 @@ const priceList = {
   "Probability": 70
 };
 
-// Default price if not found
 const amount = priceList[chapter] || 39;
 
-// Price text
 document.getElementById("priceText").innerHTML =
   "Price: <b>₹" + amount + "</b>";
 
-// UPI PAYMENT LINK AUTO-GENERATED
 document.getElementById("payLink").href =
   "upi://pay?pa=dalbir46@pnb&pn=" + encodeURIComponent(chapter) +
   "&am=" + amount + "&cu=INR";
 </script>
 
 </body>
-</html>
+    </html>
