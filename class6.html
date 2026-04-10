@@ -6,27 +6,22 @@
 <title>Class 6 — Mathematics Hub</title>
 
 <style>
+/* ---------- Base (Light) ---------- */
 body { 
   font-family: Arial, sans-serif; 
-  background: linear-gradient(180deg, #e3e8ee, #d6dde5);
+  background: #f0f8ff; 
   margin: 0; 
   padding: 0; 
-  color: #000;
-  transition: 0.3s;
+  color: #000; 
+  transition: background 0.25s ease, color 0.25s ease; 
 }
 
-/* DARK MODE */
-body.dark {
-  background: #121212;
-  color: #fff;
-}
-
-/* Header */
-.header-wrapper { 
+/* Header & Footer */
+.header-wrapper, .footer-wrapper { 
   background: linear-gradient(135deg, #6a11cb, #2575fc); 
   padding: 12px; 
 }
-.header { 
+.header, .footer { 
   background: #FFFFCC; 
   padding: 15px; 
   text-align: center; 
@@ -34,100 +29,104 @@ body.dark {
   font-weight: bold; 
   border: 2px solid #333; 
   border-radius: 10px; 
+  text-shadow: 2px 2px 4px #888888; 
   max-width: 600px; 
   margin: auto; 
 }
-body.dark .header {
-  background: #1e1e1e;
-  color: #fff;
-  border: 1px solid #555;
+.header small { 
+  display:block; 
+  font-size:13px; 
+  font-weight:normal; 
+  margin-top:6px; 
+  color:#333; 
 }
 
-/* Toggle */
-.toggle-box {
-  text-align: center;
-  margin-top: 10px;
-}
-.toggle-box select {
-  padding: 8px 14px;
-  border-radius: 20px;
-  border: none;
-  font-weight: bold;
-}
-
-/* Content */
+/* Wrapper */
 .wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
 
-h2 { 
-  font-size: 22px; 
-  margin: 15px 8px; 
-  color: #0b2447; 
-  text-align: left;   /* FIXED */
+/* ======================= UPDATED NOTE BOX ======================= */
+.note-box {
+  background:#dcfce7;   /* light green bg */
+  color:#000;        /* dark green text */
+  border:2px solid #22c55e;
+  padding:18px 20px;
+  margin:18px 10px 30px 10px;
+  font-size:16px;
+  line-height:1.55;
+  border-radius:14px;
+  font-weight:600;
+  box-shadow: 0 0 6px rgba(250,204,21,0.2);
+  transition:0.25s ease;
 }
-body.dark h2 { color: #90caf9; }
-
-/* Chapter Card */
-.chapter {
-  background: #fff;
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: 0.25s;
-  cursor: pointer;
+.note-box:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 12px rgba(250,204,21,0.35);
 }
 
-.chapter:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+/* Dark mode version */body.dark .note-box{
+  background:#020617;   /* deep dark */
+  color:#facc15;        /* yellow highlight */
+  border-color:#facc15;
+  box-shadow:0 0 10px rgba(250,204,21,0.3);
+}
+/* Chapters */
+h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
+
+.chapter { 
+  background:#F9F9F9; 
+  border:1px solid #999; 
+  padding:12px; 
+  margin:10px; 
+  border-radius:8px; 
+  transition:all .2s; 
+  position:relative;
+  padding-bottom:40px;
+}
+.chapter:hover { background:#e9e9e9; }
+
+.chapter a.mainlink { 
+  color:#0645AD;
+  text-decoration:none; 
+  font-weight:600; 
+  display:block; 
+}
+.chapter a.mainlink:hover { 
+  color:#0b0080;
+  text-decoration:underline; 
 }
 
-/* Dark */
-body.dark .chapter {
-  background: #1e1e1e;
-  box-shadow: 0 4px 12px rgba(255,255,255,0.05);
+/* Buy Button */
+.cyber-mini{
+  background:#0c0f1a;
+  color:#00eaff;
+  border:2px solid #00eaff;
+  padding:6px 14px;
+  font-size:14px;
+  border-radius:8px;
+  font-weight:600;
+  text-decoration:none;
+  position:absolute;
+  right:10px;
+  bottom:10px;
 }
 
-/* Left Content */
-.chapter-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.cyber-mini::after{
+  content:"";
+  width:100%;
+  height:3px;
+  left:0; 
+  bottom:0;
+  background:#00eaff;
+  position:absolute;
+  animation:strip 2s infinite linear;
 }
 
-/* Icon */
-.icon {
-  font-size: 20px;
+@keyframes strip{
+  0%{width:0%;}
+  100%{width:100%;}
 }
 
-/* Link */
-.chapter a {
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: bold;
-  color: #00c853;
-}
-
-body.dark .chapter a {
-  color: #69f0ae;
-}
-
-/* PREMIUM ARROW */
-.arrow {
-  font-size: 22px;
-  font-weight: 600;
-  color: #00c853;
-  transition: 0.25s;
-}
-
-.chapter:hover .arrow {
-  transform: translateX(6px);
-}
-
-/* Button */
+/* Back button */
 .b18 {
   padding: 12px 20px;
   background: #ff5722;
@@ -137,43 +136,61 @@ body.dark .chapter a {
   font-weight: bold;
   display: inline-block;
 }
+.b18::before { content: "🏠 "; }
+.b18:hover { background: #e64a19; }
 
-/* Footer */
-.footer-wrapper { 
-  background: linear-gradient(135deg, #6a11cb, #2575fc); 
-  padding: 12px; 
+/* Theme selector */
+.theme-wrap { display:flex; justify-content:center; margin:18px 0; }
+#themeSelect {
+  padding:8px 16px;
+  border-radius:6px;
+  font-weight:bold;
+  background-color:#555;
+  color:#fff;
+  border:none;
+  cursor:pointer;
 }
-.footer { 
-  background: #FFFFCC; 
-  padding: 15px; 
-  text-align: center; 
-  border: 2px solid #333; 
-  border-radius: 10px; 
-  max-width: 600px; 
-  margin: auto; 
+
+/* Dark mode */
+body.dark { background:#0f1724; color:#d1d5db; }
+
+body.dark .header, body.dark .footer {
+  background:#1e293b;
+  color:#e2e8f0;
+  border-color:#334155;
+  text-shadow:none;
 }
-body.dark .footer {
-  background: #1e1e1e;
-  color: #fff;
-  border: 1px solid #555;
-}
+
+body.dark h2 { color:#facc15; }
+
+body.dark .chapter { background:#1e293b; border-color:#334155; }
+body.dark .chapter:hover { background:#162233; }
+
+body.dark .chapter a.mainlink { color:#facc15; }
+body.dark .chapter a.mainlink:hover { color:#fde047; }
+
+body.dark .cyber-mini { background:#000814; color:#00eaff; border-color:#00eaff; }
+
+body.dark .b18 { background:#2563eb; }
+body.dark .b18:hover { background:#1d4ed8; }
+
+body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px solid #475569; }
+
 </style>
 </head>
 
 <body>
 
-<!-- Header -->
 <div class="header-wrapper">
   <div class="header">
     Mathematics Hub — Class 6
-    <small>Notes • NCERT Solutions • Practice Papers</small>
+    <small> Notes • NCERT Solutions • Practice Papers </small>
   </div>
 </div>
 
-<!-- Toggle -->
-<div class="toggle-box">
-  <select onchange="changeMode(this.value)">
-    <option value="light">☀ Light Mode</option>
+<div class="theme-wrap">
+  <select id="themeSelect">
+    <option value="light">🌞 Light Mode</option>
     <option value="dark">🌙 Dark Mode</option>
   </select>
 </div>
@@ -182,118 +199,47 @@ body.dark .footer {
 
 <h2>📘 Chapters</h2>
 
-<!-- Chapters -->
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">🔢</span>
-    <a href="https://dalbir46.github.io/6/class6ex1_all.html">Chapter 1: Patterns in Mathematics</a>
-  </div>
-  <span class="arrow">›</span>
+<div class="note-box">
+  अगर आपको ऑनलाइन पढ़ना मुश्किल लगता है या मोबाइल/कंप्यूटर की रोशनी आंखों पर असर करती है,  
+  तो आप <b>Buy Notes</b> पर क्लिक करके सभी chapters की सुंदर, साफ-सुथरी Notebook अपने घर मंगवा सकते हो।
 </div>
 
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">📐</span>
-    <a href="https://dalbir46.github.io/6/class6ex2_all.html">Chapter 2: Lines and Angles</a>
-  </div>
-  <span class="arrow">›</span>
-</div>
-
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">➗</span>
-    <a href="https://dalbir46.github.io/6/class6ex3_all.html">Chapter 3: Number Play</a>
-  </div>
-  <span class="arrow">›</span>
-</div>
-
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">📊</span>
-    <a href="https://dalbir46.github.io/6/class6ex4_all.html">Chapter 4: Data Handling</a>
-  </div>
-  <span class="arrow">›</span>
-</div>
-
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">⏱️</span>
-    <a href="https://dalbir46.github.io/6/class6ex5_all.html">Chapter 5: Prime Time</a>
-  </div>
-  <span class="arrow">›</span>
-</div>
-
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">📏</span>
-    <a href="https://dalbir46.github.io/6/class6ex6_all.html">Chapter 6: Perimeter and Area</a>
-  </div>
-  <span class="arrow">›</span>
-</div>
-
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">➗</span>
-    <a href="https://dalbir46.github.io/6/class6ex7_all.html">Chapter 7: Fractions</a>
-  </div>
-  <span class="arrow">›</span>
-</div>
-
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">📐</span>
-    <a href="https://dalbir46.github.io/6/class6ex8_all.html">Chapter 8: Constructions</a>
-  </div>
-  <span class="arrow">›</span>
-</div>
-
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">🔷</span>
-    <a href="https://dalbir46.github.io/6/class6ex9_all.html">Chapter 9: Symmetry</a>
-  </div>
-  <span class="arrow">›</span>
-</div>
-
-<div class="chapter">
-  <div class="chapter-left">
-    <span class="icon">➖</span>
-    <a href="https://dalbir46.github.io/6/class6ex10_all.html">Chapter 10: The Other Side of Zero</a>
-  </div>
-  <span class="arrow">›</span>
-</div>
-
+<!-- ALL CHAPTERS SAME -->
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex1_all.html">Chapter 1: Pattern in Mathematics</a><a href="buy6.html?ch=1" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex2_all.html">Chapter 2: Lines and Angles</a><a href="buy6.html?ch=2" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex3_all.html">Chapter 3: Number Play</a><a href="buy6.html?ch=3" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex4_all.html">Chapter 4: Data handling and Presentation</a><a href="buy6.html?ch=4" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex5_all.html">Chapter 5: Prime time</a><a href="buy6.html?ch=5" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex6_all.html">Chapter 6: Perimeter and Area</a><a href="buy6.html?ch=6" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex7_all.html">Chapter 7: Fractions</a><a href="buy6.html?ch=7" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex8_all.html">Chapter 8: Playing with Constructions</a><a href="buy6.html?ch=8" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex9_all.html">Chapter 9: Symmetry</a><a href="buy6.html?ch=9" class="cyber-mini">Buy Notes</a></div>
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex10_all.html">Chapter 10: The other side of zero</a><a href="buy6.html?ch=10" class="cyber-mini">Buy Notes</a></div>
 <div style="text-align:center; margin:20px 0;">
-  <a href="index.html" class="b18">🏠 Back to Home</a>
+  <a href="https://dalbir46.github.io/6to12/index.html" class="b18">Back to Home</a>
 </div>
 
 </div>
 
-<!-- Footer -->
 <div class="footer-wrapper">
   <div class="footer">
-    © 2025 Mathematics Hub — Class 6
+    © 2026 Mathematics Hub — Class 6
   </div>
 </div>
 
 <script>
-function changeMode(mode) {
-  if(mode === "dark"){
-    document.body.classList.add("dark");
-    localStorage.setItem("mode", "dark");
-  } else {
-    document.body.classList.remove("dark");
-    localStorage.setItem("mode", "light");
-  }
+const themeSelect = document.getElementById('themeSelect');
+const savedTheme = localStorage.getItem('theme') || 'light';
+if (savedTheme === 'dark') {
+  document.body.classList.add('dark');
+  themeSelect.value = 'dark';
 }
-
-window.onload = function() {
-  let saved = localStorage.getItem("mode");
-  if(saved === "dark"){
-    document.body.classList.add("dark");
-    document.querySelector("select").value = "dark";
-  }
-}
+themeSelect.addEventListener('change', function() {
+  const mode = this.value;
+  if (mode === 'dark') document.body.classList.add('dark');
+  else document.body.classList.remove('dark');
+  localStorage.setItem('theme', mode);
+});
 </script>
 
 </body>
