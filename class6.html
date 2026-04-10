@@ -44,10 +44,10 @@ body {
 /* Wrapper */
 .wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
 
-/* ======================= UPDATED NOTE BOX ======================= */
+/* NOTE BOX */
 .note-box {
-  background:#dcfce7;   /* light green bg */
-  color:#000;        /* dark green text */
+  background:#dcfce7;
+  color:#000;
   border:2px solid #22c55e;
   padding:18px 20px;
   margin:18px 10px 30px 10px;
@@ -63,12 +63,13 @@ body {
   box-shadow:0 0 12px rgba(250,204,21,0.35);
 }
 
-/* Dark mode version */body.dark .note-box{
-  background:#020617;   /* deep dark */
-  color:#facc15;        /* yellow highlight */
+/* Dark mode note */
+body.dark .note-box{
+  background:#020617;
+  color:#facc15;
   border-color:#facc15;
-  box-shadow:0 0 10px rgba(250,204,21,0.3);
 }
+
 /* Chapters */
 h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
 
@@ -176,6 +177,27 @@ body.dark .b18:hover { background:#1d4ed8; }
 
 body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px solid #475569; }
 
+/* ===== PRICE TABLE (Sample 9 CLEAN) ===== */
+.price-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:15px 0;
+  background:#000;
+  color:#0ff;
+  border:2px solid #0ff;
+}
+
+.price-table th,
+.price-table td{
+  padding:10px;
+  border:1px solid #0ff;
+  text-align:center; /* FIXED CENTER */
+}
+
+.price-table th{
+  font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -204,7 +226,25 @@ body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px sol
   तो आप <b>Buy Notes</b> पर क्लिक करके सभी chapters की सुंदर, साफ-सुथरी Notebook अपने घर मंगवा सकते हो।
 </div>
 
-<!-- ALL CHAPTERS SAME -->
+<h2>💰 Price List (PDF और Booklet)</h2>
+
+<table class="price-table">
+  <tr>
+    <th>Chapter</th>
+    <th>PDF Price</th>
+    <th>Booklet (Printed)</th>
+  </tr>
+
+  <tr><td>Chapter 1</td><td>₹16</td><td>₹32</td></tr>
+  <tr><td>Chapter 2</td><td>₹19</td><td>₹38</td></tr>
+  <tr><td>Chapter 3</td><td>₹20</td><td>₹40</td></tr>
+  <tr><td>Chapter 4</td><td>₹22</td><td>₹44</td></tr>
+  <tr><td>Chapter 5</td><td>₹13</td><td>₹26</td></tr>
+  <tr><td>Chapter 6</td><td>₹16</td><td>₹32</td></tr>
+  <tr><td>Chapter 7</td><td>₹13</td><td>₹26</td></tr>
+</table>
+
+<!-- CHAPTERS SAME -->
 <div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex1_all.html">Chapter 1: Pattern in Mathematics</a><a href="buy6.html?ch=1" class="cyber-mini">Buy Notes</a></div>
 <div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex2_all.html">Chapter 2: Lines and Angles</a><a href="buy6.html?ch=2" class="cyber-mini">Buy Notes</a></div>
 <div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex3_all.html">Chapter 3: Number Play</a><a href="buy6.html?ch=3" class="cyber-mini">Buy Notes</a></div>
@@ -215,6 +255,7 @@ body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px sol
 <div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex8_all.html">Chapter 8: Playing with Constructions</a><a href="buy6.html?ch=8" class="cyber-mini">Buy Notes</a></div>
 <div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex9_all.html">Chapter 9: Symmetry</a><a href="buy6.html?ch=9" class="cyber-mini">Buy Notes</a></div>
 <div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/6/class6ex10_all.html">Chapter 10: The other side of zero</a><a href="buy6.html?ch=10" class="cyber-mini">Buy Notes</a></div>
+
 <div style="text-align:center; margin:20px 0;">
   <a href="https://dalbir46.github.io/6to12/index.html" class="b18">Back to Home</a>
 </div>
@@ -243,4 +284,4 @@ themeSelect.addEventListener('change', function() {
 </script>
 
 </body>
-  </html>
+</html>
