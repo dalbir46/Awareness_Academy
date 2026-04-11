@@ -44,10 +44,10 @@ body {
 /* Wrapper */
 .wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
 
-/* ======================= UPDATED NOTE BOX ======================= */
+/* NOTE BOX */
 .note-box {
-  background:#dcfce7;   /* light green bg */
-  color:#000;        /* dark green text */
+  background:#dcfce7;
+  color:#000;
   border:2px solid #22c55e;
   padding:18px 20px;
   margin:18px 10px 30px 10px;
@@ -63,12 +63,13 @@ body {
   box-shadow:0 0 12px rgba(250,204,21,0.35);
 }
 
-/* Dark mode version */body.dark .note-box{
-  background:#020617;   /* deep dark */
-  color:#facc15;        /* yellow highlight */
+/* Dark mode note */
+body.dark .note-box{
+  background:#020617;
+  color:#facc15;
   border-color:#facc15;
-  box-shadow:0 0 10px rgba(250,204,21,0.3);
 }
+
 /* Chapters */
 h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
 
@@ -80,7 +81,7 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   border-radius:8px; 
   transition:all .2s; 
   position:relative;
-  padding-bottom:40px;
+  padding-bottom:60px; /* space for 2 buttons */
 }
 .chapter:hover { background:#e9e9e9; }
 
@@ -89,10 +90,20 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   text-decoration:none; 
   font-weight:600; 
   display:block; 
+  margin-bottom:12px; /* gap from buttons */
 }
 .chapter a.mainlink:hover { 
   color:#0b0080;
   text-decoration:underline; 
+}
+
+/* ===== BUTTON GROUP ===== */
+.btn-group{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  display:flex;
+  gap:15px;
 }
 
 /* Buy Button */
@@ -105,9 +116,7 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   border-radius:8px;
   font-weight:600;
   text-decoration:none;
-  position:absolute;
-  right:10px;
-  bottom:10px;
+  position:relative;
 }
 
 .cyber-mini::after{
@@ -176,6 +185,41 @@ body.dark .b18:hover { background:#1d4ed8; }
 
 body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px solid #475569; }
 
+/* ===== PRICE TABLE ===== */
+.price-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:15px 0;
+  background:#000;
+  color:#0ff;
+  border:2px solid #0ff;
+}
+
+.price-table th,
+.price-table td{
+  padding:10px;
+  border:1px solid #0ff;
+  text-align:center;
+}
+
+.price-table th{
+  font-weight:bold;
+}
+
+/* ===== COLOR UPDATE ===== */
+.price-table td:nth-child(1){
+  color:#facc15;
+  font-weight:bold;
+}
+.price-table td:nth-child(2){
+  color:limegreen;
+  font-weight:bold;
+}
+.price-table td:nth-child(3){
+  color:red;
+  font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -200,33 +244,57 @@ body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px sol
 <h2>📘 Chapters</h2>
 
 <div class="note-box">
-  अगर आपको ऑनलाइन पढ़ना मुश्किल लगता है या मोबाइल/कंप्यूटर की रोशनी आंखों पर असर करती है, तो आप <b>Buy Notes</b> पर क्लिक करके सभी chapters की सुंदर, साफ-सुथरी Notebook अपने घर मंगवा सकते हो।
+  अगर आपको ऑनलाइन पढ़ना मुश्किल लगता है या मोबाइल/कंप्यूटर की रोशनी आंखों पर असर करती है,  
+  तो आप <b>Buy Notes</b> पर क्लिक करके सभी chapters की सुंदर, साफ-सुथरी Notebook अपने घर मंगवा सकते हो। 📝 
+Payment करने के बाद कृपया उसका screenshot WhatsApp पर जरूर share करें, ताकि आपका order जल्दी confirm किया जा सके 
 </div>
 
-<!-- ALL CHAPTERS SAME -->
-<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex1_all.html">Chapter 1: Large Numbers Around Us</a><a href="buy7.html?ch=1" class="cyber-mini">Buy Notes</a></div>
-<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex2_all.html">Chapter 2: Arithmetic Expressions</a><a href="buy7.html?ch=2" class="cyber-mini">Buy Notes</a></div>
-<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex3_all.html">Chapter 3: A Peek Beyond
-The Point</a><a href="buy7.html?ch=3" class="cyber-mini">Buy Notes</a></div>
-<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex4_all.html">Chapter 4: Expressions Using 
-Letter-Numbers</a><a href="buy7.html?ch=4" class="cyber-mini">Buy Notes</a></div>
-<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex5_all.html">Chapter 5: Parallel and Intersecting 
-Lines</a><a href="buy7.html?ch=5" class="cyber-mini">Buy Notes</a></div>
-<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex6_all.html">Chapter 6: Number Play</a><a href="buy6.html?ch=6" class="cyber-mini">Buy Notes</a></div>
-<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex7_all.html">Chapter 7: A Tale of Three Intersecting 
-Lines</a><a href="buy7.html?ch=7" class="cyber-mini">Buy Notes</a></div>
-<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex8_all.html">Chapter 8: Working with 
-Fractions</a><a href="buy7.html?ch=8" class="cyber-mini">Buy Notes</a></div>
+<h2>💰 Price List (PDF और Booklet)</h2>
+
+<table class="price-table">
+  <tr>
+    <th>Chapter</th>
+    <th>PDF Price</th>
+    <th>Booklet (Printed)</th>
+  </tr>
+
+  <tr><td>Chapter 1</td><td>₹24</td><td>₹48</td></tr>
+  <tr><td>Chapter 2</td><td>₹22</td><td>₹44</td></tr>
+  <tr><td>Chapter 3</td><td>₹37</td><td>₹74</td></tr>
+  <tr><td>Chapter 4</td><td>₹25</td><td>₹50</td></tr>
+  <tr><td>Chapter 5</td><td>₹15</td><td>₹30</td></tr>
+  <tr><td>Chapter 6</td><td>₹23</td><td>₹46</td></tr>
+  <tr><td>Chapter 7</td><td>₹25</td><td>₹50</td></tr>
+  <tr><td>Chapter 8</td><td>₹17</td><td>₹34</td></tr>
+  
+</table>
+
+<!-- CHAPTERS -->
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex1_all.html">Chapter 1: Large Numbers Around us</a><div class="btn-group"><a href="buy6.html?ch=1" class="cyber-mini">Buy PDF</a><a href="2buy6.html?ch=1" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex2_all.html">Chapter 2: Arithmetic Expressions</a><div class="btn-group"><a href="buy6.html?ch=2" class="cyber-mini">Buy PDF</a><a href="2buy6.html?ch=2" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex3_all.html">Chapter 3: A peek Beyond the point</a><div class="btn-group"><a href="buy6.html?ch=3" class="cyber-mini">Buy PDF</a><a href="2buy6.html?ch=3" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex4_all.html">Chapter 4: Expressions using Letter-Number</a><div class="btn-group"><a href="buy6.html?ch=4" class="cyber-mini">Buy PDF</a><a href="2buy6.html?ch=4" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex5_all.html">Chapter 5: Parallel and Intersecting Lines</a><div class="btn-group"><a href="buy6.html?ch=5" class="cyber-mini">Buy PDF</a><a href="2buy6.html?ch=5" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex6_all.html">Chapter 6: Number Play</a><div class="btn-group"><a href="buy6.html?ch=6" class="cyber-mini">Buy PDF</a><a href="2buy6.html?ch=6" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex7_all.html">Chapter 7: A Tale of three Intersecting Lines</a><div class="btn-group"><a href="buy6.html?ch=7" class="cyber-mini">Buy PDF</a><a href="2buy6.html?ch=7" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/7/class7ex8_all.html">Chapter 8: Working with Fractions</a><div class="btn-group"><a href="buy6.html?ch=8" class="cyber-mini">Buy PDF</a><a href="2buy6.html?ch=8" class="cyber-mini">Buy Notebook</a></div></div>
 
 <div style="text-align:center; margin:20px 0;">
-  <a href="https://dalbir46.github.io/6to12/" class="b18">Back to Home</a>
+  <a href="https://dalbir46.github.io/6to12/index.html" class="b18">Back to Home</a>
 </div>
 
 </div>
 
 <div class="footer-wrapper">
   <div class="footer">
-    © 2025 Mathematics Hub — Class 7
+    © 2026 Mathematics Hub — Class 7
   </div>
 </div>
 
@@ -246,4 +314,4 @@ themeSelect.addEventListener('change', function() {
 </script>
 
 </body>
-  </html>
+                                                  </html>
