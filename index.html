@@ -109,13 +109,13 @@ body.dark .msg b.username.admin * {
   • <b>Weekly Test</b> — Integrals (Sun, 8 PM)
 </div><!-- Classes --><div class="section-title title-class">Select Your Class</div>
 <div class="box class-grid">
-  <button class="btn btn6" onclick="location.href='class6.html'">Class 6</button>
-  <button class="btn btn7" onclick="location.href='class7.html'">Class 7</button>
-  <button class="btn btn8" onclick="location.href='class8.html'">Class 8</button>
-  <button class="btn btn9" onclick="location.href='class9.html'">Class 9</button>
-  <button class="btn btn10" onclick="location.href='class10.html'">Class 10</button>
-  <button class="btn btn11" onclick="location.href='class11.html'">Class 11</button>
-  <button class="btn btn12" onclick="location.href='class12.html'" style="grid-column: span 2;">Class 12</button>
+  <button class="btn btn6" onclick="location.href='https://dalbir46.github.io/Awareness_Academy/class6.html'">Class 6</button>
+  <button class="btn btn7" onclick="location.href='https://dalbir46.github.io/Awareness_Academy/class7.html'">Class 7</button>
+  <button class="btn btn8" onclick="location.href='https://dalbir46.github.io/Awareness_Academy/class8.html'">Class 8</button>
+  <button class="btn btn9" onclick="location.href='https://dalbir46.github.io/Awareness_Academy/class9.html'">Class 9</button>
+  <button class="btn btn10" onclick="location.href='https://dalbir46.github.io/Awareness_Academy/class10.html'">Class 10</button>
+  <button class="btn btn11" onclick="location.href='https://dalbir46.github.io/Awareness_Academy/class11.html'">Class 11</button>
+  <button class="btn btn12" onclick="location.href='https://dalbir46.github.io/Awareness_Academy/class12.html'" style="grid-column: span 2;">Class 12</button>
 </div><!-- Practice Zone --><div class="section-title title-practice" id="practice">Practice Zone</div>
 <div class="box">
   Daily practice problems, MCQ quizzes और chapter-wise question banks.<br><br>
@@ -282,17 +282,6 @@ function formatDateTime(ts){
 async function addMessageToDOM(key, data){
   // create container
   const div = document.createElement("div");
-if (isAdminAuthenticated()) {
-  db.ref("pendingMessages").on("child_added", snap => {
-    let data = snap.val();
-    data._pending = true; // 👈 mark as pending
-    addMessageToDOM(snap.key, data);
-  });
-}
-  // ✅ Pending highlight
-if (data._pending) {
-  div.style.border = "2px dashed orange";
-  }
   div.classList.add("msg");
   div.setAttribute("data-key", key);
 
@@ -358,21 +347,7 @@ if (data._pending) {
   // add to DOM (prepend to show latest first)
   const messagesEl = document.getElementById("messages");
   if (messagesEl) messagesEl.prepend(div);
-// ✅ APPROVE BUTTON (ADD THIS)
-const approveBtn = document.createElement("button");
-approveBtn.textContent = "Approve";
-approveBtn.style.background = "green";
-approveBtn.style.color = "#fff";
-approveBtn.style.marginTop = "6px";
 
-approveBtn.onclick = function() {
-  db.ref("pendingMessages/" + key).once("value", snap => {
-    db.ref("approvedMessages").push(snap.val());
-    db.ref("pendingMessages/" + key).remove();
-  });
-};
-
-div.appendChild(approveBtn);
   // update UI
   updateDoubtStats();
   refreshDoubtNumbers();
@@ -391,7 +366,7 @@ function refreshDoubtNumbers() {
   });
 doubtList.reverse(); // 👈 Add this line to make oldest = 01
   // Numbering
-  doubtList.forEach((msg, i) => {
+doubtList.forEach((msg, i) => {
     let serialTag = msg.querySelector(".serial");
     if (!serialTag) {
       serialTag = document.createElement("div");
@@ -432,17 +407,12 @@ if(chk) chk.remove();
 });
 }
 // Firebase lis
-db.ref("approvedMessages").orderByChild("time").limitToLast(100).on("child_added", snap => {
+db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snap => {
 addMessageToDOM(snap.key, snap.val());
 });
-  // ✅ LOAD PENDING MESSAGES FOR ADMIN
-if (isAdminAuthenticated()) {
-  db.ref("pendingMessages").on("child_added", snap => {
-    addMessageToDOM(snap.key, snap.val());
-  });
-  }
+
 // Also listen for child_changed (status updates / edits) and child_removed
-db.ref("approvedMessages").on("child_changed", snap => {
+db.ref("shoutbox").on("child_changed", snap => {
 const key = snap.key;
 const el = document.querySelector(`.msg[data-key='${key}']`);
 if (el) {
@@ -457,7 +427,7 @@ addMessageToDOM(key, data);
 updateDoubtStats();
 });
 
-db.ref("approvedMessages").on("child_removed", snap => {
+db.ref("shoutbox").on("child_removed", snap => {
 const key = snap.key;
 const el = document.querySelector(`.msg[data-key='${key}']`);
 if (el) el.remove();
@@ -537,8 +507,7 @@ return;
 }
 
 const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL };
-db.ref("pendingMessages").push(data);
-alert("Message sent! It will automatically show after Approval ");
+db.ref("shoutbox").push(data);
 if (msgEl) msgEl.value = "";
 });
 
@@ -725,7 +694,7 @@ updateWorkingSection();
 });
 
 // Make sure to keep stats in sync when overall DB changes
-db.ref("approvedMessages").on("value", () => {
+db.ref("shoutbox").on("value", () => {
 refreshDoubtNumbers();
 updateDoubtStats();
 updateWorkingSection();
@@ -749,3 +718,4 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+  
