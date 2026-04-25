@@ -282,6 +282,17 @@ function formatDateTime(ts){
 async function addMessageToDOM(key, data){
   // create container
   const div = document.createElement("div");
+if (isAdminAuthenticated()) {
+  db.ref("pendingMessages").on("child_added", snap => {
+    let data = snap.val();
+    data._pending = true; // 👈 mark as pending
+    addMessageToDOM(snap.key, data);
+  });
+}
+  // ✅ Pending highlight
+if (data._pending) {
+  div.style.border = "2px dashed orange";
+  }
   div.classList.add("msg");
   div.setAttribute("data-key", key);
 
@@ -347,7 +358,21 @@ async function addMessageToDOM(key, data){
   // add to DOM (prepend to show latest first)
   const messagesEl = document.getElementById("messages");
   if (messagesEl) messagesEl.prepend(div);
+// ✅ APPROVE BUTTON (ADD THIS)
+const approveBtn = document.createElement("button");
+approveBtn.textContent = "Approve";
+approveBtn.style.background = "green";
+approveBtn.style.color = "#fff";
+approveBtn.style.marginTop = "6px";
 
+approveBtn.onclick = function() {
+  db.ref("pendingMessages/" + key).once("value", snap => {
+    db.ref("approvedMessages").push(snap.val());
+    db.ref("pendingMessages/" + key).remove();
+  });
+};
+
+div.appendChild(approveBtn);
   // update UI
   updateDoubtStats();
   refreshDoubtNumbers();
@@ -407,12 +432,17 @@ if(chk) chk.remove();
 });
 }
 // Firebase lis
-db.ref("shoutbox").orderByChild("time").limitToLast(100).on("child_added", snap => {
+db.ref("approvedMessages").orderByChild("time").limitToLast(100).on("child_added", snap => {
 addMessageToDOM(snap.key, snap.val());
 });
-
+  // ✅ LOAD PENDING MESSAGES FOR ADMIN
+if (isAdminAuthenticated()) {
+  db.ref("pendingMessages").on("child_added", snap => {
+    addMessageToDOM(snap.key, snap.val());
+  });
+  }
 // Also listen for child_changed (status updates / edits) and child_removed
-db.ref("shoutbox").on("child_changed", snap => {
+db.ref("approvedMessages").on("child_changed", snap => {
 const key = snap.key;
 const el = document.querySelector(`.msg[data-key='${key}']`);
 if (el) {
@@ -427,7 +457,7 @@ addMessageToDOM(key, data);
 updateDoubtStats();
 });
 
-db.ref("shoutbox").on("child_removed", snap => {
+db.ref("approvedMessages").on("child_removed", snap => {
 const key = snap.key;
 const el = document.querySelector(`.msg[data-key='${key}']`);
 if (el) el.remove();
@@ -507,7 +537,8 @@ return;
 }
 
 const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL };
-db.ref("shoutbox").push(data);
+db.ref("pendingMessages").push(data);
+alert("Message sent! It will automatically show after Approval ");
 if (msgEl) msgEl.value = "";
 });
 
@@ -694,7 +725,7 @@ updateWorkingSection();
 });
 
 // Make sure to keep stats in sync when overall DB changes
-db.ref("shoutbox").on("value", () => {
+db.ref("approvedMessages").on("value", () => {
 refreshDoubtNumbers();
 updateDoubtStats();
 updateWorkingSection();
