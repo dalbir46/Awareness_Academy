@@ -279,7 +279,9 @@ function formatDateTime(ts){
 }
 
 // add single message to DOM
-async function addMessageToDOM(key, data){
+async function addMessageToDOM(key, data){if (!data.approved && !isAdminAuthenticated()) {
+    return; // 👈 ADD THIS
+  }
   // create container
   const div = document.createElement("div");
   div.classList.add("msg");
@@ -315,6 +317,13 @@ async function addMessageToDOM(key, data){
 
   // combine
   div.appendChild(header);
+                                          if (!data.approved) {
+  const pendingTag = document.createElement("div");
+  pendingTag.style.color = "orange";
+  pendingTag.style.fontSize = "12px";
+  pendingTag.textContent = "⏳ Need Approval";
+  div.appendChild(pendingTag);
+  }
   const msgContent = document.createElement("div");
   msgContent.innerHTML = messageHtml + photoHtml;
   div.appendChild(msgContent);
@@ -330,6 +339,15 @@ async function addMessageToDOM(key, data){
         <button class="mark-working" data-key="${key}" style="background:#FFB300;border:none;padding:6px 8px;border-radius:4px;cursor:pointer;margin-right:6px;">Mark Working</button>
         <button class="mark-solved" data-key="${key}" style="background:#2E8B57;border:none;padding:6px 8px;border-radius:4px;color:#fff;cursor:pointer;">Mark Solved</button>
       `;
+      if (!data.approved) {
+  const btns = document.createElement("div");
+  btns.style.marginTop = "6px";
+  btns.innerHTML = `
+    <button class="approve-btn" data-key="${key}" style="background:green;color:#fff;border:none;padding:5px 8px;border-radius:4px;">Approve</button>
+    <button class="reject-btn" data-key="${key}" style="background:red;color:#fff;border:none;padding:5px 8px;border-radius:4px;">Reject</button>
+  `;
+  div.appendChild(btns);
+  }
       div.appendChild(btns);
     }
     // if admin, prepend a checkbox to the header
@@ -506,7 +524,7 @@ return;
 }
 }
 
-const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL };
+const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL, approved: false };
 db.ref("shoutbox").push(data);
 if (msgEl) msgEl.value = "";
 });
@@ -538,6 +556,17 @@ const key = chk.getAttribute("data-key");
 if (key) db.ref("shoutbox/"+key).remove();
 const el = document.querySelector(`.msg[data-key='${key}']`);
 if (el) el.remove();
+  // Approve
+if (e.target.classList.contains("approve-btn")) {
+  const key = e.target.getAttribute("data-key");
+  db.ref("shoutbox/" + key).update({ approved: true });
+}
+
+// Reject
+if (e.target.classList.contains("reject-btn")) {
+  const key = e.target.getAttribute("data-key");
+  db.ref("shoutbox/" + key).remove();
+  }
 });
 refreshDoubtNumbers();
 updateDoubtStats();
