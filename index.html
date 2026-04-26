@@ -53,11 +53,16 @@ body.dark .msg b.username.admin * {
 /* Admin buttons style same as clear */ #clearBtn, #deleteSelectedBtn, #logoutBtn { padding: 6px 14px; font-size: 12px; border-radius: 4px; color: #fff; cursor: pointer; width: auto; height: auto; } #clearBtn { background-color: red; } #clearBtn:hover { background-color: darkred; } #deleteSelectedBtn { background-color: #8B0000; display:none; } #deleteSelectedBtn:hover { background-color: #8B0000; filter: brightness(0.85); } #logoutBtn { background-color: #555; display:none; } #logoutBtn:hover { background-color: #555; filter: brightness(0.85); }
 
 #adminStatus { color:green; font-weight:bold; margin-bottom:6px; display:none; }
-#pendingRequests {  
-  min-height: 40px;  
-  display: flex;  
-  align-items: center;  
-  justify-content: center;  
+#pendingRequests {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: 4px;
+  margin-top: 6px;
+  text-align: center;
+  background: #e3f2fd;
+  border-left: 4px solid #2196F3;
+  color: #0d47a1;
 }
 /* Progress bar */ #uploadProgress { width:100%; background:#eee; border-radius:4px; margin:6px 0; display:none; } #uploadBar { width:0%; height:8px; background:#4CAF50; border-radius:4px; }
 
@@ -107,7 +112,6 @@ body.dark .msg b.username.admin * {
   text-align:center;
   border-radius:6px;
   color:#0d47a1;
-  width:100%;
   box-sizing:border-box;">
   ⏳ Loading pending requests...
   </div>
