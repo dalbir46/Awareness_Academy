@@ -120,7 +120,9 @@ body.dark .msg b.username.admin * {
   </div>
 </div>
     <div id="userStatusMsg" style="display:none; font-weight:bold; margin-bottom:6px;"></div>
-  <div class="send-wrapper"><button id="clearBtn">Clear Shoutbox</button></div>
+<div class="send-wrapper">
+  <button id="clearBtn" onclick="clearShoutbox()">Clear Shoutbox</button>
+</div>  
   <div class="send-wrapper"><button id="deleteSelectedBtn">Delete Selected</button></div>
   <div class="send-wrapper"><button id="logoutBtn">Admin Logout</button></div>
 </div><!-- Updates --><div class="section-title title-updates" id="updates">Latest Updates</div>
@@ -211,6 +213,19 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 var db=firebase.database();
+  function clearShoutbox() {
+  const confirmDelete = confirm("⚠️ Are you sure?\nThis will delete ALL messages permanently!");
+
+  if (!confirmDelete) return;
+
+  db.ref("shoutbox").remove()
+    .then(() => {
+      alert("✅ Shoutbox cleared successfully!");
+    })
+    .catch(err => {
+      alert("❌ Error: " + err.message);
+    });
+}
   function updatePendingRequests() {
   db.ref("shoutbox").on("value", snap => {
     let count = 0;
