@@ -690,14 +690,6 @@ document.head.appendChild(style);
 
 // === Handle Admin Mark Buttons (delegated) ===
 document.addEventListener("click", async (e) => {
-if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
-if (!isAdminAuthenticated()) return alert("Admin only");
-
-const key = e.target.getAttribute("data-key");
-const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
-
-try {
-await db.ref("shoutbox/" + key).update({ status });
   // Approve
 if (e.target.classList.contains("approve-btn")) {
   const key = e.target.getAttribute("data-key");
@@ -708,7 +700,16 @@ if (e.target.classList.contains("approve-btn")) {
 if (e.target.classList.contains("reject-btn")) {
   const key = e.target.getAttribute("data-key");
   db.ref("shoutbox/" + key).remove();
-  }
+}
+if (e.target.classList.contains("mark-working") || e.target.classList.contains("mark-solved")) {
+if (!isAdminAuthenticated()) return alert("Admin only");
+
+const key = e.target.getAttribute("data-key");
+const status = e.target.classList.contains("mark-working") ? "Working" : "Solved";
+
+try {
+await db.ref("shoutbox/" + key).update({ status });
+  
 // update DOM element if exists
 const el = document.querySelector(`.msg[data-key='${key}']`);
 if (el) el.dataset.status = status;
