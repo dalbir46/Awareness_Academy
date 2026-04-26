@@ -53,7 +53,12 @@ body.dark .msg b.username.admin * {
 /* Admin buttons style same as clear */ #clearBtn, #deleteSelectedBtn, #logoutBtn { padding: 6px 14px; font-size: 12px; border-radius: 4px; color: #fff; cursor: pointer; width: auto; height: auto; } #clearBtn { background-color: red; } #clearBtn:hover { background-color: darkred; } #deleteSelectedBtn { background-color: #8B0000; display:none; } #deleteSelectedBtn:hover { background-color: #8B0000; filter: brightness(0.85); } #logoutBtn { background-color: #555; display:none; } #logoutBtn:hover { background-color: #555; filter: brightness(0.85); }
 
 #adminStatus { color:green; font-weight:bold; margin-bottom:6px; display:none; }
-
+#pendingRequests {  
+  min-height: 40px;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+}
 /* Progress bar */ #uploadProgress { width:100%; background:#eee; border-radius:4px; margin:6px 0; display:none; } #uploadBar { width:0%; height:8px; background:#4CAF50; border-radius:4px; }
 
 @media(max-width:600px){ #shoutbox .send-wrapper { justify-content:flex-start; margin-top:6px; } #shoutbox button{ width:100%; } } </style>
