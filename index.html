@@ -540,10 +540,10 @@ return;
 const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL, approved: false };
 db.ref("shoutbox").push(data);
   if (photoURL) {
-  showUserMessage("✅  📷 "Image sent successfully! ⏳ It will be visible after approval.");
+  showUserMessage("✅ 📷 Image sent successfully! ⏳ It will be visible after approval.");
 } else {
-  showUserMessage("✅  📩 "Message sent successfully! ⏳ It will be visible after admin approval .");
-}
+  showUserMessage("✅ 📩 Message sent successfully! ⏳ It will be visible after admin approval.");
+  }
 if (msgEl) msgEl.value = "";
 });
 
