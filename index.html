@@ -79,6 +79,7 @@ body.dark .msg b.username.admin * {
 </div><!-- Shoutbox --><div class="section-title title-shout">Shoutbox</div>
 <div class="box" id="shoutbox">
   <div id="adminStatus">✅ Admin login successful</div>
+  <div id="userStatusMsg" style="display:none; font-weight:bold; margin-bottom:6px;"></div>
   <!-- 🔍 Search Box for Shoutbox -->
 <input 
   type="text" 
@@ -249,7 +250,18 @@ function escapeHtml(str){
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
 }
+function showUserMessage(text, color="green") {
+  const el = document.getElementById("userStatusMsg");
+  if (!el) return;
 
+  el.style.display = "block";
+  el.style.color = color;
+  el.textContent = text;
+
+  setTimeout(() => {
+    el.style.display = "none";
+  }, 3000);
+  }
 function isAdminAuthenticated(){ return sessionStorage.getItem("isAdmin")==="true"; }
 function setAdminAuthenticated(flag){
   if(flag) sessionStorage.setItem("isAdmin","true");
@@ -527,6 +539,11 @@ return;
 
 const data = { name: name || "Guest", message: msg || "", time: Date.now(), photoURL, approved: false };
 db.ref("shoutbox").push(data);
+  if (photoURL) {
+  showUserMessage("✅  📷 "Image sent successfully! ⏳ It will be visible after approval.");
+} else {
+  showUserMessage("✅  📩 "Message sent successfully! ⏳ It will be visible after admin approval .");
+}
 if (msgEl) msgEl.value = "";
 });
 
