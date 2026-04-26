@@ -92,6 +92,9 @@ body.dark .msg b.username.admin * {
   <input type="file" id="photoInput" accept="image/*">
   <div id="uploadProgress"><div id="uploadBar"></div></div>
   <div class="send-wrapper"><button id="sendBtn">Send</button></div>
+  <div id="pendingRequests" style="font-weight:bold; padding:8px; margin-top:6px; background:#fff3cd; border-left:4px solid orange; text-align:center; border-radius:6px;">
+⏳ Loading pending requests...
+  </div>
     <div id="userStatusMsg" style="display:none; font-weight:bold; margin-bottom:6px;"></div>
   <div class="send-wrapper"><button id="clearBtn">Clear Shoutbox</button></div>
   <div class="send-wrapper"><button id="deleteSelectedBtn">Delete Selected</button></div>
@@ -184,6 +187,34 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 var db=firebase.database();
+  function updatePendingRequests() {
+  db.ref("shoutbox").on("value", snap => {
+    let count = 0;
+
+    snap.forEach(child => {
+      const data = child.val();
+      if (data.approved === false) {
+        count++;
+      }
+    });
+
+    const el = document.getElementById("pendingRequests");
+    if (!el) return;
+
+    if (count === 0) {
+      el.innerHTML = "✅ No pending requests right now";
+      el.style.background = "#d4edda";
+      el.style.borderLeft = "4px solid green";
+    } else {
+      el.innerHTML = `⏳ <b>${count}</b> requests need approval`;
+      el.style.background = "#fff3cd";
+      el.style.borderLeft = "4px solid orange";
+    }
+  });
+}
+
+// call once
+updatePendingRequests();
 const ADMIN_PASSWORD="password";
 const IMGBB_API_KEY="9a1627658ec3732fd03cb87cbff0ed66";
 // === Function to Update Doubt Stats in "Latest Updates" ===
