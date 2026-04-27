@@ -185,6 +185,28 @@ body.dark .msg b.username.admin * {
 <!-- Navigation Bar --><div class="linkbar">
   <a href="#">Home</a> | <a href="#updates">Latest Updates</a> | <a href="#practice">Practice Zone</a> | <a href="#resources">Resources</a>
 </div>
+  <div id="visitorBox" style="
+  margin:15px auto;
+  max-width:320px;
+  background:linear-gradient(135deg,#1e293b,#334155);
+  padding:12px;
+  border-radius:10px;
+  text-align:center;
+  color:white;
+  box-shadow:0 0 10px rgba(0,0,0,0.4);
+">
+
+  <div style="font-weight:bold; color:#38bdf8;">📊 Visitor Stats</div>
+
+  <div> 👤 Total: <span id="total">0</span></div>
+  <div>📅 Today: <span id="today">0</span></div>
+  <div>📆 Yesterday: <span id="yesterday">0</span></div>
+
+  <div style="color:#4ade80; font-weight:bold;">
+    🟢 Online: <span id="online">0</span>
+  </div>
+
+  </div>
   <div style="margin-top:15px; padding:10px; text-align:center; background:black; color:#0f0; border-radius:8px;">
     🌐 Developed & Managed by  
     <b style="text-shadow:0 0 1px #0f0;">Dalbir & Rahul</b><br>
@@ -867,6 +889,8 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 });
+    // call visitor system
+initVisitorSystem(); // ya jo bhi function naam diya tha
 </script>
 </body>
 </html>
