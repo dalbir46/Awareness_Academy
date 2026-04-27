@@ -379,7 +379,7 @@ function updateAdminUI(){
   const clearBtn = document.getElementById("clearBtn");
   if(logoutBtn) logoutBtn.style.display = isAdminAuthenticated() ? "inline-block" : "none";
   if(deleteSelectedBtn) deleteSelectedBtn.style.display = isAdminAuthenticated() ? "inline-block" : "none";
-
+if(clearBtn) clearBtn.style.display = isAdminAuthenticated() ? "inline-block" : "none";
   updateCheckboxes();
 }
 
