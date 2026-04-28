@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Class 12 — Mathematics Hub</title>
+
 <style>
 /* ---------- Base (Light) ---------- */
 body { 
@@ -14,6 +15,7 @@ body {
   color: #000; 
   transition: background 0.25s ease, color 0.25s ease; 
 }
+
 /* Header & Footer */
 .header-wrapper, .footer-wrapper { 
   background: linear-gradient(135deg, #6a11cb, #2575fc); 
@@ -38,10 +40,39 @@ body {
   margin-top:6px; 
   color:#333; 
 }
+
 /* Wrapper */
 .wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
+
+/* NOTE BOX */
+.note-box {
+  background:#dcfce7;
+  color:#000;
+  border:2px solid #22c55e;
+  padding:18px 20px;
+  margin:18px 10px 30px 10px;
+  font-size:16px;
+  line-height:1.55;
+  border-radius:14px;
+  font-weight:600;
+  box-shadow: 0 0 6px rgba(250,204,21,0.2);
+  transition:0.25s ease;
+}
+.note-box:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 12px rgba(250,204,21,0.35);
+}
+
+/* Dark mode note */
+body.dark .note-box{
+  background:#020617;
+  color:#facc15;
+  border-color:#facc15;
+}
+
 /* Chapters */
 h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
+
 .chapter { 
   background:#F9F9F9; 
   border:1px solid #999; 
@@ -49,34 +80,75 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   margin:10px; 
   border-radius:8px; 
   transition:all .2s; 
+  position:relative;
+  padding-bottom:60px; /* space for 2 buttons */
 }
 .chapter:hover { background:#e9e9e9; }
-/* ---- Light mode chapter links ---- */
-.chapter a { 
-  color:#0645AD; 
+
+.chapter a.mainlink { 
+  color:#0645AD;
   text-decoration:none; 
   font-weight:600; 
   display:block; 
+  margin-bottom:12px; /* gap from buttons */
 }
-.chapter a:hover { 
-  color:#0b0080; 
+.chapter a.mainlink:hover { 
+  color:#0b0080;
   text-decoration:underline; 
 }
-/* Back to home button */
+
+/* ===== BUTTON GROUP ===== */
+.btn-group{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  display:flex;
+  gap:15px;
+}
+
+/* Buy Button */
+.cyber-mini{
+  background:#0c0f1a;
+  color:#00eaff;
+  border:2px solid #00eaff;
+  padding:6px 14px;
+  font-size:14px;
+  border-radius:8px;
+  font-weight:600;
+  text-decoration:none;
+  position:relative;
+}
+
+.cyber-mini::after{
+  content:"";
+  width:100%;
+  height:3px;
+  left:0; 
+  bottom:0;
+  background:#00eaff;
+  position:absolute;
+  animation:strip 2s infinite linear;
+}
+
+@keyframes strip{
+  0%{width:0%;}
+  100%{width:100%;}
+}
+
+/* Back button */
 .b18 {
   padding: 12px 20px;
   background: #ff5722;
   color: #fff;
   border-radius: 25px;
-  position: relative;
   text-decoration: none;
   font-weight: bold;
   display: inline-block;
-  transition: background 0.3s ease;
 }
 .b18::before { content: "🏠 "; }
 .b18:hover { background: #e64a19; }
-/* Theme selector (center) */
+
+/* Theme selector */
 .theme-wrap { display:flex; justify-content:center; margin:18px 0; }
 #themeSelect {
   padding:8px 16px;
@@ -87,91 +159,159 @@ h2 { font-size: 20px; margin: 15px 8px; color: #0b2447; }
   border:none;
   cursor:pointer;
 }
-/* Responsive */
-@media(max-width:520px){
-  .header, .footer { font-size:18px; padding:12px; max-width:92%; }
-  #themeSelect { padding:8px 12px; }
-}
-/* ---------- Dark mode ---------- */
+
+/* Dark mode */
 body.dark { background:#0f1724; color:#d1d5db; }
-body.dark .header-wrapper, body.dark .footer-wrapper {
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-}
+
 body.dark .header, body.dark .footer {
   background:#1e293b;
   color:#e2e8f0;
   border-color:#334155;
   text-shadow:none;
-  font-size:21px;
-  font-weight:700;
-  padding:16px;
 }
-body.dark .header small {
-  color: #94a3b8;
-  font-size:13px;
-  font-weight:400;
-  margin-top:8px;
-}
+
 body.dark h2 { color:#facc15; }
+
 body.dark .chapter { background:#1e293b; border-color:#334155; }
 body.dark .chapter:hover { background:#162233; }
-body.dark .chapter a { color:#facc15; }
-body.dark .chapter a:hover { color:#fde047; text-decoration:underline; }
-body.dark .b18 { background: #2563eb; color: #fff; }
+
+body.dark .chapter a.mainlink { color:#facc15; }
+body.dark .chapter a.mainlink:hover { color:#fde047; }
+
+body.dark .cyber-mini { background:#000814; color:#00eaff; border-color:#00eaff; }
+
+body.dark .b18 { background:#2563eb; }
 body.dark .b18:hover { background:#1d4ed8; }
-body.dark #themeSelect {
-  background-color:#334155;
-  color:#d1d5db;
-  border: 1px solid #475569;
+
+body.dark #themeSelect { background-color:#334155; color:#d1d5db; border:1px solid #475569; }
+
+/* ===== PRICE TABLE ===== */
+.price-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:15px 0;
+  background:#000;
+  color:#0ff;
+  border:2px solid #0ff;
 }
-.header, .footer, .chapter, .b18, #themeSelect { transition: all 0.18s ease; }
+
+.price-table th,
+.price-table td{
+  padding:10px;
+  border:1px solid #0ff;
+  text-align:center;
+}
+
+.price-table th{
+  font-weight:bold;
+}
+
+/* ===== COLOR UPDATE ===== */
+.price-table td:nth-child(1){
+  color:#facc15;
+  font-weight:bold;
+}
+.price-table td:nth-child(2){
+  color:limegreen;
+  font-weight:bold;
+}
+.price-table td:nth-child(3){
+  color:red;
+  font-weight:bold;
+}
+
 </style>
 </head>
+
 <body>
-  <!-- Header -->
-  <div class="header-wrapper">
-    <div class="header">
-      Mathematics Hub — Class 12
-      <small> Notes • NCERT Solutions • Practice Papers </small>
-    </div>
+
+<div class="header-wrapper">
+  <div class="header">
+    Mathematics Hub — Class 12
+    <small> Notes • NCERT Solutions • Practice Papers </small>
   </div>
+</div>
 
-  <!-- Theme selector -->
-  <div class="theme-wrap">
-    <select id="themeSelect" aria-label="Theme select">
-      <option value="light">🌞 Light Mode</option>
-      <option value="dark">🌙 Dark Mode</option>
-    </select>
+<div class="theme-wrap">
+  <select id="themeSelect">
+    <option value="light">🌞 Light Mode</option>
+    <option value="dark">🌙 Dark Mode</option>
+  </select>
+</div>
+
+<div class="wrap">
+
+<h2>📘 Chapters</h2>
+
+<div class="note-box">
+  अगर आपको ऑनलाइन पढ़ना मुश्किल लगता है या मोबाइल/कंप्यूटर की रोशनी आंखों पर असर करती है,  
+  तो आप <b>Buy Notebook 📚</b> पर क्लिक करके सभी chapters की सुंदर, साफ Notebook अपने घर मंगवा सकते हो । 📝 Payment करने के बाद कृपया उसका screenshot WhatsApp पर जरूर share करें, ताकि आपका order जल्दी confirm किया जा सके ।
+</div>
+
+<h2>💰 Price List (PDF और Booklet)</h2>
+
+<table class="price-table">
+  <tr>
+    <th>Chapter</th>
+    <th>PDF Price</th>
+    <th>Notebook (Printed)</th>
+  </tr>
+
+  <tr><td>Chapter 1</td><td>₹41</td><td>₹82</td></tr>
+  <tr><td>Chapter 2</td><td>₹39</td><td>₹78</td></tr>
+  <tr><td>Chapter 3</td><td>₹70</td><td>₹140</td></tr>
+  <tr><td>Chapter 4</td><td>₹76</td><td>₹152</td></tr>
+  <tr><td>Chapter 5</td><td>₹134</td><td>₹268</td></tr>
+  <tr><td>Chapter 6</td><td>₹107</td><td>₹214</td></tr>
+  <tr><td>Chapter 7</td><td>₹225</td><td>₹450</td></tr>
+  <tr><td>Chapter 8</td><td>₹31</td><td>₹62</td></tr>
+<tr><td>Chapter 9</td><td>₹108</td><td>₹216</td></tr>
+<tr><td>Chapter 10</td><td>₹45</td><td>₹90</td></tr>
+  <tr><td>Chapter 11</td><td>₹39</td><td>₹78</td></tr>
+  <tr><td>Chapter 12</td><td>₹29</td><td>₹58</td></tr>
+<tr><td>Chapter 13</td><td>₹65</td><td>₹130</td></tr>
+
+</table>
+
+<!-- CHAPTERS -->
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch1_ex1.html">Chapter 1: Relation and Functions </a><div class="btn-group"><a href="buy12.html?ch=1" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=1" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch2_ex1.html">Chapter 2: Inverse Trigonometric Functions </a><div class="btn-group"><a href="buy12.html?ch=2" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=2" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch3_ex1.html">Chapter 3: Matrices </a><div class="btn-group"><a href="buy12.html?ch=3" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=3" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch4_ex1.html">Chapter 4: Determinants </a><div class="btn-group"><a href="buy12.html?ch=4" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=4" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch5_ex1.html">Chapter 5: Continuity and Differentiability </a><div class="btn-group"><a href="buy12.html?ch=5" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=5" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch6_ex1.html">Chapter 6: Applications of Derivatives </a><div class="btn-group"><a href="buy12.html?ch=6" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=6" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch7_ex1.html">Chapter 7: Integrals </a><div class="btn-group"><a href="buy12.html?ch=7" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=7" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch8_ex1.html">Chapter 8: Applications of Integrals </a><div class="btn-group"><a href="buy12.html?ch=8" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=8" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch9_ex1.html">Chapter 9: Differential Equations </a><div class="btn-group"><a href="buy12.html?ch=9" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=9" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch10_ex1.html">Chapter 10: Vector Algebra </a><div class="btn-group"><a href="buy12.html?ch=10" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=10" class="cyber-mini">Buy Notebook</a></div></div>
+
+  <div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch11_ex1.html">Chapter 11: Three Dimensional Geometry </a><div class="btn-group"><a href="buy12.html?ch=11" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=11" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch12_ex1.html">Chapter 12: Linear Programming </a><div class="btn-group"><a href="buy12.html?ch=12" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=12" class="cyber-mini">Buy Notebook</a></div></div>
+
+<div class="chapter"><a class="mainlink" href="https://dalbir46.github.io/12/class12_ch13_ex1.html">Chapter 13: Probability </a><div class="btn-group"><a href="buy12.html?ch=13" class="cyber-mini">Buy PDF</a><a href="2buy12.html?ch=13" class="cyber-mini">Buy Notebook</a></div></div>
+
+  
+<div style="text-align:center; margin:20px 0;">
+  <a href="https://dalbir46.github.io/6to12/index.html" class="b18">Back to Home</a>
+</div>
+
+</div>
+
+<div class="footer-wrapper">
+  <div class="footer">
+    © 2026 Mathematics Hub — Class 12
   </div>
-
-  <div class="wrap">
-    <h2>📘 Chapters</h2>
-
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex1_1.html">Chapter 1: Relations and Functions</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex2_1.html">Chapter 2: Inverse Trigonometric Functions</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex3_1.html">Chapter 3: Matrices</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex4_1.html">Chapter 4: Determinants</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex5_1.html">Chapter 5: Continuity and Differentiability</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex6_1.html">Chapter 6: Applications of Derivatives</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex7_1.html">Chapter 7: Integrals</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex8_1.html">Chapter 8: Applications of Integrals</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex9_1.html">Chapter 9: Differential Equations</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex10_1.html">Chapter 10: Vector Algebra</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex11_1.html">Chapter 11: Three Dimensional Geometry</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex12_1.html">Chapter 12: Linear Programming</a></div>
-    <div class="chapter"><a href="https://dalbir46.github.io/12/class12ex13_1.html">Chapter 13: Probability</a></div>
-
-    <div style="text-align:center; margin:20px 0;">
-      <a href="https://dalbir46.github.io/Awareness_Academy/" class="b18">Back to Home</a>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="footer-wrapper">
-    <div class="footer">
-      © 2025 Mathematics Hub — Class 12
-    </div>
-  </div>
+</div>
 
 <script>
 const themeSelect = document.getElementById('themeSelect');
@@ -179,19 +319,14 @@ const savedTheme = localStorage.getItem('theme') || 'light';
 if (savedTheme === 'dark') {
   document.body.classList.add('dark');
   themeSelect.value = 'dark';
-} else {
-  document.body.classList.remove('dark');
-  themeSelect.value = 'light';
 }
 themeSelect.addEventListener('change', function() {
   const mode = this.value;
-  if (mode === 'dark') {
-    document.body.classList.add('dark');
-  } else {
-    document.body.classList.remove('dark');
-  }
+  if (mode === 'dark') document.body.classList.add('dark');
+  else document.body.classList.remove('dark');
   localStorage.setItem('theme', mode);
 });
 </script>
+
 </body>
-  </html>
+                            </html>
