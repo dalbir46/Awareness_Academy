@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Class 9 — Mathematics Hub</title>
+
+<style>
+body { 
+  font-family: Arial, sans-serif; 
+  background: #f0f8ff; 
+  margin: 0; 
+  padding: 0; 
+  color: #000; 
+  transition: 0.3s;
+}
+
+/* Dark Mode */
+body.dark { background: #121212; color: #fff; }
+
+/* Header & Footer */
+.header-wrapper, .footer-wrapper { background: linear-gradient(135deg, #6a11cb, #2575fc); padding: 12px; }
+.header, .footer { background: #FFFFCC; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; border: 2px solid #333; border-radius: 10px; text-shadow: 2px 2px 4px #888888; max-width: 600px; margin: auto; }
+.header small { display:block; font-size:13px; font-weight:normal; margin-top:6px; color:#333; }
+
+.wrap { max-width: 940px; margin: 20px auto; padding: 0 12px; }
+
+/* Dropdown */
+.mode-select { display:block; margin: 10px auto; padding: 8px; border-radius: 6px; font-weight: bold; }
+
+/* Part Boxes Container */
+.parts { display:flex; gap:15px; flex-wrap:wrap; margin: 20px 10px; justify-content:center; }
+
+/* Base Part Box */
+.part-box {
+  flex:1;
+  min-width:140px;
+  text-align:center;
+  padding:15px;
+  color:#fff;
+  font-weight:bold;
+  border-radius:12px;
+  text-decoration:none;
+  cursor:pointer;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid #000; /* black border */
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Moving strip (Buy Notes style) */
+.part-box::after {
+  content:"";
+  position: absolute;
+  left:0; bottom:0;
+  height:4px;
+  width:100%;
+  border-radius:2px;
+  animation: strip 2s linear infinite;
+}
+@keyframes strip { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+/* Hover lift + glow */
+.part-box:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.35), 0 0 15px rgba(255,255,255,0.2);
+  border-color:#fff;
+}
+
+/* Individual box gradients + strip colors */
+.part1 { 
+  background: linear-gradient(135deg, #1e3a8a, #4f46e5); 
+}
+.part1::after { background: #60a5fa; }
+
+.part2 { 
+  background: linear-gradient(135deg, #991b1b, #b91c1c); 
+}
+.part2::after { background: #f87171; }
+
+.part3 { 
+  background: linear-gradient(135deg, #1e293b, #4c1d95); 
+}
+.part3::after { background: #c084fc; }
+
+/* Back Button */
+.b18 { padding: 12px 20px; background: #ff5722; color: #fff; border-radius: 25px; text-decoration: none; font-weight: bold; display: inline-block; transition: background 0.3s ease, transform 0.3s ease; }
+.b18::before { content: "🏠 "; }
+.b18:hover { background: #e64a19; transform: translateY(-3px); }
+
+/* Dark mode styles */
+body.dark .part1, body.dark .part2, body.dark .part3 { box-shadow:0 6px 15px rgba(255,255,255,0.25); border-color:#fff; }
+body.dark .header, body.dark .footer { background:#1e293b; color:#e2e8f0; border-color:#334155; text-shadow:none; }
+
+</style>
+</head>
+
+<body>
+
+<div class="header-wrapper">
+  <div class="header">
+    Mathematics Hub — Class 9
+    <small>Notes • NCERT Solutions • Practice Papers</small>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <select class="mode-select" onchange="changeMode(this.value)">
+    <option value="light">🌞 Light Mode</option>
+    <option value="dark">🌙 Dark Mode</option>
+  </select>
+
+  <div class="parts">
+    <a href="part95.html" class="part-box part1">Ganita Prakash Part 1</a>
+    <a href="class9ori.html" class="part-box part2">Old Ncert</a>
+ </div>
+
+  <div style="text-align:center; margin:30px 0;">
+    <a href="index.html" class="b18">Back to Home</a>
+  </div>
+
+</div>
+
+<div class="footer-wrapper">
+  <div class="footer">© 2027 Mathematics Hub — Class 9</div>
+</div>
+
+<script>
+function changeMode(mode){ 
+  if(mode === "dark"){ document.body.classList.add("dark"); } 
+  else { document.body.classList.remove("dark"); } 
+}
+</script>
+
+</body>
+</html>
